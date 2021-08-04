@@ -28,15 +28,14 @@ public class DataProduct {
     public String getQualifiedName() {
         return qualifiedName;
     }
-    public Integer getVersion() {
-        // TODO: I thought we could include the version, since the subject qualified name has
-        // a version. We can just parse it from the subject name.  For example:
-        // `lsrc-78xpp:.:users-value:1` we can parse out the final `:` and return 1 here
-        return 1;
-    }
 
     public String getOwner() {
         // TODO: read from a well known label / attribute
         return "@web";
+    }
+
+    public String getDescription() {
+        // TODO: read from a well knkown label / attribute
+        return "description here";
     }
 }
