@@ -3,7 +3,7 @@
 An example implementation of Data Mesh on top of Confluent Cloud.
 
 ### Prerequisties
-* Java 8 or 11
+* Java 11
 * Gradle
 
 ### Instructions (WIP during development)
