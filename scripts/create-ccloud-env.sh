@@ -4,9 +4,14 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
 # Source library
 curl -sS -o ccloud_library.sh https://raw.githubusercontent.com/confluentinc/examples/latest/utils/ccloud_library.sh
-curl -sS -o helper.sh https://raw.githubusercontent.com/confluentinc/examples/latest/utils/helper.sh
-source ./helper.sh
 source ./ccloud_library.sh
+source ./helper.sh
+
+# Setting default QUIET=false to surface potential errors
+QUIET="${QUIET:-false}"
+[[ $QUIET == "true" ]] &&
+  REDIRECT_TO="/dev/null" ||
+  REDIRECT_TO="/dev/stdout"
 
 # Verifications
 ccloud::validate_version_ccloud_cli $CCLOUD_MIN_VERSION \
@@ -46,11 +51,11 @@ sleep 60
 printf "\n";print_process_start "====== Pre-creating topics"
 CMD="ccloud kafka topic create pageviews"
 $CMD &>"$REDIRECT_TO" \
-  && print_code_pass -c "$CMD" \
+  && print_pass -c "$CMD" \
   || exit_with_error -c $? -n "$NAME" -m "$CMD" -l $(($LINENO -3))
 CMD="ccloud kafka topic create users"
 $CMD &>"$REDIRECT_TO" \
-  && print_code_pass -c "$CMD" \
+  && print_pass -c "$CMD" \
   || exit_with_error -c $? -n "$NAME" -m "$CMD" -l $(($LINENO -3))
 print_pass "Topics created"
 
@@ -62,19 +67,21 @@ ccloud::wait_for_connector_up connectors/ccloud-datagen-users.json 300 || exit 1
 printf "\nSleeping 30 seconds to give the Datagen Source Connectors a chance to start producing messages\n"
 sleep 30
 
+printf "\n";print_process_start "====== Add tags to the Data Catalog."
+
 printf "\n";print_process_start "====== Create ksqlDB STREAMs for the Kafka topics."
 MAX_WAIT=720
 echo "Waiting up to $MAX_WAIT seconds for Confluent Cloud ksqlDB cluster to be UP"
-retry $MAX_WAIT ccloud::validate_ccloud_ksqldb_endpoint_ready $KSQLDB_ENDPOINT
+ccloud::retry $MAX_WAIT ccloud::validate_ccloud_ksqldb_endpoint_ready $KSQLDB_ENDPOINT
 printf "Obtaining the ksqlDB App Id\n"
 CMD="ccloud ksql app list -o json | jq -r '.[].id'"
 ksqlDBAppId=$(eval $CMD) \
-  && print_code_pass -c "$CMD" -m "$ksqlDBAppId" \
+  && print_pass -c "$CMD" -m "$ksqlDBAppId" \
   || exit_with_error -c $? -n "$NAME" -m "$CMD" -l $(($LINENO -3))
 printf "\nConfiguring ksqlDB ACLs\n"
 CMD="ccloud ksql app configure-acls $ksqlDBAppId pageviews users"
 $CMD \
-  && print_code_pass -c "$CMD" \
+  && print_pass -c "$CMD" \
   || exit_with_error -c $? -n "$NAME" -m "$CMD" -l $(($LINENO -3))
 while read ksqlCmd; do # from statements-cloud.sql
         response=$(curl -w "\n%{http_code}" -X POST $KSQLDB_ENDPOINT/ksql \
@@ -91,18 +98,17 @@ while read ksqlCmd; do # from statements-cloud.sql
         }
 EOF
         ))
+        echo "$response"
         echo "$response" | {
           read body
           read code
           if [[ "$code" -gt 299 ]];
             then print_code_error -c "$ksqlCmd" -m "$(echo "$body" | jq .message)"
-            else print_code_pass  -c "$ksqlCmd" -m "$(echo "$body" | jq -r .[].commandStatus.message)"
+            else print_pass  -c "$ksqlCmd" -m "$(echo "$body" | jq -r .[].commandStatus.message)"
           fi
         }
 sleep 3;
 done < statements-cloud.sql
-
-printf "\n";print_process_start "====== Add tags to the Data Catalog."
 
 echo
 echo

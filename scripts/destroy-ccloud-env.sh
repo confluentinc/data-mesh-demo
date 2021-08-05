@@ -4,9 +4,14 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
 # Source library
 curl -sS -o ccloud_library.sh https://raw.githubusercontent.com/confluentinc/examples/latest/utils/ccloud_library.sh
-curl -sS -o helper.sh https://raw.githubusercontent.com/confluentinc/examples/latest/utils/helper.sh
-source ./helper.sh
 source ./ccloud_library.sh
+source ./helper.sh
+
+# Setting default QUIET=false to surface potential errors
+QUIET="${QUIET:-false}"
+[[ $QUIET == "true" ]] &&
+  REDIRECT_TO="/dev/null" ||
+  REDIRECT_TO="/dev/stdout"
 
 # Verifications
 ccloud::validate_version_ccloud_cli $CCLOUD_MIN_VERSION \
@@ -20,7 +25,7 @@ check_jq \
   || exit 1
 
 if [ -z "$1" ]; then
-  echo "ERROR: Must supply argument that is the client configuration file created from './ccloud_stack_create.sh'. (Is it in stack-configs/ folder?) "
+  echo "ERROR: Must supply argument that is the client configuration file created from './create-ccloud-env.sh'. (Is it in stack-configs/ folder?) "
   exit 1
 else
   CONFIG_FILE=$1
