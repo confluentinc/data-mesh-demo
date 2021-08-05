@@ -59,7 +59,11 @@ echo
 echo
 echo "Confluent Cloud Environment:"
 echo
-echo "  export CONFIG_FILE=$CONFIG_FILE"
 echo "  export SERVICE_ACCOUNT_ID=$SERVICE_ACCOUNT_ID"
 echo "  export CCLOUD_CLUSTER_ID=$CCLOUD_CLUSTER_ID"
+echo
+
+echo
+echo "To destroy the Data Mesh environment in Confluent Cloud run ->"
+echo "    ./destroy-data-mesh.sh $CONFIG_FILE"
 echo
