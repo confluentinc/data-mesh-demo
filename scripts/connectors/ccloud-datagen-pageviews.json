@@ -1,5 +1,5 @@
 {
-    "name" : "datagen_ccloud_pageviews",
+    "name" : "datagen_pageviews",
     "connector.class": "DatagenSource",
     "kafka.api.key": "$CLOUD_KEY",
     "kafka.api.secret" : "$CLOUD_SECRET",

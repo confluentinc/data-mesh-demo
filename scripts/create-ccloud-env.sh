@@ -48,7 +48,7 @@ echo
 echo "Sleep an additional 60s to wait for all Confluent Cloud metadata to propagate"
 sleep 60
 
-printf "\n";print_process_start "====== Pre-creating topics"
+printf "\n";print_process_start "====== Pre-creating Kafka topics in Confluent Cloud."
 CMD="ccloud kafka topic create pageviews"
 $CMD &>"$REDIRECT_TO" \
   && print_pass -c "$CMD" \
@@ -59,7 +59,7 @@ $CMD &>"$REDIRECT_TO" \
   || exit_with_error -c $? -n "$NAME" -m "$CMD" -l $(($LINENO -3))
 print_pass "Topics created"
 
-printf "\n";print_process_start "====== Create fully-managed Datagen Source Connectors to produce sample data."
+printf "\n";print_process_start "====== Create Datagen Source Connectors to produce sample data into Kafka topics."
 ccloud::create_connector connectors/ccloud-datagen-pageviews.json || exit 1
 ccloud::create_connector connectors/ccloud-datagen-users.json || exit 1
 ccloud::wait_for_connector_up connectors/ccloud-datagen-pageviews.json 300 || exit 1
@@ -69,19 +69,19 @@ sleep 30
 
 printf "\n";print_process_start "====== Add tags to the Data Catalog."
 
-printf "\n";print_process_start "====== Create ksqlDB STREAMs for the Kafka topics."
+printf "\n";print_process_start "====== Create ksqlDB entities for the Kafka topics."
 MAX_WAIT=720
 echo "Waiting up to $MAX_WAIT seconds for Confluent Cloud ksqlDB cluster to be UP"
 ccloud::retry $MAX_WAIT ccloud::validate_ccloud_ksqldb_endpoint_ready $KSQLDB_ENDPOINT
 printf "Obtaining the ksqlDB App Id\n"
 CMD="ccloud ksql app list -o json | jq -r '.[].id'"
 ksqlDBAppId=$(eval $CMD) \
-  && print_pass -c "$CMD" -m "$ksqlDBAppId" \
+  && print_pass "Retrieved ksqlDB application ID: $ksqlDBAppId" \
   || exit_with_error -c $? -n "$NAME" -m "$CMD" -l $(($LINENO -3))
 printf "\nConfiguring ksqlDB ACLs\n"
 CMD="ccloud ksql app configure-acls $ksqlDBAppId pageviews users"
 $CMD \
-  && print_pass -c "$CMD" \
+  && print_pass "$CMD" \
   || exit_with_error -c $? -n "$NAME" -m "$CMD" -l $(($LINENO -3))
 while read ksqlCmd; do # from statements-cloud.sql
         response=$(curl -w "\n%{http_code}" -X POST $KSQLDB_ENDPOINT/ksql \
