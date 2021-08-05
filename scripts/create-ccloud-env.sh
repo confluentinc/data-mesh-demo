@@ -62,23 +62,39 @@ print_pass "Topics created"
 printf "\n";print_process_start "====== Create Datagen Source Connectors to produce sample data into Kafka topics."
 ccloud::create_connector connectors/ccloud-datagen-pageviews.json || exit 1
 ccloud::create_connector connectors/ccloud-datagen-users.json || exit 1
-ccloud::wait_for_connector_up connectors/ccloud-datagen-pageviews.json 300 || exit 1
-ccloud::wait_for_connector_up connectors/ccloud-datagen-users.json 300 || exit 1
+ccloud::wait_for_connector_up connectors/ccloud-datagen-pageviews.json 600 || exit 1
+ccloud::wait_for_connector_up connectors/ccloud-datagen-users.json 600 || exit 1
 printf "\nSleeping 30 seconds to give the Datagen Source Connectors a chance to start producing messages\n"
 sleep 30
 
-printf "\n";print_process_start "====== Add tags to the Data Catalog."
+printf "\n";print_process_start "====== Add tags to the Data Catalog for the subject that represents the Kafka topic called users."
+echo "Subjects:"
+curl -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} "${SCHEMA_REGISTRY_URL}/catalog/v1/search/basic?types=sr_subject_version" | jq .
+echo "Define Governance tag:"
+curl -X PUT -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} ${SCHEMA_REGISTRY_URL}/catalog/v1/types/tagdefs \
+  --header 'Content-Type: application/json' \
+  --data '[{ "entityTypes" : [ "sr_subject_version" ], "name" : "Governance", "description" : "Data Mesh Governance Attributes" , "attributeDefs" : [ { "name" : "owner", "cardinality" : "SINGLE", "typeName" : "string" }, { "name" : "description", "isOptional" : "true", "cardinality" : "SINGLE", "typeName" : "string" } ] }]'
+echo "Tags:"
+curl -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} ${SCHEMA_REGISTRY_URL}/catalog/v1/types/tagdefs/Governance | jq .
+echo "Get Qualified name for users (not working yet):"
+QN=$(curl -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} "${SCHEMA_REGISTRY_URL}/catalog/v1/search/basic?types=sr_subject_version" | jq -r 'map(select(.entities[].attributes.name == "users-value")) | .entities[].attributes.qualifiedName')
+echo "Qualified Name: .$QN."
+echo "Attach tag to subject for users"
+curl -X PUT -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} "${SCHEMA_REGISTRY_URL}/catalog/v1/entity/tags" \
+  --header 'Content-Type: application/json' \
+  --data '[ { "entityType" : "sr_subject_version", "entityName" : "${QN}", "typeName" : "Governance", "attributes" : { "owner":"yeva", "description":"foobar"} }]'
+echo "Verify tag attached to subject"
+curl -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} "${SCHEMA_REGISTRY_URL}/catalog/v1/search/basic?types=sr_subject_version" | jq -r 'map(select(.entities[].attributes.name == "users-value"))'
+sleep 5
 
 printf "\n";print_process_start "====== Create ksqlDB entities for the Kafka topics."
 MAX_WAIT=720
 echo "Waiting up to $MAX_WAIT seconds for Confluent Cloud ksqlDB cluster to be UP"
 ccloud::retry $MAX_WAIT ccloud::validate_ccloud_ksqldb_endpoint_ready $KSQLDB_ENDPOINT
-printf "Obtaining the ksqlDB App Id\n"
 CMD="ccloud ksql app list -o json | jq -r '.[].id'"
 ksqlDBAppId=$(eval $CMD) \
   && print_pass "Retrieved ksqlDB application ID: $ksqlDBAppId" \
   || exit_with_error -c $? -n "$NAME" -m "$CMD" -l $(($LINENO -3))
-printf "\nConfiguring ksqlDB ACLs\n"
 CMD="ccloud ksql app configure-acls $ksqlDBAppId pageviews users"
 $CMD \
   && print_pass "$CMD" \
