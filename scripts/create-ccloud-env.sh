@@ -24,7 +24,7 @@ check_jq \
   && print_pass "jq installed" \
   || exit 1
 
-printf "\n";print_process_start "====== Create a new ccloud-stack."
+printf "\n";print_process_start "====== Create a new ccloud-stack to bootstrap the Data Mesh."
 ccloud::prompt_continue_ccloud_demo || exit 1
 export EXAMPLE="data-mesh-demo"
 ccloud::create_ccloud_stack true || exit 1
