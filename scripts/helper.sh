@@ -38,7 +38,7 @@ function create_data_product () {
     --header 'Content-Type: application/json' \
     --data '[ { "entityType" : "sr_subject_version", "entityName" : "'"${QN}"'", "typeName" : "Governance", "attributes" : { "owner":"yeva", "description":"foobar"} }]'
   echo -e "\nVerify tag attached to subject ${dp}-value"
-  curl -s -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} "${SCHEMA_REGISTRY_URL}/catalog/v1/search/basic?types=sr_subject_version" | jq -r --arg dp "${dp}-value" '.entities[] | select(.attributes.name==${dp}") | .classificationNames[] '
+  curl -s -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} "${SCHEMA_REGISTRY_URL}/catalog/v1/search/basic?types=sr_subject_version" | jq -r --arg dp "${dp}-value" '.entities[] | select(.attributes.name==$dp) | .classificationNames[] '
 
   return 0
 }
