@@ -28,7 +28,7 @@ function create_data_product () {
 
   ccloud::create_connector connectors/ccloud-datagen-${dp}.json || exit 1
   ccloud::wait_for_connector_up connectors/ccloud-datagen-${dp}.json 600 || exit 1
-  printf "\nSleeping 60 seconds until Datagen Source Connector for ${dp} starts producing messages\n"
+  printf "\nSleeping 60 seconds until the datagen source connector starts producing records for ${dp}\n"
   sleep 60
 
   QN=$(curl -s -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} "${SCHEMA_REGISTRY_URL}/catalog/v1/search/basic?types=sr_subject_version" | jq -r --arg dp "${dp}-value" '.entities[].attributes | select(.name==$dp) | .qualifiedName ')
