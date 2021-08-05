@@ -25,7 +25,7 @@ check_jq \
   || exit 1
 
 if [ -z "$1" ]; then
-  echo "ERROR: Must supply argument that is the client configuration file created from './create-ccloud-env.sh'. (Is it in stack-configs/ folder?) "
+  echo "ERROR: Must supply argument that is the client configuration file created from './create-data-mesh.sh'. (Is it in stack-configs/ folder?) "
   exit 1
 else
   CONFIG_FILE=$1
