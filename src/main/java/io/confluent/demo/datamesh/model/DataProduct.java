@@ -1,4 +1,4 @@
-package io.confluent.demo.datamesh;
+package io.confluent.demo.datamesh.model;
 
 import java.util.List;
 
