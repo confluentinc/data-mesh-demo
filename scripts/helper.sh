@@ -28,17 +28,17 @@ function create_data_product () {
 
   ccloud::create_connector connectors/ccloud-datagen-${dp}.json || exit 1
   ccloud::wait_for_connector_up connectors/ccloud-datagen-${dp}.json 600 || exit 1
-  printf "\nSleeping 60 seconds till Datagen Source Connector for ${dp} starts producing messages\n"
+  printf "\nSleeping 60 seconds until Datagen Source Connector for ${dp} starts producing messages\n"
   sleep 60
 
-  QN=$(curl -s -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} "${SCHEMA_REGISTRY_URL}/catalog/v1/search/basic?types=sr_subject_version" | jq -r '.entities[].attributes | select(.name=="${dp}-value") | .qualifiedName ')
+  QN=$(curl -s -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} "${SCHEMA_REGISTRY_URL}/catalog/v1/search/basic?types=sr_subject_version" | jq -r --arg dp "${dp}-value" '.entities[].attributes | select(.name==$dp) | .qualifiedName ')
   echo "Qualified name for Kafka subject $dp: $QN"
   echo "Set tag to subject for ${dp}"
   curl -X POST -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} "${SCHEMA_REGISTRY_URL}/catalog/v1/entity/tags" \
     --header 'Content-Type: application/json' \
     --data '[ { "entityType" : "sr_subject_version", "entityName" : "'"${QN}"'", "typeName" : "Governance", "attributes" : { "owner":"yeva", "description":"foobar"} }]'
-  echo "\nVerify tag attached to subject ${dp}-value"
-  curl -s -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} "${SCHEMA_REGISTRY_URL}/catalog/v1/search/basic?types=sr_subject_version" | jq -r '.entities[] | select(.attributes.name=="${dp}-value") | .classificationNames[] '
+  echo -e "\nVerify tag attached to subject ${dp}-value"
+  curl -s -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} "${SCHEMA_REGISTRY_URL}/catalog/v1/search/basic?types=sr_subject_version" | jq -r --arg dp "${dp}-value" '.entities[] | select(.attributes.name==${dp}") | .classificationNames[] '
 
   return 0
 }

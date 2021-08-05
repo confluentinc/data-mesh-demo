@@ -14,6 +14,11 @@ An example implementation of Data Mesh on top of Confluent Cloud.
   cd data-mesh-demo
   ```
 
+* Create the Data Mesh in Confluent Cloud
+  ```
+  cd scripts && ./create-data-mesh.sh
+  ```
+
 * Run the web service with
    ```
    ./gradlew bootRun
@@ -42,4 +47,9 @@ An example implementation of Data Mesh on top of Confluent Cloud.
       "version": 1
     }
   ]
+  ```
+
+* Destroy the Data Mesh in Confluent Cloud
+  ```
+  cd scripts && ./destroy-data-mesh.sh
   ```
