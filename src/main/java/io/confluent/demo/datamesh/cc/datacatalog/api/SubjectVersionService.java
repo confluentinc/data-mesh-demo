@@ -18,16 +18,17 @@ public class SubjectVersionService {
     public SubjectVersionService(
             RestTemplateBuilder builder,
             @Value("${confluent.cloud.auth.key}") String ccKey,
-            @Value("${confluent.cloud.auth.secret}") String ccValue) {
+            @Value("${confluent.cloud.auth.secret}") String ccValue,
+            @Value("${confluent.cloud.datacatalog.baseurl}")String baseUrl) {
         restTemplate = builder
+                .rootUri(baseUrl)
                 .basicAuthentication(ccKey, ccValue)
                 .build();
     }
-    public List<AtlasEntityHeader> getAll(String baseUrlBits) {
-        String searchUrlBits = "/search/basic?types=sr_subject_version";
-        String fullUrl = baseUrlBits + searchUrlBits;
+    public List<AtlasEntityHeader> getAll() {
+        String searchUrl = "/search/basic?types=sr_subject_version";
         SearchResult result = restTemplate.getForObject(
-                fullUrl,
+                searchUrl,
                 SearchResult.class);
 
         return result.getEntities();

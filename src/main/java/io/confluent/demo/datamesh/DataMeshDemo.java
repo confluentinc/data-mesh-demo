@@ -18,9 +18,6 @@ public class DataMeshDemo {
 	@Autowired
 	SubjectVersionService svc;
 
-	@Value("${confluent.cloud.datacatalog.baseurl}")
-	String dataCatalogBaseUrl;
-
 	public static void main(String[] args) {
 		SpringApplication.run(DataMeshDemo.class, args);
 	}
@@ -30,7 +27,7 @@ public class DataMeshDemo {
 
 	@GetMapping("/testme")
 	public List<AtlasEntityHeader> testMe() {
-		return svc.getAll(dataCatalogBaseUrl);
+		return svc.getAll();
 	}
 	@GetMapping("/ruok")
 	public String hello() {
