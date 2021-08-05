@@ -1,0 +1,1032 @@
+openapi: 3.0.1
+info:
+  title: Confluent Data Catalog
+  version: v1
+paths:
+  /catalog/v1/ready:
+    get:
+      operationId: ready_1
+      responses:
+        default:
+          description: default response
+          content:
+            application/vnd.schemaregistry.v1+json:
+              schema:
+                type: boolean
+            application/vnd.schemaregistry+json; qs=0.9:
+              schema:
+                type: boolean
+            application/json; qs=0.5:
+              schema:
+                type: boolean
+  /catalog/v1/entity/tags:
+    put:
+      summary: Bulk API to update multiple tags.
+      description: Bulk API to update multiple tags. The successfully updated tags
+        will be returned.
+      operationId: updateTags_1
+      requestBody:
+        description: the tags
+        content:
+          application/vnd.schemaregistry.v1+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Tag'
+          application/vnd.schemaregistry+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Tag'
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Tag'
+          application/octet-stream:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Tag'
+      responses:
+        default:
+          content:
+            application/vnd.schemaregistry.v1+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TagResponse'
+            application/vnd.schemaregistry+json; qs=0.9:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TagResponse'
+            application/json; qs=0.5:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TagResponse'
+    post:
+      summary: Bulk API to create multiple tags.
+      description: Bulk API to create multiple tags. The successfully created tags
+        will be returned.
+      operationId: createTags_1
+      requestBody:
+        description: the tags
+        content:
+          application/vnd.schemaregistry.v1+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Tag'
+          application/vnd.schemaregistry+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Tag'
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Tag'
+          application/octet-stream:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Tag'
+      responses:
+        default:
+          content:
+            application/vnd.schemaregistry.v1+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TagResponse'
+            application/vnd.schemaregistry+json; qs=0.9:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TagResponse'
+            application/json; qs=0.5:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TagResponse'
+  /catalog/v1/entity/type/{typeName}/name/{qualifiedName}:
+    get:
+      summary: Fetch complete definition of an entity given its type and unique attribute.
+      description: "Fetch complete definition of an entity given its type and unique\
+        \ attribute. In addition to the typeName path parameter, attribute key-value\
+        \ pair(s) can be provided in the following format attr:= NOTE: The attrName\
+        \ and attrValue should be unique across entities, eg. qualifiedName The REST\
+        \ request would look something like this GET /v2/entity/uniqueAttribute/type/aType?attr:aTypeAttribute=someValue"
+      operationId: getByUniqueAttributes_1
+      parameters:
+      - name: typeName
+        in: path
+        description: the type of the entity
+        required: true
+        schema:
+          type: string
+      - name: qualifiedName
+        in: path
+        description: the qualified name of the entity
+        required: true
+        schema:
+          type: string
+      - name: minExtInfo
+        in: query
+        schema:
+          type: boolean
+          default: false
+      - name: ignoreRelationships
+        in: query
+        description: whether to ignore relationships
+        schema:
+          type: boolean
+          default: false
+      responses:
+        default:
+          content:
+            application/vnd.schemaregistry.v1+json:
+              schema:
+                $ref: '#/components/schemas/AtlasEntityWithExtInfo'
+            application/vnd.schemaregistry+json; qs=0.9:
+              schema:
+                $ref: '#/components/schemas/AtlasEntityWithExtInfo'
+            application/json; qs=0.5:
+              schema:
+                $ref: '#/components/schemas/AtlasEntityWithExtInfo'
+  /catalog/v1/entity/type/{typeName}/name/{qualifiedName}/tags:
+    get:
+      summary: Gets the list of classifications for a given entity represented by
+        a qualifed name.
+      description: Gets the list of classifications for a given entity represented
+        by a qualifed name.
+      operationId: getTags_1
+      parameters:
+      - name: typeName
+        in: path
+        description: the type of the entity
+        required: true
+        schema:
+          type: string
+      - name: qualifiedName
+        in: path
+        description: the qualified name of the entity
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          content:
+            application/vnd.schemaregistry.v1+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TagResponse'
+            application/vnd.schemaregistry+json; qs=0.9:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TagResponse'
+            application/json; qs=0.5:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TagResponse'
+  /catalog/v1/entity/type/{typeName}/name/{qualifiedName}/tags/{tagName}:
+    delete:
+      summary: Delete a tag on an entity.
+      description: Delete a tag on an entity.
+      operationId: deleteTag_1
+      parameters:
+      - name: typeName
+        in: path
+        description: the type of the entity
+        required: true
+        schema:
+          type: string
+      - name: qualifiedName
+        in: path
+        description: the qualified name of the entity
+        required: true
+        schema:
+          type: string
+      - name: tagName
+        in: path
+        description: the name of the tag
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: default response
+          content:
+            application/vnd.schemaregistry.v1+json: {}
+            application/vnd.schemaregistry+json; qs=0.9: {}
+            application/json; qs=0.5: {}
+  /catalog/v1/search/attribute:
+    get:
+      summary: Retrieve data for the specified attribute search query.
+      description: Retrieve data for the specified attribute search query.
+      operationId: searchUsingAttribute_1
+      parameters:
+      - name: types
+        in: query
+        description: limit the result to only entities of specified types
+        schema:
+          type: string
+      - name: attrs
+        in: query
+        description: one of more additional attributes to return in the response
+        schema:
+          type: string
+      - name: attrName
+        in: query
+        description: the attribute to search
+        schema:
+          type: array
+          items:
+            type: string
+      - name: attrValuePrefix
+        in: query
+        description: the prefix for the attribute value to search
+        schema:
+          type: array
+          items:
+            type: string
+      - name: tag
+        in: query
+        description: limit the result to only entities tagged with the given tag
+        schema:
+          type: string
+      - name: sortBy
+        in: query
+        description: an attribute to sort by
+        schema:
+          type: string
+      - name: sortOrder
+        in: query
+        description: "sort order, either ASCENDING (default) or DESCENDING"
+        schema:
+          type: string
+          enum:
+          - ASCENDING
+          - DESCENDING
+      - name: deleted
+        in: query
+        description: whether to include deleted entities
+        schema:
+          type: boolean
+      - name: limit
+        in: query
+        description: limit the result set to only include the specified number of
+          entries
+        schema:
+          type: integer
+          format: int32
+      - name: offset
+        in: query
+        description: start offset of the result set (useful for pagination)
+        schema:
+          type: integer
+          format: int32
+      responses:
+        default:
+          content:
+            application/vnd.schemaregistry.v1+json:
+              schema:
+                $ref: '#/components/schemas/SearchResult'
+            application/vnd.schemaregistry+json; qs=0.9:
+              schema:
+                $ref: '#/components/schemas/SearchResult'
+            application/json; qs=0.5:
+              schema:
+                $ref: '#/components/schemas/SearchResult'
+        "200":
+          description: "On successful search query with some results, might return\
+            \ an empty list if execution succeeded without any results"
+        "400":
+          description: Invalid wildcard or query parameters
+  /catalog/v1/search/basic:
+    get:
+      summary: Retrieve data for the specified fulltext query.
+      description: Retrieve data for the specified fulltext query.
+      operationId: searchUsingBasic_1
+      parameters:
+      - name: query
+        in: query
+        description: the full-text query
+        schema:
+          type: string
+      - name: types
+        in: query
+        description: limit the result to only entities of specified types
+        schema:
+          type: string
+      - name: attrs
+        in: query
+        description: one or more additional attributes a to return in the response
+        schema:
+          type: string
+      - name: tag
+        in: query
+        description: limit the result to only entities tagged with the given classification
+        schema:
+          type: string
+      - name: sortBy
+        in: query
+        description: an attribute to sort by
+        schema:
+          type: string
+      - name: sortOrder
+        in: query
+        description: "sort order, either ASCENDING (default) or DESCENDING"
+        schema:
+          type: string
+          enum:
+          - ASCENDING
+          - DESCENDING
+      - name: deleted
+        in: query
+        description: whether to include deleted entities
+        schema:
+          type: boolean
+      - name: limit
+        in: query
+        description: limit the result set to only include the specified number of
+          entries
+        schema:
+          type: integer
+          format: int32
+      - name: offset
+        in: query
+        description: start offset of the result set (useful for pagination)
+        schema:
+          type: integer
+          format: int32
+      responses:
+        default:
+          content:
+            application/vnd.schemaregistry.v1+json:
+              schema:
+                $ref: '#/components/schemas/SearchResult'
+            application/vnd.schemaregistry+json; qs=0.9:
+              schema:
+                $ref: '#/components/schemas/SearchResult'
+            application/json; qs=0.5:
+              schema:
+                $ref: '#/components/schemas/SearchResult'
+        "200":
+          description: "On successful fulltext query with some results, might return\
+            \ an empty list if execution succeeded without any results"
+        "400":
+          description: Invalid fulltext or query parameters
+  /catalog/v1/synced:
+    get:
+      operationId: synced_1
+      responses:
+        default:
+          description: default response
+          content:
+            application/vnd.schemaregistry.v1+json:
+              schema:
+                type: boolean
+            application/vnd.schemaregistry+json; qs=0.9:
+              schema:
+                type: boolean
+            application/json; qs=0.5:
+              schema:
+                type: boolean
+  /catalog/v1/types/tagdefs:
+    get:
+      summary: Bulk retrieval API for retrieving tag definitions.
+      description: Bulk retrieval API for retrieving tag definitions.
+      operationId: getAllTagDefs_1
+      parameters:
+      - name: prefix
+        in: query
+        description: the prefix of a tag definition name
+        schema:
+          type: string
+      responses:
+        default:
+          content:
+            application/vnd.schemaregistry.v1+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TagDefResponse'
+            application/vnd.schemaregistry+json; qs=0.9:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TagDefResponse'
+            application/json; qs=0.5:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TagDefResponse'
+    put:
+      summary: Bulk update API for tag definitions.
+      description: Bulk update API for tag definitions. Returns the successfully updated
+        tag definitions.
+      operationId: updateTagDefs_1
+      requestBody:
+        description: the tag definitions to update
+        content:
+          application/vnd.schemaregistry.v1+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/TagDef'
+          application/vnd.schemaregistry+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/TagDef'
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/TagDef'
+          application/octet-stream:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/TagDef'
+      responses:
+        default:
+          content:
+            application/vnd.schemaregistry.v1+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TagDefResponse'
+            application/vnd.schemaregistry+json; qs=0.9:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TagDefResponse'
+            application/json; qs=0.5:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TagDefResponse'
+    post:
+      summary: Bulk create API for tag definitions.
+      description: Bulk create API for tag definitions. Returns the successfully created
+        tag definitions.
+      operationId: createTagDefs_1
+      requestBody:
+        description: the tag definitions to create
+        content:
+          application/vnd.schemaregistry.v1+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/TagDef'
+          application/vnd.schemaregistry+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/TagDef'
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/TagDef'
+          application/octet-stream:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/TagDef'
+      responses:
+        default:
+          content:
+            application/vnd.schemaregistry.v1+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TagDefResponse'
+            application/vnd.schemaregistry+json; qs=0.9:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TagDefResponse'
+            application/json; qs=0.5:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TagDefResponse'
+  /catalog/v1/types/tagdefs/{tagName}:
+    get:
+      summary: Get the tag definition with the given name.
+      description: Get the tag definition with the given name.
+      operationId: getTagDefByName_1
+      parameters:
+      - name: tagName
+        in: path
+        description: the name of the tag definiton
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          content:
+            application/vnd.schemaregistry.v1+json:
+              schema:
+                $ref: '#/components/schemas/TagDef'
+            application/vnd.schemaregistry+json; qs=0.9:
+              schema:
+                $ref: '#/components/schemas/TagDef'
+            application/json; qs=0.5:
+              schema:
+                $ref: '#/components/schemas/TagDef'
+    delete:
+      summary: Delete API for tag definition identified by its name.
+      description: Delete API for tag definition identified by its name.
+      operationId: deleteTagDef_1
+      parameters:
+      - name: tagName
+        in: path
+        description: the name of the tag definition
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: default response
+          content:
+            application/vnd.schemaregistry.v1+json: {}
+            application/vnd.schemaregistry+json; qs=0.9: {}
+            application/json; qs=0.5: {}
+components:
+  schemas:
+    Tag:
+      type: object
+      properties:
+        typeName:
+          type: string
+        attributes:
+          type: object
+          additionalProperties:
+            type: object
+        entityGuid:
+          type: string
+        entityStatus:
+          type: string
+          enum:
+          - ACTIVE
+          - DELETED
+          - PURGED
+        propagate:
+          type: boolean
+        validityPeriods:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeBoundary'
+        removePropagationsOnEntityDelete:
+          type: boolean
+        entityType:
+          type: string
+        entityName:
+          type: string
+    TimeBoundary:
+      type: object
+      properties:
+        startTime:
+          type: string
+        endTime:
+          type: string
+        timeZone:
+          type: string
+    AtlasClassification:
+      type: object
+      properties:
+        typeName:
+          type: string
+        attributes:
+          type: object
+          additionalProperties:
+            type: object
+        entityGuid:
+          type: string
+        entityStatus:
+          type: string
+          enum:
+          - ACTIVE
+          - DELETED
+          - PURGED
+        propagate:
+          type: boolean
+        validityPeriods:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeBoundary'
+        removePropagationsOnEntityDelete:
+          type: boolean
+    AtlasEntity:
+      type: object
+      properties:
+        typeName:
+          type: string
+        attributes:
+          type: object
+          additionalProperties:
+            type: object
+        guid:
+          type: string
+        homeId:
+          type: string
+        isProxy:
+          type: boolean
+          writeOnly: true
+        isIncomplete:
+          type: boolean
+        provenanceType:
+          type: integer
+          format: int32
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - DELETED
+          - PURGED
+        createdBy:
+          type: string
+        updatedBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateTime:
+          type: string
+          format: date-time
+        version:
+          type: integer
+          format: int64
+        relationshipAttributes:
+          type: object
+          additionalProperties:
+            type: object
+        classifications:
+          type: array
+          items:
+            $ref: '#/components/schemas/AtlasClassification'
+        meanings:
+          type: array
+          items:
+            $ref: '#/components/schemas/AtlasTermAssignmentHeader'
+        customAttributes:
+          type: object
+          additionalProperties:
+            type: string
+        businessAttributes:
+          type: object
+          additionalProperties:
+            type: object
+            additionalProperties:
+              type: object
+        labels:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        proxy:
+          type: boolean
+    AtlasEntityWithExtInfo:
+      type: object
+      properties:
+        referredEntities:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/AtlasEntity'
+        entity:
+          $ref: '#/components/schemas/AtlasEntity'
+    AtlasTermAssignmentHeader:
+      type: object
+      properties:
+        termGuid:
+          type: string
+        relationGuid:
+          type: string
+        description:
+          type: string
+        displayText:
+          type: string
+        expression:
+          type: string
+        createdBy:
+          type: string
+        steward:
+          type: string
+        source:
+          type: string
+        confidence:
+          type: integer
+          format: int32
+        status:
+          type: string
+          enum:
+          - DISCOVERED
+          - PROPOSED
+          - IMPORTED
+          - VALIDATED
+          - DEPRECATED
+          - OBSOLETE
+          - OTHER
+    AtlasEntityHeader:
+      type: object
+      properties:
+        typeName:
+          type: string
+        attributes:
+          type: object
+          additionalProperties:
+            type: object
+        guid:
+          type: string
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - DELETED
+          - PURGED
+        displayText:
+          type: string
+        classificationNames:
+          type: array
+          items:
+            type: string
+        classifications:
+          type: array
+          items:
+            $ref: '#/components/schemas/AtlasClassification'
+        meaningNames:
+          type: array
+          items:
+            type: string
+        meanings:
+          type: array
+          items:
+            $ref: '#/components/schemas/AtlasTermAssignmentHeader'
+        isIncomplete:
+          type: boolean
+        labels:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+    SearchParams:
+      type: object
+      properties:
+        includeDeleted:
+          type: boolean
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+    SearchResult:
+      type: object
+      properties:
+        searchParameters:
+          $ref: '#/components/schemas/SearchParams'
+        types:
+          type: array
+          items:
+            type: string
+        entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/AtlasEntityHeader'
+        referredEntities:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/AtlasEntityHeader'
+    AtlasAttributeDef:
+      type: object
+      properties:
+        name:
+          type: string
+        typeName:
+          type: string
+        isOptional:
+          type: boolean
+        cardinality:
+          type: string
+          enum:
+          - SINGLE
+          - LIST
+          - SET
+        valuesMinCount:
+          type: integer
+          format: int32
+        valuesMaxCount:
+          type: integer
+          format: int32
+        isUnique:
+          type: boolean
+        isIndexable:
+          type: boolean
+        includeInNotification:
+          type: boolean
+        defaultValue:
+          type: string
+        description:
+          type: string
+        searchWeight:
+          type: integer
+          format: int32
+        indexType:
+          type: string
+          enum:
+          - DEFAULT
+          - STRING
+        constraints:
+          type: array
+          items:
+            $ref: '#/components/schemas/AtlasConstraintDef'
+        options:
+          type: object
+          additionalProperties:
+            type: string
+        displayName:
+          type: string
+    AtlasConstraintDef:
+      type: object
+      properties:
+        type:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+    TagDef:
+      type: object
+      properties:
+        category:
+          type: string
+          enum:
+          - PRIMITIVE
+          - OBJECT_ID_TYPE
+          - ENUM
+          - STRUCT
+          - CLASSIFICATION
+          - ENTITY
+          - ARRAY
+          - MAP
+          - RELATIONSHIP
+          - BUSINESS_METADATA
+        guid:
+          type: string
+        createdBy:
+          type: string
+        updatedBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateTime:
+          type: string
+          format: date-time
+        version:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+        typeVersion:
+          type: string
+        serviceType:
+          type: string
+        options:
+          type: object
+          additionalProperties:
+            type: string
+        attributeDefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/AtlasAttributeDef'
+        superTypes:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        entityTypes:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        subTypes:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+    ErrorMessage:
+      type: object
+      properties:
+        error_code:
+          type: integer
+          format: int32
+        message:
+          type: string
+    TagResponse:
+      type: object
+      properties:
+        typeName:
+          type: string
+        attributes:
+          type: object
+          additionalProperties:
+            type: object
+        entityGuid:
+          type: string
+        entityStatus:
+          type: string
+          enum:
+          - ACTIVE
+          - DELETED
+          - PURGED
+        propagate:
+          type: boolean
+        validityPeriods:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeBoundary'
+        removePropagationsOnEntityDelete:
+          type: boolean
+        entityType:
+          type: string
+        entityName:
+          type: string
+        error:
+          $ref: '#/components/schemas/ErrorMessage'
+    TagDefResponse:
+      type: object
+      properties:
+        category:
+          type: string
+          enum:
+          - PRIMITIVE
+          - OBJECT_ID_TYPE
+          - ENUM
+          - STRUCT
+          - CLASSIFICATION
+          - ENTITY
+          - ARRAY
+          - MAP
+          - RELATIONSHIP
+          - BUSINESS_METADATA
+        guid:
+          type: string
+        createdBy:
+          type: string
+        updatedBy:
+          type: string
+        createTime:
+          type: string
+          format: date-time
+        updateTime:
+          type: string
+          format: date-time
+        version:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+        typeVersion:
+          type: string
+        serviceType:
+          type: string
+        options:
+          type: object
+          additionalProperties:
+            type: string
+        attributeDefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/AtlasAttributeDef'
+        superTypes:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        entityTypes:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        subTypes:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        error:
+          $ref: '#/components/schemas/ErrorMessage'

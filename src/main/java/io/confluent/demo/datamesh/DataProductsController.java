@@ -1,5 +1,6 @@
 package io.confluent.demo.datamesh;
 
+import io.confluent.demo.datamesh.model.DataProduct;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
