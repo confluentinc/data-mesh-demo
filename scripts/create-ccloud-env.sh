@@ -74,15 +74,15 @@ echo "Define a new tag called Governance:"
 curl -X PUT -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} ${SCHEMA_REGISTRY_URL}/catalog/v1/types/tagdefs \
   --header 'Content-Type: application/json' \
   --data '[{ "entityTypes" : [ "sr_subject_version" ], "name" : "Governance", "description" : "Data Mesh Governance Attributes" , "attributeDefs" : [ { "name" : "owner", "cardinality" : "SINGLE", "typeName" : "string" }, { "name" : "description", "isOptional" : "true", "cardinality" : "SINGLE", "typeName" : "string" } ] }]'
-echo "List tags in the catalog:"
+echo "View the new tag definition:"
 curl -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} ${SCHEMA_REGISTRY_URL}/catalog/v1/types/tagdefs/Governance | jq .
-echo "Get qualified name for the Kafka topic users (not working yet):"
-QN=$(curl -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} "${SCHEMA_REGISTRY_URL}/catalog/v1/search/basic?types=sr_subject_version" | jq -r 'map(select(.entities[].attributes.name == "users-value")) | .entities[].attributes.qualifiedName')
+echo "Get qualified name for the Kafka topic users:"
+QN=$(curl -s -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} "${SCHEMA_REGISTRY_URL}/catalog/v1/search/basic?types=sr_subject_version" | jq -r '.entities[].attributes | select(.name=="users-value") | .qualifiedName ')
 echo "Qualified Name: .$QN."
 echo "Set tag to subject for users"
 curl -X PUT -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} "${SCHEMA_REGISTRY_URL}/catalog/v1/entity/tags" \
   --header 'Content-Type: application/json' \
-  --data '[ { "entityType" : "sr_subject_version", "entityName" : "${QN}", "typeName" : "Governance", "attributes" : { "owner":"yeva", "description":"foobar"} }]'
+  --data '[ { "entityType" : "sr_subject_version", "entityName" : "'"${QN}"'", "typeName" : "Governance", "attributes" : { "owner":"yeva", "description":"foobar"} }]'
 echo "Verify tag attached to subject"
 curl -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} "${SCHEMA_REGISTRY_URL}/catalog/v1/search/basic?types=sr_subject_version" | jq -r 'map(select(.entities[].attributes.name == "users-value"))'
 sleep 5
