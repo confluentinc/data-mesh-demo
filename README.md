@@ -16,7 +16,7 @@ An example implementation of Data Mesh on top of Confluent Cloud.
 
 * Create the Data Mesh in Confluent Cloud. This script will take 10-15 minutes to complete.
   ```
-  cd scripts && ./create-data-mesh.sh
+  ./scripts/create-data-mesh.sh
   ```
 
 * Run the web service with
@@ -49,7 +49,7 @@ An example implementation of Data Mesh on top of Confluent Cloud.
   ]
   ```
 
-* Destroy the Data Mesh in Confluent Cloud
+* Destroy the Data Mesh in Confluent Cloud.  Pass in as an argument the configuration file that was auto generated from `./scripts/create-data-mesh.sh`
   ```
-  cd scripts && ./destroy-data-mesh.sh stack-configs/java-service-account-<SERVICE_ACCOUNT_ID>.config
+  ./scripts/destroy-data-mesh.sh stack-configs/java-service-account-<SERVICE_ACCOUNT_ID>.config
   ```

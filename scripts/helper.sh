@@ -38,8 +38,9 @@ function create_data_product () {
     && print_pass "$CMD" \
     || exit_with_error -c $? -n "$NAME" -m "$CMD" -l $(($LINENO -3))
 
-  ccloud::create_connector connectors/ccloud-datagen-${dp}.json || exit 1
-  ccloud::wait_for_connector_up connectors/ccloud-datagen-${dp}.json 600 || exit 1
+  CONNECTOR_CONFIG="${DIR_HELPER}/connectors/ccloud-datagen-${dp}.json"
+  ccloud::create_connector $CONNECTOR_CONFIG || exit 1
+  ccloud::wait_for_connector_up $CONNECTOR_CONFIG 600 || exit 1
   printf "\nSleeping 60 seconds until the datagen source connector starts producing records for ${dp}\n"
   sleep 60
 
@@ -71,7 +72,7 @@ function create_ksqldb_app() {
   $CMD \
     && print_pass "$CMD" \
     || exit_with_error -c $? -n "$NAME" -m "$CMD" -l $(($LINENO -3))
-  while read ksqlCmd; do # from statements-cloud.sql
+  while read ksqlCmd; do
           response=$(curl -w "\n%{http_code}" -X POST $KSQLDB_ENDPOINT/ksql \
                  -H "Content-Type: application/vnd.ksql.v1+json; charset=utf-8" \
                  -u $KSQLDB_BASIC_AUTH_USER_INFO \
@@ -95,8 +96,8 @@ EOF
               else print_pass  -c "$ksqlCmd" -m "$(echo "$body" | jq -r .[].commandStatus.message)"
             fi
           }
-  sleep 3;
-  done < statements-cloud.sql
+          sleep 3;
+  done < ${DIR_HELPER}/statements-cloud.sql
 }
 
 PRETTY_PASS="\e[32m✔ \e[0m"

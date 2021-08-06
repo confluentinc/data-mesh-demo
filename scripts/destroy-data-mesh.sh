@@ -3,9 +3,9 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
 # Source library
-curl -sS -o ccloud_library.sh https://raw.githubusercontent.com/confluentinc/examples/latest/utils/ccloud_library.sh
-source ./ccloud_library.sh
-source ./helper.sh
+curl -sS -o ${DIR}/ccloud_library.sh https://raw.githubusercontent.com/confluentinc/examples/latest/utils/ccloud_library.sh
+source ${DIR}/ccloud_library.sh
+source ${DIR}/helper.sh
 
 # Setting default QUIET=false to surface potential errors
 QUIET="${QUIET:-false}"
