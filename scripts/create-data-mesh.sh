@@ -5,9 +5,9 @@ echo -e "\nLet's go build a Data Mesh!\n"
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
 # Source library
-curl -sS -o ccloud_library.sh https://raw.githubusercontent.com/confluentinc/examples/latest/utils/ccloud_library.sh
-source ./ccloud_library.sh
-source ./helper.sh
+curl -sS -o ${DIR}/ccloud_library.sh https://raw.githubusercontent.com/confluentinc/examples/latest/utils/ccloud_library.sh
+source ${DIR}/ccloud_library.sh
+source ${DIR}/helper.sh
 
 # Setting default QUIET=false to surface potential errors
 QUIET="${QUIET:-false}"
@@ -38,7 +38,7 @@ echo -e "\nDefine a new tag called DataProduct:"
 curl -X POST -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} ${SCHEMA_REGISTRY_URL}/catalog/v1/types/tagdefs \
   --header 'Content-Type: application/json' \
   --data '[{ "entityTypes" : [ "sr_subject_version" ], "name" : "DataProduct", "description" : "Data Product Attributes" , "attributeDefs" : [ { "name" : "owner", "cardinality" : "SINGLE", "typeName" : "string" }, { "name" : "description", "isOptional" : "true", "cardinality" : "SINGLE", "typeName" : "string" } ] }]'
-echo -e "\nView the new tag definition:"
+echo -e "\n\nView the new tag definition:"
 curl -s -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} ${SCHEMA_REGISTRY_URL}/catalog/v1/types/tagdefs/DataProduct | jq .
 
 # Create Data Products
@@ -59,5 +59,5 @@ echo
 
 echo
 echo "To destroy the Data Mesh environment in Confluent Cloud run ->"
-echo "    ./destroy-data-mesh.sh $CONFIG_FILE"
+echo "    ${DIR}/destroy-data-mesh.sh $CONFIG_FILE"
 echo
