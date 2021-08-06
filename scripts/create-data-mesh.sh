@@ -15,16 +15,8 @@ QUIET="${QUIET:-false}"
   REDIRECT_TO="/dev/null" ||
   REDIRECT_TO="/dev/stdout"
 
-# Verifications
-ccloud::validate_version_ccloud_cli $CCLOUD_MIN_VERSION \
-  && print_pass "ccloud version ok" \
-  || exit 1
-ccloud::validate_logged_in_ccloud_cli \
-  && print_pass "logged into ccloud CLI" \
-  || exit 1
-check_jq \
-  && print_pass "jq installed" \
-  || exit 1
+printf "\n";print_process_start "====== Preflight Checks."
+preflight_checks || exit 1
 
 printf "\n";print_process_start "====== Create a new ccloud-stack to bootstrap the Data Mesh."
 ccloud::prompt_continue_ccloud_demo || exit 1
@@ -36,17 +28,18 @@ CCLOUD_CLUSTER_ID=$(ccloud kafka cluster list -o json | jq -c -r '.[] | select (
 # Create parameters customized for Confluent Cloud instance created above
 ccloud::generate_configs $CONFIG_FILE
 source "delta_configs/env.delta"
-echo
-echo "Sleep an additional 60s to wait for all Confluent Cloud metadata to propagate"
-sleep 60
 
-printf "\n";print_process_start "====== Add tag definition to the Data Catalog."
-echo "Define a new tag called Governance:"
+echo
+echo "Sleep an additional 90s to wait for all Confluent Cloud metadata to propagate"
+sleep 90
+
+printf "\n";print_process_start "====== Add new tag definition to the Data Catalog."
+echo -e "\nDefine a new tag called DataProduct:"
 curl -X POST -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} ${SCHEMA_REGISTRY_URL}/catalog/v1/types/tagdefs \
   --header 'Content-Type: application/json' \
-  --data '[{ "entityTypes" : [ "sr_subject_version" ], "name" : "Governance", "description" : "Data Mesh Governance Attributes" , "attributeDefs" : [ { "name" : "owner", "cardinality" : "SINGLE", "typeName" : "string" }, { "name" : "description", "isOptional" : "true", "cardinality" : "SINGLE", "typeName" : "string" } ] }]'
+  --data '[{ "entityTypes" : [ "sr_subject_version" ], "name" : "DataProduct", "description" : "Data Product Attributes" , "attributeDefs" : [ { "name" : "owner", "cardinality" : "SINGLE", "typeName" : "string" }, { "name" : "description", "isOptional" : "true", "cardinality" : "SINGLE", "typeName" : "string" } ] }]'
 echo -e "\nView the new tag definition:"
-curl -s -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} ${SCHEMA_REGISTRY_URL}/catalog/v1/types/tagdefs/Governance | jq .
+curl -s -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} ${SCHEMA_REGISTRY_URL}/catalog/v1/types/tagdefs/DataProduct | jq .
 
 # Create Data Products
 create_data_product pageviews adam || exit 1
@@ -55,7 +48,8 @@ create_data_product users yeva || exit 1
 printf "\n";print_process_start "====== Prepare ksqlDB entities for new Data Products."
 create_ksqldb_app || exit 1
 
-echo
+###########################################################################
+
 echo
 echo "Confluent Cloud Environment:"
 echo

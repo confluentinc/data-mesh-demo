@@ -5,7 +5,6 @@
 ################################################################
 DIR_HELPER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
-
 function check_jq() {
   if [[ $(type jq 2>&1) =~ "not found" ]]; then
     echo "'jq' is not found. Install 'jq' and try again"
@@ -13,6 +12,19 @@ function check_jq() {
   fi
 
   return 0
+}
+
+function preflight_checks() {
+  # Verifications
+  ccloud::validate_version_ccloud_cli $CCLOUD_MIN_VERSION \
+    && print_pass "ccloud version ok" \
+    || exit 1
+  ccloud::validate_logged_in_ccloud_cli \
+    && print_pass "logged into ccloud CLI" \
+    || exit 1
+  check_jq \
+    && print_pass "jq installed" \
+    || exit 1
 }
 
 function create_data_product () {
@@ -23,7 +35,7 @@ function create_data_product () {
 
   CMD="ccloud kafka topic create $dp"
   $CMD &>"$REDIRECT_TO" \
-    && print_pass -c "$CMD" \
+    && print_pass "$CMD" \
     || exit_with_error -c $? -n "$NAME" -m "$CMD" -l $(($LINENO -3))
 
   ccloud::create_connector connectors/ccloud-datagen-${dp}.json || exit 1
@@ -31,14 +43,18 @@ function create_data_product () {
   printf "\nSleeping 60 seconds until the datagen source connector starts producing records for ${dp}\n"
   sleep 60
 
+  # Get the qualified name
   QN=$(curl -s -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} "${SCHEMA_REGISTRY_URL}/catalog/v1/search/basic?types=sr_subject_version" | jq -r --arg dp "${dp}-value" '.entities[].attributes | select(.name==$dp) | .qualifiedName ')
   echo "Qualified name for Kafka subject $dp: $QN"
-  echo "Set tag to subject for ${dp}"
+
+  echo -e "\nAdd tag to ${dp}"
   curl -X POST -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} "${SCHEMA_REGISTRY_URL}/catalog/v1/entity/tags" \
     --header 'Content-Type: application/json' \
-    --data '[ { "entityType" : "sr_subject_version", "entityName" : "'"${QN}"'", "typeName" : "Governance", "attributes" : { "owner":"yeva", "description":"foobar"} }]'
-  echo -e "\nVerify tag attached to subject ${dp}-value"
+    --data '[ { "entityType" : "sr_subject_version", "entityName" : "'"${QN}"'", "typeName" : "DataProduct", "attributes" : { "owner":"yeva", "description":"foobar"} }]'
+  echo -e "\nVerify tag is attached to ${dp}"
   curl -s -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} "${SCHEMA_REGISTRY_URL}/catalog/v1/search/basic?types=sr_subject_version" | jq -r --arg dp "${dp}-value" '.entities[] | select(.attributes.name==$dp) | .classificationNames[] '
+  echo -e "\nView tag details"
+  curl -s -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} "${SCHEMA_REGISTRY_URL}/catalog/v1/entity/type/sr_subject_version/name/${QN}/tags" | jq .
 
   return 0
 }
