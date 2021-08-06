@@ -2,7 +2,6 @@ package io.confluent.demo.datamesh;
 
 import io.confluent.demo.datamesh.cc.datacatalog.api.SubjectVersionService;
 import io.confluent.demo.datamesh.cc.datacatalog.api.TagService;
-import io.confluent.demo.datamesh.cc.datacatalog.model.AtlasEntity;
 import io.confluent.demo.datamesh.cc.datacatalog.model.AtlasEntityWithExtInfo;
 import io.confluent.demo.datamesh.cc.datacatalog.model.DataProductEntity;
 import io.confluent.demo.datamesh.cc.datacatalog.model.Tag;
@@ -20,7 +19,7 @@ import java.util.stream.Collectors;
 public class DataProductService {
 
     @ResponseStatus(value= HttpStatus.NOT_FOUND)
-    public class DataProductNotFoundException extends RuntimeException { }
+    public static class DataProductNotFoundException extends RuntimeException { }
 
     @Autowired
     private SubjectVersionService subjectVersionService;

@@ -1,8 +1,6 @@
 package io.confluent.demo.datamesh.model;
 
-import io.confluent.demo.datamesh.cc.datacatalog.model.AtlasEntity;
 import io.confluent.demo.datamesh.cc.datacatalog.model.DataProductEntity;
-import io.confluent.demo.datamesh.cc.datacatalog.model.Tag;
 
 /**
  * Place to house functions which map various objects into the

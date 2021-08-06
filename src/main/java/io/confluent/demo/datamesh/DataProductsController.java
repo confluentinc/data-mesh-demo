@@ -4,6 +4,7 @@ import io.confluent.demo.datamesh.model.DataProduct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,9 +17,7 @@ public class DataProductsController {
 
     @GetMapping
     public List<DataProduct> getDataProducts() {
-        return dataProductService.getAll()
-            .stream()
-            .collect(Collectors.toList());
+        return new ArrayList<>(dataProductService.getAll());
     }
 
     @RequestMapping("/{qualifiedName}")

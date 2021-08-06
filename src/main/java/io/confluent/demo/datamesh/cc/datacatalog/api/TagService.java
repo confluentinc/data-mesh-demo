@@ -9,14 +9,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
-import java.util.List;
 
 @Service
 public class TagService {
     private final RestTemplate restTemplate;
 
     @ResponseStatus(value= HttpStatus.NOT_FOUND)
-    public class TagNotFoundException extends RuntimeException { }
+    public static class TagNotFoundException extends RuntimeException { }
 
     public TagService(
             RestTemplateBuilder builder,

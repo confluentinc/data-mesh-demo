@@ -1,7 +1,5 @@
 package io.confluent.demo.datamesh.model;
 
-import java.util.List;
-
 public class DataProduct {
     private final String qualifiedName;
     private final String name;
@@ -25,7 +23,6 @@ public class DataProduct {
 
     /**
      * Qualified name is useful for further reference in the catalog API
-     * @return
      */
     public String getQualifiedName() {
         return qualifiedName;

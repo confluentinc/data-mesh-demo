@@ -29,8 +29,7 @@ public class SubjectVersionService {
     public AtlasEntityWithExtInfo getSubjectVersionEntity(String qualifiedName) {
         OffsetDateTime odt;
         String entityUrl = String.format("/entity/type/sr_subject_version/name/%s", qualifiedName);
-        AtlasEntityWithExtInfo rv = restTemplate.getForObject(entityUrl, AtlasEntityWithExtInfo.class);
-        return rv;
+        return restTemplate.getForObject(entityUrl, AtlasEntityWithExtInfo.class);
     }
 
     public List<AtlasEntityWithExtInfo> getAll() {
@@ -39,10 +38,8 @@ public class SubjectVersionService {
             searchUrl,
             SearchResult.class);
 
-        List<AtlasEntityWithExtInfo> rv = result.getEntities().stream()
+        return result.getEntities().stream()
            .map(header -> getSubjectVersionEntity(header.getAttributes().get("qualifiedName").toString()))
            .collect(Collectors.toList());
-
-        return rv;
     }
 }

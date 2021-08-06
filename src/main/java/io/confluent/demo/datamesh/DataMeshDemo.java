@@ -27,7 +27,7 @@ public class DataMeshDemo {
 	}
 
 	@GetMapping("/ruok")
-	public String hello() {
-		return String.format("imok");
+	public String ruok() {
+		return "imok";
 	}
 }
