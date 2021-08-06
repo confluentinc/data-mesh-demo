@@ -70,7 +70,7 @@ An example implementation of Data Mesh on top of [Confluent Cloud](https://www.c
   ]
   ```
 
-  Example: get one information on one data product:
+  Example: get one information on one data product. This requires the qualified name of the data product, which is the Schema Registry subject:
   ```
   curl -s localhost:8080/data-products/lsrc-w8v85:.:users-value:1 | jq
   {
