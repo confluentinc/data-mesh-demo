@@ -19,15 +19,19 @@ An example implementation of Data Mesh on top of Confluent Cloud.
   ./scripts/create-data-mesh.sh
   ```
 
-* Run the web service with
+* Build the web service with
    ```
-   ./gradlew bootRun
+   ./gradlew bootJar
    ```
 
-  It is successful and will wait for requests when you see this:
+* Run the web service passing in your ccloud configuration file (your file will have a different name):
   ```
-  <==========---> 80% EXECUTING [30s]
-  > :bootRun
+  java -jar build/libs/datamesh-0.0.1-SNAPSHOT.jar --spring.config.location=file:$(pwd)/scripts/stack-configs/java-service-account-291352.config
+  ```
+
+  It is successful and will wait for requests when you see a log message similar to this:
+  ```
+	2021-08-06 14:31:22.531  INFO 42900 --- [           main] io.confluent.demo.datamesh.DataMeshDemo  : Started DataMeshDemo in 1.901 seconds (JVM running for 2.331)
   ```
 
 * Use endpoint `localhost:8080` to interact with the REST API, for example with `curl` and `jq`
@@ -35,16 +39,16 @@ An example implementation of Data Mesh on top of Confluent Cloud.
   curl -s localhost:8080/data-products | jq
   [
     {
-      "qualifiedName": "lsrc-78xpp:.:pageviews-value:1",
-      "name": "pageviews",
-      "owner": "@web",
-      "version": 1
+      "qualifiedName": "lsrc-w8v85:.:users-value:1",
+      "name": "users",
+      "description": "website users",
+      "owner": "yeva"
     },
     {
-      "qualifiedName": "lsrc-78xpp:.:users-value:1",
-      "name": "users",
-      "owner": "@web",
-      "version": 1
+      "qualifiedName": "lsrc-w8v85:.:pageviews-value:1",
+      "name": "pageviews",
+      "description": "website pageviews",
+      "owner": "adam"
     }
   ]
   ```
