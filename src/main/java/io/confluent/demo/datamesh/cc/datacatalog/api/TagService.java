@@ -18,14 +18,16 @@ public class TagService {
     public static class TagNotFoundException extends RuntimeException { }
 
     public TagService(
-            RestTemplateBuilder builder,
-            @Value("${confluent.cloud.schemaregistry.auth.key}") String ccKey,
-            @Value("${confluent.cloud.schemaregistry.auth.secret}") String ccValue,
-            @Value("${confluent.cloud.schemaregistry.baseurl}") String baseUrl) {
-        restTemplate = builder
-           .rootUri(baseUrl + "/catalog/v1")
-           .basicAuthentication(ccKey, ccValue)
-           .build();
+        RestTemplateBuilder builder,
+        @Value("${basic.auth.user.info}") String srAuthInfo,
+        @Value("${schema.registry.url}") String baseUrl) {
+
+            String user = srAuthInfo.split(":")[0];
+            String pwd = srAuthInfo.split(":")[1];
+            restTemplate = builder
+               .rootUri(baseUrl + "/catalog/v1")
+               .basicAuthentication(user, pwd)
+               .build();
     }
 
     public Tag getDataProductTagForSubjectVersion(String subjectVersionQualifiedName) {
