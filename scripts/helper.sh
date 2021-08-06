@@ -31,7 +31,7 @@ function create_data_product () {
   dp=$1
   owner=$2
 
-  printf "\n";print_process_start "====== Create Data Product: $dp."
+  printf "\n";print_process_start "====== Create a new Data Product called $dp."
 
   CMD="ccloud kafka topic create $dp"
   $CMD &>"$REDIRECT_TO" \
