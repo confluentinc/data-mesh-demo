@@ -34,7 +34,7 @@ echo "Sleep an additional 90s to wait for all Confluent Cloud metadata to propag
 sleep 90
 
 printf "\n";print_process_start "====== Add new tag definition to the Data Catalog."
-echo -e "\nDefine a new tag called DataProduct:"
+echo -e "\nDefine a new tag in the Data Catalog called DataProduct:"
 curl -X POST -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} ${SCHEMA_REGISTRY_URL}/catalog/v1/types/tagdefs \
   --header 'Content-Type: application/json' \
   --data '[{ "entityTypes" : [ "sr_subject_version" ], "name" : "DataProduct", "description" : "Data Product Attributes" , "attributeDefs" : [ { "name" : "owner", "cardinality" : "SINGLE", "typeName" : "string" }, { "name" : "description", "isOptional" : "true", "cardinality" : "SINGLE", "typeName" : "string" } ] }]'
@@ -43,7 +43,7 @@ curl -s -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} ${SCHEMA_REGISTRY_URL}/catalo
 
 # Create Data Products
 create_data_product pageviews adam || exit 1
-create_data_product users yeva || exit 1
+create_data_product users rick || exit 1
 
 printf "\n";print_process_start "====== Prepare ksqlDB entities for new Data Products."
 create_ksqldb_app || exit 1
@@ -61,3 +61,8 @@ echo
 echo "To destroy the Data Mesh environment in Confluent Cloud run ->"
 echo "    ${DIR}/destroy-data-mesh.sh $CONFIG_FILE"
 echo
+
+echo
+echo "Congrats! You are ready to start exploring the data products in the Data Mesh."
+echo
+
