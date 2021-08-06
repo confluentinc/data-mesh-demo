@@ -13,7 +13,7 @@
 package io.confluent.demo.datamesh.cc.datacatalog.model;
 
 import java.util.Objects;
-import java.util.Arrays;
+
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
@@ -27,7 +27,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.threeten.bp.OffsetDateTime;
+// import org.threeten.bp.OffsetDateTime;
+import java.time.OffsetDateTime;
 /**
  * AtlasEntity
  */

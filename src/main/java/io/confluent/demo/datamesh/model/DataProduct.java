@@ -1,16 +1,16 @@
 package io.confluent.demo.datamesh.model;
 
-import java.util.List;
-
 public class DataProduct {
     private final String qualifiedName;
     private final String name;
-    private final List<Label> lables;
+    private final String description;
+    private final String owner;
 
-    public DataProduct(String name, String qualifiedName, List<Label> labels) {
+    public DataProduct(String name, String qualifiedName, String owner, String description) {
         this.name = name;
         this.qualifiedName = qualifiedName;
-        this.lables = labels;
+        this.description = description;
+        this.owner = owner;
     }
 
     public String getName() {
@@ -23,19 +23,16 @@ public class DataProduct {
 
     /**
      * Qualified name is useful for further reference in the catalog API
-     * @return
      */
     public String getQualifiedName() {
         return qualifiedName;
     }
 
     public String getOwner() {
-        // TODO: read from a well known label / attribute
-        return "@web";
+        return owner;
     }
 
     public String getDescription() {
-        // TODO: read from a well knkown label / attribute
-        return "description here";
+        return description;
     }
 }
