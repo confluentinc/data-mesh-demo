@@ -115,7 +115,7 @@ function augment_config_file() {
   REST_API_SECRET=$(echo "$REST_API_AUTH_USER_INFO" | jq -r .secret)
 
   # Split other credentials into key and secret
-  IFS=":" read -r SR_KEY SR_SECRET <<< "$SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO"
+  IFS=":" read -r SCHEMA_REGISTRY_KEY SCHEMA_REGISTRY_SECRET <<< "$SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO"
   IFS=":" read -r KSQLDB_KEY KSQLDB_SECRET <<< "$KSQLDB_BASIC_AUTH_USER_INFO"
 
   cat <<EOF >> $file
@@ -126,8 +126,8 @@ confluent.cloud.kafka.cluster.id=${KAFKA_CLUSTER_ID}
 confluent.cloud.kafka.auth.key=${CLOUD_KEY}
 confluent.cloud.kafka.auth.secret=${CLOUD_SECRET}
 confluent.cloud.schemaregistry.url=${SCHEMA_REGISTRY_URL}
-confluent.cloud.schemaregistry.auth.key=${SR_KEY}
-confluent.cloud.schemaregistry.auth.secret=${SR_SECRET}
+confluent.cloud.schemaregistry.auth.key=${SCHEMA_REGISTRY_KEY}
+confluent.cloud.schemaregistry.auth.secret=${SCHEMA_REGISTRY_SECRET}
 confluent.cloud.ksqldb.url=${KSQLDB_ENDPOINT}
 confluent.cloud.ksqldb.auth.key=${KSQLDB_KEY}
 confluent.cloud.ksqldb.auth.secret=${KSQLDB_SECRET}

@@ -53,5 +53,8 @@ SERVICE_ACCOUNT_ID=$(ccloud::get_service_account $CLOUD_KEY) || exit 1
 echo
 ccloud::destroy_ccloud_stack $SERVICE_ACCOUNT_ID
 
+REST_API_KEY=$( grep "^confluent.cloud.auth.key" $CONFIG_FILE | awk -F'=' '{print $2;}' )
+if [[ ! -z "$REST_API_KEY" ]]; then ccloud api-key delete $REST_API_KEY; fi
+
 echo
 echo "Tip: 'ccloud' CLI currently has no environment set"

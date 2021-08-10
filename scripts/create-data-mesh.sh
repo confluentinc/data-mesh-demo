@@ -29,6 +29,7 @@ CCLOUD_CLUSTER_ID=$(ccloud kafka cluster list -o json | jq -c -r '.[] | select (
 ccloud::generate_configs $CONFIG_FILE
 source "delta_configs/env.delta"
 augment_config_file $CONFIG_FILE
+exit
 
 echo
 echo "Sleep an additional 90s to wait for all Confluent Cloud metadata to propagate"
