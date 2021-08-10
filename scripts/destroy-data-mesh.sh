@@ -51,6 +51,8 @@ source delta_configs/env.delta
 SERVICE_ACCOUNT_ID=$(ccloud::get_service_account $CLOUD_KEY) || exit 1
 
 echo
+REST_API_KEY=$( grep "^confluent.cloud.auth.key" $CONFIG_FILE | awk -F'=' '{print $2;}' )
+if [[ ! -z "$REST_API_KEY" ]]; then ccloud api-key delete $REST_API_KEY; fi
 ccloud::destroy_ccloud_stack $SERVICE_ACCOUNT_ID
 
 echo

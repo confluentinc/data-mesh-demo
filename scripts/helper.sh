@@ -100,6 +100,44 @@ EOF
   done < ${DIR_HELPER}/statements-cloud.sql
 }
 
+function augment_config_file() {
+  file=$1
+
+  # Determine IDs for environment and Kafka cluster
+  ENVIRONMENT_NAME_PREFIX=${ENVIRONMENT_NAME_PREFIX:-"ccloud-stack-$SERVICE_ACCOUNT_ID"}
+  ENVIRONMENT_ID=$(ccloud environment list -o json | jq -r 'map(select(.name | startswith("'"$ENVIRONMENT_NAME_PREFIX"'"))) | .[].id')
+  KAFKA_CLUSTER_NAME=${KAFKA_CLUSTER_NAME:-"demo-kafka-cluster-$SERVICE_ACCOUNT_ID"}
+  KAFKA_CLUSTER_ID=$(ccloud kafka cluster list -o json | jq -r 'map(select(.name | startswith("'"$KAFKA_CLUSTER_NAME"'"))) | .[].id')
+
+  # Create credentials for the cloud resource for the Connector REST API
+  REST_API_AUTH_USER_INFO=$(ccloud api-key create --resource cloud -o json) || exit 1
+  REST_API_KEY=$(echo "$REST_API_AUTH_USER_INFO" | jq -r .key)
+  REST_API_SECRET=$(echo "$REST_API_AUTH_USER_INFO" | jq -r .secret)
+
+  # Split other credentials into key and secret
+  IFS=":" read -r SCHEMA_REGISTRY_KEY SCHEMA_REGISTRY_SECRET <<< "$SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO"
+  IFS=":" read -r KSQLDB_KEY KSQLDB_SECRET <<< "$KSQLDB_BASIC_AUTH_USER_INFO"
+
+  cat <<EOF >> $file
+
+# Data Mesh demo specifics
+confluent.cloud.environment.id=${ENVIRONMENT_ID}
+confluent.cloud.kafka.cluster.id=${KAFKA_CLUSTER_ID}
+confluent.cloud.kafka.auth.key=${CLOUD_KEY}
+confluent.cloud.kafka.auth.secret=${CLOUD_SECRET}
+confluent.cloud.schemaregistry.url=${SCHEMA_REGISTRY_URL}
+confluent.cloud.schemaregistry.auth.key=${SCHEMA_REGISTRY_KEY}
+confluent.cloud.schemaregistry.auth.secret=${SCHEMA_REGISTRY_SECRET}
+confluent.cloud.ksqldb.url=${KSQLDB_ENDPOINT}
+confluent.cloud.ksqldb.auth.key=${KSQLDB_KEY}
+confluent.cloud.ksqldb.auth.secret=${KSQLDB_SECRET}
+confluent.cloud.auth.key=${REST_API_KEY}
+confluent.cloud.auth.secret=${REST_API_SECRET}
+EOF
+
+  return 0
+}
+
 PRETTY_PASS="\e[32m✔ \e[0m"
 function print_pass() {
   printf "${PRETTY_PASS}%s\n" "${1}"
