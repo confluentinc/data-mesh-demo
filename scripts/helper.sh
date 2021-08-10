@@ -100,6 +100,40 @@ EOF
   done < ${DIR_HELPER}/statements-cloud.sql
 }
 
+function augment_config_file() {
+  file=$1
+
+  # Create credentials for the cloud resource for the Connector REST API
+  REST_API_AUTH_USER_INFO=$(ccloud api-key create --resource cloud -o json) || exit 1
+  REST_API_KEY=$(echo "$REST_API_AUTH_USER_INFO" | jq -r .key)
+  REST_API_SECRET=$(echo "$REST_API_AUTH_USER_INFO" | jq -r .secret)
+
+  # Split other credentials into key and secret
+  SR_KEY=$(echo "$SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO" | jq -r .key)
+  SR_SECRET=$(echo "$SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO" | jq -r .secret)
+  KSQLDB_KEY=$(echo "$KSQLDB_BASIC_AUTH_USER_INFO" | jq -r .key)
+  KSQLDB_SECRET=$(echo "$KSQLDB_BASIC_AUTH_USER_INFO" | jq -r .secret)
+
+  cat <<EOF >> $file
+
+# Data Mesh demo specifics
+confluent.cloud.environment.id=${ENVIRONMENT_ID}
+confluent.cloud.kafka.cluster.id=${KAFKA_CLUSTER_ID}
+confluent.cloud.kafka.auth.key=${CLOUD_KEY}
+confluent.cloud.kafka.auth.secret=${CLOUD_SECRET}
+confluent.cloud.schemaregistry.url=${SCHEMA_REGISTRY_URL}
+confluent.cloud.schemaregistry.auth.key=${SR_KEY}
+confluent.cloud.schemaregistry.auth.secret=${SR_SECRET}
+confluent.cloud.ksqldb.url=${KSQLDB_ENDPOINT}
+confluent.cloud.ksqldb.auth.key=${KSQLDB_KEY}
+confluent.cloud.ksqldb.auth.secret=${KSQLDB_SECRET}
+confluent.cloud.auth.key=${REST_API_KEY}
+confluent.cloud.auth.secret=${REST_API_SECRET}
+EOF
+
+  return 0
+}
+
 PRETTY_PASS="\e[32m✔ \e[0m"
 function print_pass() {
   printf "${PRETTY_PASS}%s\n" "${1}"
