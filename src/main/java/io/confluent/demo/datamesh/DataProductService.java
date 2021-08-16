@@ -24,7 +24,11 @@ public class DataProductService {
     @ResponseStatus(value=HttpStatus.NOT_FOUND)
     public static class DataProductNotFoundException extends RuntimeException { }
     @ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)
-    public static class DataProductCreateException extends RuntimeException {}
+    public static class DataProductCreateException extends RuntimeException {
+        public DataProductCreateException(String msg) {
+           super(msg);
+        }
+    }
 
     @Autowired
     private SubjectVersionService subjectVersionService;
@@ -63,9 +67,13 @@ public class DataProductService {
         }
         else if (request instanceof CreateKsqlDbDataProductRequest) {
             CreateKsqlDbDataProductRequest ksqlRequest = (CreateKsqlDbDataProductRequest)request;
+            // The following blocks until a result is obtained from the
+            // ksqlDB service. The queryId will contain the ID of the new
+            // persistent query that was created, and we'll use that to know if
+            // we should crate a new Data Product in the subject service
             ExecuteStatementResult result = ksqlService.execute(ksqlRequest.getCommand()).get();
             if (result.queryId().isEmpty()) {
-                throw new DataProductCreateException();
+                throw new DataProductCreateException(result.toString());
             } else {
                 // TODO: Implement tagging of new data product
                 return new DataProduct("Fixme", "qualifiedName",
