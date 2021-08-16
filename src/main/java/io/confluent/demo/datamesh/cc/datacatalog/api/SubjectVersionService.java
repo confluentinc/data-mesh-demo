@@ -17,13 +17,12 @@ public class SubjectVersionService {
 
     public SubjectVersionService(
             RestTemplateBuilder builder,
-            @Value("${basic.auth.user.info}") String srAuthInfo,
-            @Value("${schema.registry.url}") String baseUrl) {
-        String user = srAuthInfo.split(":")[0];
-        String pwd = srAuthInfo.split(":")[1];
+            @Value("${confluent.cloud.schemaregistry.auth.key}") String srKey,
+            @Value("${confluent.cloud.schemaregistry.auth.secret}") String srSecret,
+            @Value("${confluent.cloud.schemaregistry.url}") String baseUrl) {
         restTemplate = builder
             .rootUri(baseUrl + "/catalog/v1")
-            .basicAuthentication(user, pwd)
+            .basicAuthentication(srKey, srSecret)
             .build();
     }
 

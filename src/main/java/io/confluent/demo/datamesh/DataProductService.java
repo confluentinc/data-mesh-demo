@@ -5,12 +5,12 @@ import io.confluent.demo.datamesh.cc.datacatalog.api.TagService;
 import io.confluent.demo.datamesh.cc.datacatalog.model.AtlasEntityWithExtInfo;
 import io.confluent.demo.datamesh.cc.datacatalog.model.DataProductEntity;
 import io.confluent.demo.datamesh.cc.datacatalog.model.Tag;
-import io.confluent.demo.datamesh.model.DataProduct;
-import io.confluent.demo.datamesh.model.Mapper;
+import io.confluent.demo.datamesh.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,4 +50,14 @@ public class DataProductService {
             .collect(Collectors.toList());
     }
 
+    public void createDataProduct(CreateDataProductRequest request) {
+        if (request instanceof CreateS3DataProductRequest) {
+        }
+        else if (request instanceof CreateKsqlDbDataProductRequest) {
+        }
+        else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Unkonwn type in request body. Expecting @type field = (KSQLDB | S3)");
+        }
+    }
 }
