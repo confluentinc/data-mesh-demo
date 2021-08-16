@@ -34,6 +34,8 @@ public class KsqlDbService {
             .create()
             .setHost(url.getHost())
             .setPort(url.getPort())
+            .setUseTls(true)
+            .setUseAlpn(true)
             .setBasicAuthCredentials(ksqlAuthKey, ksqlAuthSecret);
         this.ksqlClient = Client.create(options);
     }
