@@ -2,11 +2,13 @@ package io.confluent.demo.datamesh.cc.ksqldb.api;
 
 import io.confluent.ksql.api.client.Client;
 import io.confluent.ksql.api.client.ClientOptions;
+import io.confluent.ksql.api.client.ExecuteStatementResult;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 
 import java.net.URL;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class KsqlDbService {
@@ -40,7 +42,7 @@ public class KsqlDbService {
         this.ksqlClient = Client.create(options);
     }
 
-    public String execute(String request) throws Exception {
-        return ksqlClient.executeStatement(request).get().toString();
+    public CompletableFuture<ExecuteStatementResult> execute(String request) throws Exception {
+        return ksqlClient.executeStatement(request);
     }
 }

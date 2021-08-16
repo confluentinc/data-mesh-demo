@@ -31,8 +31,8 @@ public class DataProductsController {
     }
 
     @PostMapping
-    public void postDataProduct(@RequestBody CreateDataProductRequest request) {
-        dataProductService.createDataProduct(request);
+    public DataProduct postDataProduct(@RequestBody CreateDataProductRequest request) throws Exception {
+        return dataProductService.createDataProduct(request);
     }
 
 }
