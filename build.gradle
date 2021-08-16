@@ -11,12 +11,22 @@ sourceCompatibility = '11'
 
 repositories {
 	mavenCentral()
+	maven {
+		url "https://ksqldb-maven.s3.amazonaws.com/maven/"
+	}
+	maven {
+		url "https://jenkins-confluent-packages-beta-maven.s3.amazonaws.com/7.0.0-beta210604105212-cp7/1/maven/"
+	}
 }
 dependencies {
 	implementation 'io.swagger.core.v3:swagger-annotations:2.0.0'
 	implementation 'com.google.code.gson:gson:2.8.1'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.threeten:threetenbp:1.5.0'
+	def noLog = {
+		exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+	}
+	implementation 'io.confluent.ksql:ksqldb-api-client:0.19.0', noLog
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 

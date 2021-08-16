@@ -5,6 +5,7 @@ import io.confluent.demo.datamesh.cc.datacatalog.api.TagService;
 import io.confluent.demo.datamesh.cc.datacatalog.model.AtlasEntityWithExtInfo;
 import io.confluent.demo.datamesh.cc.datacatalog.model.DataProductEntity;
 import io.confluent.demo.datamesh.cc.datacatalog.model.Tag;
+import io.confluent.demo.datamesh.cc.ksqldb.api.KsqlDbService;
 import io.confluent.demo.datamesh.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,8 @@ public class DataProductService {
 
     @Autowired
     private SubjectVersionService subjectVersionService;
+    @Autowired
+    private KsqlDbService ksqlService;
 
     @Autowired
     private TagService tagService;
