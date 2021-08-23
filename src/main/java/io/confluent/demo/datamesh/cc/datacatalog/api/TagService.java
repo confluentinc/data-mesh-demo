@@ -4,11 +4,13 @@ import io.confluent.demo.datamesh.cc.datacatalog.model.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class TagService {
@@ -36,37 +38,16 @@ public class TagService {
             .findFirst().orElseThrow(TagNotFoundException::new);
     }
 
-    class DataProductTagEntityRequest {
-        class Attributes {
-            private final String owner;
-            private final String description;
-            public Attributes(String owner, String description) {
-                this.owner = owner;
-                this.description = description;
-            }
-            public String getOwner() {return this.owner;}
-            public String getDescription() {return this.description;}
-        }
+    public TagResponse[] tagSubjectVersionWithDataProduct(String entityQualifiedName,
+                                                 DataProductTag tag) {
+        String url = String.format("/entity/tags");
+        List<DataProductTagEntityRequest> request = Arrays.asList(
+                new DataProductTagEntityRequest(entityQualifiedName, tag));
 
-        private final String entityName;
-        private final Attributes attributes;
+        ResponseEntity<TagResponse[]> response = restTemplate.postForEntity(
+                url, request, TagResponse[].class);
 
-        public DataProductTagEntityRequest(String entityName, DataProductTag tag) {
-            this.entityName = entityName;
-            this.attributes = new Attributes(tag.getOwner(), tag.getDescription());
-        }
-
-        public String getEntityType() {return "sr_subject_version";}
-        public String getEntityName() {return this.entityName;}
-        public String getTypeName() {return "DataProduct";}
-        public Attributes getAttributes() {return this.attributes;}
-    }
-
-    public void tagSubjectVersionWithDataProduct(String entityQualifiedName, DataProductTag tag) {
-        String url = String.format("entity/tags");
-        DataProductTagEntityRequest request = new DataProductTagEntityRequest(entityQualifiedName, tag);
-        // TODO: Finish wiring up the POST to place the DataProduct tag on the given entity
-        //String response = restTemplate.postForEntity(url, request, String.class);
+        return response.getBody();
     }
 
 }

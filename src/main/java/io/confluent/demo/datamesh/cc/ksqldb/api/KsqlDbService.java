@@ -42,6 +42,26 @@ public class KsqlDbService {
         this.ksqlClient = Client.create(options);
     }
 
+    /**
+     *
+     *
+     * Example return value from ksqlDB API (if needed or sdk handles)
+     * {
+     *   "@type": "currentStatus",
+     *   "statementText": "CREATE STREAM PAGEVIEWS_USER3 WITH (KAFKA_TOPIC='pksqlc-w5q3gPAGEVIEWS_USER3', PARTITIONS=6, REPLICAS=3) AS SELECT *\nFROM PAGEVIEWS PAGEVIEWS\nWHERE (PAGEVIEWS.USERID = 'User_3')\nEMIT CHANGES;",
+     *   "commandId": "stream/`PAGEVIEWS_USER3`/create",
+     *   "commandStatus": {
+     *     "status": "SUCCESS",
+     *     "message": "Created query with ID CSAS_PAGEVIEWS_USER3_5",
+     *     "queryId": "CSAS_PAGEVIEWS_USER3_5"
+     *   },
+     *   "commandSequenceNumber": 6,
+     *   "warnings": []
+     * }
+     * @param request
+     * @return
+     * @throws Exception
+     */
     public CompletableFuture<ExecuteStatementResult> execute(String request) throws Exception {
         return ksqlClient.executeStatement(request);
     }
