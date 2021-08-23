@@ -30,14 +30,14 @@ public class DataMeshDemo {
 	}
 
 	@GetMapping("/testme")
-	public TagResponse[] testMe() throws Exception {
-			//@RequestBody CreateDataProductRequest request) throws Exception {
+	public DataProduct testMe(@RequestBody CreateDataProductRequest request) throws Exception {
+		return testDpService.createDataProduct(request);
+
 		//return tsvc.getDataProductTagForSubjectVersion("lsrc-w8v85:.:users-value:1").toString();
 		//return "no test function setup";
-		//return testDpService.createDataProduct(request);
-		return tsvc.tagSubjectVersionWithDataProduct(
-				"lsrc-r3ww0:.:pksqlc-w5q3gPAGEVIEWS_USER3-value:1",
-				new DataProductTag("bbecker", "she is user 3"));
+		//return tsvc.tagSubjectVersionWithDataProduct(
+		//		"lsrc-r3ww0:.:pksqlc-w5q3gPAGEVIEWS_USER3-value:1",
+		//		new DataProductTag("bbecker", "she is user 3"));
 	}
 
 	@GetMapping("/ruok")

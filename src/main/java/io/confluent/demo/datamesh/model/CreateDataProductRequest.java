@@ -12,8 +12,16 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 })
 public abstract class CreateDataProductRequest {
     private String name;
+    private String description;
+    private String owner;
 
     public CreateDataProductRequest() { }
+
+    public void setDescription(String description) { this.description = description;}
+    public String getDescription() {return this.description;}
+
+    public void setOwner(String owner) { this.owner = owner;}
+    public String getOwner() {return this.owner;}
 
     public void setName(String name) {
         this.name = name;

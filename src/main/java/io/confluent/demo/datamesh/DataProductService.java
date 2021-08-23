@@ -4,6 +4,7 @@ import io.confluent.demo.datamesh.cc.datacatalog.api.SubjectVersionService;
 import io.confluent.demo.datamesh.cc.datacatalog.api.TagService;
 import io.confluent.demo.datamesh.cc.datacatalog.model.AtlasEntityWithExtInfo;
 import io.confluent.demo.datamesh.cc.datacatalog.model.DataProductEntity;
+import io.confluent.demo.datamesh.cc.datacatalog.model.DataProductTag;
 import io.confluent.demo.datamesh.cc.datacatalog.model.Tag;
 import io.confluent.demo.datamesh.cc.ksqldb.api.KsqlDbService;
 import io.confluent.demo.datamesh.model.*;
@@ -75,9 +76,10 @@ public class DataProductService {
             if (result.queryId().isEmpty()) {
                 throw new DataProductCreateException(result.toString());
             } else {
-                // TODO: Implement tagging of new data product
-                return new DataProduct("Fixme", "qualifiedName",
-                        "owner", "description");
+                tagService.tagSubjectVersionWithDataProduct(
+                        ksqlRequest.getDataProductName(),
+                        new DataProductTag(ksqlRequest.getOwner(), ksqlRequest.getDescription()));
+                return get(ksqlRequest.getDataProductName());
             }
         }
         else {
