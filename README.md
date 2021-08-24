@@ -81,6 +81,23 @@ An example implementation of Data Mesh on top of [Confluent Cloud](https://www.c
   }
   ```
 
+  Example: Create a new data product using ksqlDB:
+  ```
+  curl -XPOST -H 'Content-Type: application/json' --data "@ksqldbrequest.json" http://localhost:8080/data-products
+  ```
+    where the contents of the `ksqldbrequest.json` file are:
+    ```
+    {
+      "@type": "KSQLDB",
+      "name": "pageviews_user3",
+      "owner": "owner value here",
+      "description": "description value here",
+      "dataProductName": "lsrc-xgw2k:.:pageviews_user3-value:1",
+      "command": "CREATE STREAM PAGEVIEWS_USER3 WITH (KAFKA_TOPIC='pageviews_user3', PARTITIONS=3, REPLICAS=3) AS SELECT * FROM PAGEVIEWS WHERE (PAGEVIEWS.USERID = 'User_3') EMIT CHANGES;"
+    }
+    ```
+  For now, the user must provide the fully qualified name of the expected subject version that the SQL command will create, so that the data mesh server can tag the subject version appropriately.
+
 #### Teardown
 
 * Stop the web service by issuing `<ctrl-c>` in the window where you started it.

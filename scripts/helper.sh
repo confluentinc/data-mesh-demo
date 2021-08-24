@@ -108,6 +108,7 @@ function augment_config_file() {
   ENVIRONMENT_ID=$(ccloud environment list -o json | jq -r 'map(select(.name | startswith("'"$ENVIRONMENT_NAME_PREFIX"'"))) | .[].id')
   KAFKA_CLUSTER_NAME=${KAFKA_CLUSTER_NAME:-"demo-kafka-cluster-$SERVICE_ACCOUNT_ID"}
   KAFKA_CLUSTER_ID=$(ccloud kafka cluster list -o json | jq -r 'map(select(.name | startswith("'"$KAFKA_CLUSTER_NAME"'"))) | .[].id')
+  SCHEMA_REGISTRY_ID=$(ccloud schema-registry cluster describe -o json | jq -r ".cluster_id")
 
   # Create credentials for the cloud resource for the Connector REST API
   REST_API_AUTH_USER_INFO=$(ccloud api-key create --resource cloud -o json) || exit 1
@@ -125,6 +126,7 @@ confluent.cloud.environment.id=${ENVIRONMENT_ID}
 confluent.cloud.kafka.cluster.id=${KAFKA_CLUSTER_ID}
 confluent.cloud.kafka.auth.key=${CLOUD_KEY}
 confluent.cloud.kafka.auth.secret=${CLOUD_SECRET}
+confluent.cloud.schemaregistry.id=${SCHEMA_REGISTRY_ID}
 confluent.cloud.schemaregistry.url=${SCHEMA_REGISTRY_URL}
 confluent.cloud.schemaregistry.auth.key=${SCHEMA_REGISTRY_KEY}
 confluent.cloud.schemaregistry.auth.secret=${SCHEMA_REGISTRY_SECRET}
