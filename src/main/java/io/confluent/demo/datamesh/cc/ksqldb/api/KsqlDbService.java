@@ -14,18 +14,6 @@ import java.util.concurrent.CompletableFuture;
 public class KsqlDbService {
     private final Client ksqlClient;
 
-    class PostRequest {
-        private String sql;
-
-        public PostRequest(String sql) {
-            this.sql = sql;
-        }
-
-        public String getSql() {
-           return sql;
-        }
-    }
-
     public KsqlDbService(
             RestTemplateBuilder builder,
             @Value("${confluent.cloud.ksqldb.auth.key}") String ksqlAuthKey,

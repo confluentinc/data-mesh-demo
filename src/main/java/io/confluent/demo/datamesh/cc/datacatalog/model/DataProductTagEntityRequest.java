@@ -1,8 +1,8 @@
-package io.confluent.demo.datamesh.cc.datacatalog.api;
+package io.confluent.demo.datamesh.cc.datacatalog.model;
 
 import io.confluent.demo.datamesh.cc.datacatalog.model.DataProductTag;
 
-class DataProductTagEntityRequest {
+public class DataProductTagEntityRequest {
     class Attributes {
         private final String owner;
         private final String description;

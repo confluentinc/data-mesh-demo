@@ -5,6 +5,8 @@ import io.confluent.demo.datamesh.cc.datacatalog.api.TagService;
 import io.confluent.demo.datamesh.cc.datacatalog.model.DataProductTag;
 import io.confluent.demo.datamesh.cc.datacatalog.model.TagResponse;
 import io.confluent.demo.datamesh.cc.ksqldb.api.KsqlDbService;
+import io.confluent.demo.datamesh.cc.schemaregistry.api.SchemaRegistryService;
+import io.confluent.demo.datamesh.cc.schemaregistry.model.LatestResponse;
 import io.confluent.demo.datamesh.model.CreateDataProductRequest;
 import io.confluent.demo.datamesh.model.CreateKsqlDbDataProductRequest;
 import io.confluent.demo.datamesh.model.DataProduct;
@@ -20,18 +22,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class DataMeshDemo {
 	//@Autowired
 	//SubjectVersionService svc;
+	//@Autowired
+	//TagService tsvc;
+	//@Autowired
+	//DataProductService testDpService;
 	@Autowired
-	TagService tsvc;
-	@Autowired
-	DataProductService testDpService;
+	SchemaRegistryService testSchemaService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(DataMeshDemo.class, args);
 	}
 
 	@GetMapping("/testme")
-	public DataProduct testMe(@RequestBody CreateDataProductRequest request) throws Exception {
-		return testDpService.createDataProduct(request);
+	public LatestResponse testMe() throws Exception {
+		return testSchemaService.getLatest("pageviews-value");
+		//return testDpService.createDataProduct(request);
 
 		//return tsvc.getDataProductTagForSubjectVersion("lsrc-w8v85:.:users-value:1").toString();
 		//return "no test function setup";
