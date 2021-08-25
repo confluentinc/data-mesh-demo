@@ -38,8 +38,10 @@ public class TagService {
             .findFirst().orElseThrow(TagNotFoundException::new);
     }
 
-    public TagResponse[] tagSubjectVersionWithDataProduct(String entityQualifiedName,
-                                                 DataProductTag tag) {
+    public TagResponse[] tagSubjectVersionWithDataProduct(
+            String entityQualifiedName,
+            DataProductTag tag)
+    {
         String url = String.format("/entity/tags");
         List<DataProductTagEntityRequest> request = Arrays.asList(
                 new DataProductTagEntityRequest(entityQualifiedName, tag));

@@ -15,7 +15,8 @@ public abstract class CreateDataProductRequest {
     private String description;
     private String owner;
 
-    public CreateDataProductRequest() { }
+    public CreateDataProductRequest() {
+    }
 
     public void setDescription(String description) { this.description = description;}
     public String getDescription() {return this.description;}
