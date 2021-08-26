@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,7 +53,7 @@ public class DataProductService {
     }
 
     public List<DataProduct> getAll() {
-        return subjectVersionService.getAll()
+        return subjectVersionService.getDataProducts()
             .stream()
             .map(this::buildDataProductEntityFromSubjectVersion)
             .map(Mapper::ccToDataProduct)

@@ -1,20 +1,29 @@
 package io.confluent.demo.datamesh.cc.datacatalog.api;
 
+import io.confluent.demo.datamesh.cc.datacatalog.model.AtlasClassification;
 import io.confluent.demo.datamesh.cc.datacatalog.model.AtlasEntityHeader;
 import io.confluent.demo.datamesh.cc.datacatalog.model.AtlasEntityWithExtInfo;
 import io.confluent.demo.datamesh.cc.datacatalog.model.SearchResult;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.OffsetDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
+@RestController
+@RequestMapping("/subjects")
 public class SubjectVersionService {
     private final RestTemplate restTemplate;
 
@@ -46,25 +55,53 @@ public class SubjectVersionService {
         return restTemplate.getForObject(entityUrl, AtlasEntityWithExtInfo.class);
     }
 
-    public List<AtlasEntityWithExtInfo> getAll() {
-        String searchUrl = "/search/basic?types=sr_subject_version&tag=DataProduct&attrs=version";
-        SearchResult result = restTemplate.getForObject(
-            searchUrl,
-            SearchResult.class);
-
+    private List<AtlasEntityWithExtInfo> filterForDuplicates(SearchResult result) {
         /**
          * Filters out the results by version taking the latest version for each search result
          */
         return result
-            .getEntities()
-            .stream()
-            .collect(Collectors.toMap(
-                    SubjectVersionService::getEntityName,
-                    Function.identity(),
-                    SubjectVersionService::getLatestHeader))
-            .values()
-            .stream()
-            .map(header -> getSubjectVersionEntity(header.getAttributes().get("qualifiedName").toString()))
-           .collect(Collectors.toList());
+                .getEntities()
+                .stream()
+                .collect(Collectors.toMap(
+                        SubjectVersionService::getEntityName,
+                        Function.identity(),
+                        SubjectVersionService::getLatestHeader))
+                .values()
+                .stream()
+                .map(header -> getSubjectVersionEntity(header.getAttributes().get("qualifiedName").toString()))
+                .collect(Collectors.toList());
     }
+    @GetMapping
+    public List<AtlasEntityWithExtInfo> getAll(
+            @RequestParam Optional<String> includeTag,
+            @RequestParam Optional<String> excludeTag) {
+
+        String searchUrl = "/search/basic?types=sr_subject_version&attrs=version";
+        if(!includeTag.isEmpty() && includeTag.get().trim().length() > 0)
+            searchUrl = searchUrl + "&tag=" + includeTag.get();
+
+        SearchResult result = restTemplate.getForObject(
+                searchUrl,
+                SearchResult.class);
+
+        List<AtlasEntityWithExtInfo> found = filterForDuplicates(result);
+        if (excludeTag.isEmpty()) {
+            return found;
+        } else {
+            return found.stream()
+                .filter(entry -> {
+                    return Optional.ofNullable(entry.getEntity().getClassifications())
+                        .orElse(Collections.<AtlasClassification> emptyList())
+                        .stream()
+                        .filter(c -> excludeTag.get().equals(c.getTypeName()))
+                        .findAny()
+                        .isEmpty();
+                })
+                .collect(Collectors.toList());
+        }
+    }
+    public List<AtlasEntityWithExtInfo> getDataProducts() {
+        return getAll(Optional.of("DataProduct"), Optional.empty());
+    }
+
 }
