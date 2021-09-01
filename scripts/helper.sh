@@ -109,8 +109,7 @@ function augment_config_file() {
   KAFKA_CLUSTER_NAME=${KAFKA_CLUSTER_NAME:-"demo-kafka-cluster-$SERVICE_ACCOUNT_ID"}
   KAFKA_CLUSTER_ID=$(ccloud kafka cluster list -o json | jq -r 'map(select(.name | startswith("'"$KAFKA_CLUSTER_NAME"'"))) | .[].id')
   SCHEMA_REGISTRY_ID=$(ccloud schema-registry cluster describe -o json | jq -r ".cluster_id")
-  # waves hands at the possibility of there being multiple ksqlDB applications in the current users environment
-  KSQLDB_ID=$(ccloud ksql app list -o json | jq -r '.[].id')
+  KSQLDB_ID=$(ccloud ksql app list -o json | jq -r 'map(select(.name == "demo-ksqldb-'"$SERVICE_ACCOUNT_ID"'")) | .[].id')
 
   # Create credentials for the cloud resource for the Connector REST API
   REST_API_AUTH_USER_INFO=$(ccloud api-key create --resource cloud -o json) || exit 1
@@ -153,37 +152,37 @@ function print_error() {
 }
 PRETTY_CODE="\e[1;100;37m"
 function print_code() {
-	printf "${PRETTY_CODE}%s\e[0m\n" "${1}"
+  printf "${PRETTY_CODE}%s\e[0m\n" "${1}"
 }
 function print_process_start() {
-	printf "⌛ %s\n" "${1}"
+  printf "⌛ %s\n" "${1}"
 }
 function print_code_pass() {
   local MESSAGE=""
-	local CODE=""
+  local CODE=""
   OPTIND=1
   while getopts ":c:m:" opt; do
     case ${opt} in
-			c ) CODE=${OPTARG};;
+      c ) CODE=${OPTARG};;
       m ) MESSAGE=${OPTARG};;
-		esac
-	done
+    esac
+  done
   shift $((OPTIND-1))
-	printf "${PRETTY_PASS}${PRETTY_CODE}%s\e[0m\n" "${CODE}"
-	[[ -z "$MESSAGE" ]] || printf "\t$MESSAGE\n"			
+  printf "${PRETTY_PASS}${PRETTY_CODE}%s\e[0m\n" "${CODE}"
+  [[ -z "$MESSAGE" ]] || printf "\t$MESSAGE\n"      
 }
 function print_code_error() {
   local MESSAGE=""
-	local CODE=""
+  local CODE=""
   OPTIND=1
   while getopts ":c:m:" opt; do
     case ${opt} in
-			c ) CODE=${OPTARG};;
+      c ) CODE=${OPTARG};;
       m ) MESSAGE=${OPTARG};;
-		esac
-	done
+    esac
+  done
   shift $((OPTIND-1))
-	printf "${PRETTY_ERROR}${PRETTY_CODE}%s\e[0m\n" "${CODE}"
-	[[ -z "$MESSAGE" ]] || printf "\t$MESSAGE\n"			
+  printf "${PRETTY_ERROR}${PRETTY_CODE}%s\e[0m\n" "${CODE}"
+  [[ -z "$MESSAGE" ]] || printf "\t$MESSAGE\n"      
 }
 
