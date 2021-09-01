@@ -38,23 +38,6 @@ public class SubjectVersionService {
             .build();
     }
 
-    private static String getEntityName(AtlasEntityHeader header) {
-        return (String)header.getAttributes().get("name");
-    }
-    public static AtlasEntityHeader getLatestHeader(AtlasEntityHeader h1, AtlasEntityHeader h2) {
-        int r1Ver = (int)h1.getAttributes().get("version");
-        int r2Ver = (int)h2.getAttributes().get("version");
-        if (r2Ver > r1Ver)
-            return h2;
-        else
-            return h1;
-    }
-    public AtlasEntityWithExtInfo getSubjectVersionEntity(String qualifiedName) {
-        OffsetDateTime odt;
-        String entityUrl = String.format("/entity/type/sr_subject_version/name/%s", qualifiedName);
-        return restTemplate.getForObject(entityUrl, AtlasEntityWithExtInfo.class);
-    }
-
     private List<AtlasEntityWithExtInfo> filterForDuplicates(SearchResult result) {
         /**
          * Filters out the results by version taking the latest version for each search result
@@ -70,6 +53,31 @@ public class SubjectVersionService {
                 .stream()
                 .map(header -> getSubjectVersionEntity(header.getAttributes().get("qualifiedName").toString()))
                 .collect(Collectors.toList());
+    }
+    private static String getEntityName(AtlasEntityHeader header) {
+        return (String)header.getAttributes().get("name");
+    }
+
+    public static AtlasEntityHeader getLatestHeader(AtlasEntityHeader h1, AtlasEntityHeader h2) {
+        int r1Ver = (int)h1.getAttributes().get("version");
+        int r2Ver = (int)h2.getAttributes().get("version");
+        if (r2Ver > r1Ver)
+            return h2;
+        else
+            return h1;
+    }
+    public static String getQualifiedNameSchemaName(String srSubjectVersionFQN) {
+        // Must match the pattern: "lsrc-wqxng:.:pageviews-value:1"
+        return srSubjectVersionFQN.split(":")[2];
+    }
+
+    public AtlasEntityWithExtInfo getSubjectVersionEntity(String qualifiedName) {
+        OffsetDateTime odt;
+        String entityUrl = String.format("/entity/type/sr_subject_version/name/%s", qualifiedName);
+        return restTemplate.getForObject(entityUrl, AtlasEntityWithExtInfo.class);
+    }
+    public List<AtlasEntityWithExtInfo> getAll() {
+        return getAll(Optional.empty(), Optional.empty());
     }
     @GetMapping
     public List<AtlasEntityWithExtInfo> getAll(

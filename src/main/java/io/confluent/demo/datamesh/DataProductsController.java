@@ -22,7 +22,7 @@ public class DataProductsController {
 
     @GetMapping
     public List<DataProduct> getDataProducts() {
-        return new ArrayList<>(dataProductService.getAll());
+        return new ArrayList<>(dataProductService.getDataProducts());
     }
 
     @RequestMapping("/{qualifiedName}")
@@ -33,6 +33,10 @@ public class DataProductsController {
     @PostMapping
     public DataProduct postDataProduct(@RequestBody CreateDataProductRequest request) throws Exception {
         return dataProductService.createDataProduct(request);
+    }
+    @DeleteMapping
+    public void deleteDataProduct(@PathVariable("qualifiedName") String qualifiedName) {
+
     }
 
 }

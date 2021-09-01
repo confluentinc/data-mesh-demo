@@ -109,6 +109,8 @@ function augment_config_file() {
   KAFKA_CLUSTER_NAME=${KAFKA_CLUSTER_NAME:-"demo-kafka-cluster-$SERVICE_ACCOUNT_ID"}
   KAFKA_CLUSTER_ID=$(ccloud kafka cluster list -o json | jq -r 'map(select(.name | startswith("'"$KAFKA_CLUSTER_NAME"'"))) | .[].id')
   SCHEMA_REGISTRY_ID=$(ccloud schema-registry cluster describe -o json | jq -r ".cluster_id")
+  # waves hands at the possibility of there being multiple ksqlDB applications in the current users environment
+  KSQLDB_ID=$(ccloud ksql app list -o json | jq -r '.[].id')
 
   # Create credentials for the cloud resource for the Connector REST API
   REST_API_AUTH_USER_INFO=$(ccloud api-key create --resource cloud -o json) || exit 1
@@ -130,6 +132,7 @@ confluent.cloud.schemaregistry.id=${SCHEMA_REGISTRY_ID}
 confluent.cloud.schemaregistry.url=${SCHEMA_REGISTRY_URL}
 confluent.cloud.schemaregistry.auth.key=${SCHEMA_REGISTRY_KEY}
 confluent.cloud.schemaregistry.auth.secret=${SCHEMA_REGISTRY_SECRET}
+confluent.cloud.ksqldb.id=${KSQLDB_ID}
 confluent.cloud.ksqldb.url=${KSQLDB_ENDPOINT}
 confluent.cloud.ksqldb.auth.key=${KSQLDB_KEY}
 confluent.cloud.ksqldb.auth.secret=${KSQLDB_SECRET}
