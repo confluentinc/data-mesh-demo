@@ -8,6 +8,9 @@ import Route exposing (routeToString)
 import Types exposing (..)
 import UIKit
 import Url exposing (..)
+import View.Create
+import View.Discover
+import View.Manage
 
 
 view : Model -> Document Msg
@@ -46,13 +49,13 @@ mainView model =
                 )
             , case model.activeView of
                 Discover ->
-                    discoverView model
+                    View.Discover.view model
 
                 Create ->
-                    createView model
+                    View.Create.view model
 
                 Manage ->
-                    manageView model
+                    View.Manage.view model
 
                 NotFound ->
                     notFoundView model
@@ -64,21 +67,6 @@ tabView : View -> ( View, String ) -> Html Msg
 tabView activeView ( tab, label ) =
     li [ classList [ ( "uk-active", activeView == tab ) ] ]
         [ a [ href (routeToString tab) ] [ text label ] ]
-
-
-discoverView : Model -> Html msg
-discoverView model =
-    h2 [] [ text "Discover" ]
-
-
-createView : Model -> Html msg
-createView model =
-    h2 [] [ text "Create" ]
-
-
-manageView : Model -> Html msg
-manageView model =
-    h2 [] [ text "Manage" ]
 
 
 notFoundView : Model -> Html msg
