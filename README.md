@@ -81,6 +81,52 @@ An example implementation of Data Mesh on top of [Confluent Cloud](https://www.c
   }
   ```
 
+  Example: Get all the data products and topics in one list:
+  ```
+  curl -s localhost:8080/data-products/manage | jq
+  [
+    {
+      "@type": "DataProduct",
+      "name": "users",
+      "qualifiedName": "lsrc-7xxv2:.:users-value:1",
+      "description": "website users",
+      "owner": "rick",
+      "urls": {
+        "schemaUrl": "https://confluent.cloud/environments/env-6qx3j/schema-registry/schemas/users-value",
+        "portUrl": "https://confluent.cloud/environments/env-6qx3j/clusters/lkc-1771v/topics/users",
+        "lineageUrl": "https://confluent.cloud/environments/env-6qx3j/clusters/lkc-1771v/stream-lineage/view/users-value"
+      }
+    },
+    ...
+    {
+      "@type": "Topic",
+      "name": "pksqlc-09g26PAGEVIEWS_USER3",
+      "qualifiedName": "lsrc-7xxv2:.:pksqlc-09g26PAGEVIEWS_USER3-value:2"
+    }
+  ]
+  ```
+
+  Example: Create a new data product for an existing topic:
+  ```
+  curl -XPOST -H 'Content-Type: application/json' --data "@topicrequest.json" http://localhost:8080/data-products
+  ```
+    Where the contents of topicrequest.json file are as below. The `qualifiedName` field must be a valid `sr_subject_version` in the cc data catalog.
+    ```
+    {
+      "@type": "TOPIC",
+      "qualifiedName": "lsrc-7xxv2:.:pksqlc-09g26PAGEVIEWS_USER2-value:2",
+      "dataProductTag": {
+      	"owner": "ybyzek",
+      	"description": "pageviews users 2"
+      }
+    }
+    ```
+
+  Example: Delete a data product:
+  ```
+  curl -X DELETE http://localhost:8080/data-products/lsrc-7xxv2:.:pksqlc-09g26PAGEVIEWS_USER2-value:2
+  ```
+
   Example: Create a new data product using ksqlDB:
   ```
   curl -XPOST -H 'Content-Type: application/json' --data "@ksqldbrequest.json" http://localhost:8080/data-products

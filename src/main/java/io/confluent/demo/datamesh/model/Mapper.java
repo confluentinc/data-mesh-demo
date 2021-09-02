@@ -1,5 +1,6 @@
 package io.confluent.demo.datamesh.model;
 
+import io.confluent.demo.datamesh.cc.datacatalog.model.AtlasEntityWithExtInfo;
 import io.confluent.demo.datamesh.cc.datacatalog.model.DataProductEntity;
 import io.confluent.demo.datamesh.cc.urls.model.DataProductUrls;
 
@@ -10,6 +11,22 @@ import java.util.Optional;
  * Data Mesh Demo data model
  */
 public class Mapper {
+
+    public static Topic ccToTopic(AtlasEntityWithExtInfo entity) {
+        String name = entity.getEntity().getAttributes()
+                .get("name")
+                .toString();
+
+        // Strips off the topic naming scheme to set a more friendly name
+        int i = name.indexOf("-value");
+        if (i > -1) {
+            name = name.substring(0, i);
+        }
+
+        return new Topic(
+                name,
+                entity.getEntity().getAttributes().get("qualifiedName").toString());
+    }
 
     /**
      * Converts the Confluent Cloud representation of a data product

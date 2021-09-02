@@ -55,7 +55,7 @@ public class DataProductService {
     }
     public DataProduct get(String qualifiedName) {
         // TODO: Filter on the server side instead of locally with all the results
-        return getAll()
+        return getDataProducts()
            .stream()
            .filter(dp -> dp.getQualifiedName().equals(qualifiedName))
            .findFirst()
@@ -73,12 +73,15 @@ public class DataProductService {
         if (request instanceof CreateS3DataProductRequest) {
             return null;
         }
+        else if (request instanceof CreateTopicDataProductRequest) {
+            return createTopicDataProduct((CreateTopicDataProductRequest)request);
+        }
         else if (request instanceof CreateKsqlDbDataProductRequest) {
             return createKsqlDbDataProduct((CreateKsqlDbDataProductRequest) request);
         }
         else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Unkonwn type in request body. Expecting @type field = (KSQLDB | S3)");
+                    "Unkonwn type in request body. Expecting @type field = (TOPIC | KSQLDB | S3)");
         }
     }
     public void deleteDataProduct(String qualifiedName) {
@@ -94,7 +97,7 @@ public class DataProductService {
         if (result.queryId().isEmpty()) {
             throw new DataProductCreateException(result.toString());
         } else {
-            String subjectName = request.getName() + "-value";
+            String subjectName = request.getEventualSubjectName();
             int latestVersion = schemaService.getLatest(subjectName).version;
             String subjectFQN = String.format(":.:%s:%d", subjectName, latestVersion);
             TagResponse[] response = tagService.tagSubjectVersionAsDataProduct(
@@ -102,5 +105,9 @@ public class DataProductService {
                     new DataProductTag(request.getOwner(), request.getDescription()));
             return get(response[0].getEntityName());
         }
+    }
+    private DataProduct createTopicDataProduct(final CreateTopicDataProductRequest request) throws Exception {
+        tagService.tagSubjectVersionAsDataProduct(request.getQualifiedName(), request.getDataProductTag());
+        return get(request.getQualifiedName());
     }
 }
