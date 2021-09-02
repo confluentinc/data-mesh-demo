@@ -3,23 +3,24 @@ module State exposing (..)
 import Browser exposing (..)
 import Browser.Navigation as Nav exposing (Key)
 import Html exposing (..)
+import RemoteData exposing (RemoteData(..))
+import Rest
 import Route exposing (routeParser)
+import Table
 import Types exposing (..)
 import Url exposing (..)
 
 
-initialModel : String -> Url -> Key -> Model
-initialModel logoPath url key =
-    { key = key
-    , logoPath = logoPath
-    , activeView = routeParser url
-    }
-
-
 init : String -> Url -> Key -> ( Model, Cmd Msg )
 init logoPath url key =
-    ( initialModel logoPath url key
-    , Cmd.none
+    ( { key = key
+      , logoPath = logoPath
+      , activeView = routeParser url
+      , dataProductsTableState = Table.initialSort "name"
+      , dataProducts = Loading
+      , activeDataProductKey = Nothing
+      }
+    , Rest.getDataProducts
     )
 
 
@@ -44,6 +45,11 @@ update msg model =
         NoOp ->
             ( model, Cmd.none )
 
+        SetDataProductsTableState newTableState ->
+            ( { model | dataProductsTableState = newTableState }
+            , Cmd.none
+            )
+
         ChangeView urlRequest ->
             case urlRequest of
                 Internal url ->
@@ -55,3 +61,13 @@ update msg model =
                     ( model
                     , Nav.load url
                     )
+
+        GotDataProducts newDataProducts ->
+            ( { model | dataProducts = newDataProducts }
+            , Cmd.none
+            )
+
+        SelectDataProduct qualifiedName ->
+            ( { model | activeDataProductKey = Just qualifiedName }
+            , Cmd.none
+            )

@@ -8,6 +8,9 @@ module Types exposing
 
 import Browser exposing (UrlRequest)
 import Browser.Navigation as Nav exposing (Key)
+import Dict exposing (Dict)
+import RemoteData exposing (WebData)
+import Table
 
 
 type alias Flags =
@@ -24,12 +27,18 @@ type View
 type Msg
     = NoOp
     | ChangeView UrlRequest
+    | SetDataProductsTableState Table.State
+    | GotDataProducts (WebData (Dict String DataProduct))
+    | SelectDataProduct String
 
 
 type alias Model =
     { key : Key
     , logoPath : String
     , activeView : View
+    , dataProductsTableState : Table.State
+    , dataProducts : WebData (Dict String DataProduct)
+    , activeDataProductKey : Maybe String
     }
 
 
