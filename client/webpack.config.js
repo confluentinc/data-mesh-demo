@@ -40,13 +40,17 @@ module.exports = {
         use: ['style-loader', 'css-loader', 'less-loader']
       },
       {
-        test: /\.svg$/,
+        test: /\.(png|jpg|jpeg|svg|gif)$/,
+        type: 'asset/resource',
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
         type: 'asset/resource',
       },
     ],
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js', '.elm'],
+    extensions: ['.tsx', '.ts', '.js', '.elm', '.ttf'],
   },
   plugins: [
     new webpack.LoaderOptionsPlugin({

@@ -1,7 +1,16 @@
-module Types exposing (Model, Msg(..), View(..))
+module Types exposing
+    ( Flags
+    , Model
+    , Msg(..)
+    , View(..)
+    )
 
 import Browser exposing (UrlRequest)
 import Browser.Navigation as Nav exposing (Key)
+
+
+type alias Flags =
+    String
 
 
 type View
@@ -18,6 +27,6 @@ type Msg
 
 type alias Model =
     { key : Key
+    , logoPath : String
     , activeView : View
-    , n : Int
     }

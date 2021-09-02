@@ -8,17 +8,19 @@ import Types exposing (..)
 import Url exposing (..)
 
 
-initialModel : Key -> Model
-initialModel key =
+initialModel : String -> Url -> Key -> Model
+initialModel logoPath url key =
     { key = key
-    , activeView = Discover
-    , n = 6
+    , logoPath = logoPath
+    , activeView = routeParser url
     }
 
 
-init : flags -> Url -> Key -> ( Model, Cmd Msg )
-init flags url key =
-    ( initialModel key, Cmd.none )
+init : String -> Url -> Key -> ( Model, Cmd Msg )
+init logoPath url key =
+    ( initialModel logoPath url key
+    , Cmd.none
+    )
 
 
 onUrlChange : Url -> Msg

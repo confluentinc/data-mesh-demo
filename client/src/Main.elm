@@ -7,7 +7,8 @@ import Types exposing (..)
 import Url exposing (..)
 import View
 
-main : Program () Model Msg
+
+main : Program Flags Model Msg
 main =
     Browser.application
         { init = State.init

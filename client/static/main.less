@@ -1,0 +1,38 @@
+@heading-color: #1d335e;
+
+@font-face {
+  font-family: 'MainFont';
+  src: url('fonts/MarkOT/MarkOT.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+header {
+  background-color: @heading-color;
+
+  .uk-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+
+    .logo {
+      height: 50px;
+      width: 50px;
+      filter: brightness(0) invert(1);
+    }
+
+    h1 {
+      margin: 0 0 0 15px;
+      color: white;
+    }
+  }
+}
+
+body {
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'MainFont';
+  }
+}

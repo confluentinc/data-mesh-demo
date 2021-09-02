@@ -6,6 +6,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 import Route exposing (routeToString)
 import Types exposing (..)
+import UIKit
 import Url exposing (..)
 
 
@@ -13,9 +14,30 @@ view : Model -> Document Msg
 view model =
     { title = "Data Mesh"
     , body =
-        [ div [ class "uk-container" ]
-            [ header [] [ h1 [] [ text "Confluent" ] ]
-            , ul [ class "uk-tab" ]
+        [ headerView model.logoPath
+        , mainView model
+        ]
+    }
+
+
+headerView logoPath =
+    header []
+        [ div [ UIKit.container ]
+            [ img
+                [ class "logo"
+                , src logoPath
+                ]
+                []
+            , h1 [] [ text "Confluent" ]
+            ]
+        ]
+
+
+mainView model =
+    div [ class "main" ]
+        [ div [ UIKit.container ]
+            [ ul
+                [ UIKit.tab ]
                 (List.map (tabView model.activeView)
                     [ ( Discover, "Discover & Export" )
                     , ( Create, "Create" )
@@ -36,7 +58,6 @@ view model =
                     notFoundView model
             ]
         ]
-    }
 
 
 tabView : View -> ( View, String ) -> Html Msg
