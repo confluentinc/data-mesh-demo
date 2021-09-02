@@ -87,3 +87,13 @@ buttonDefault =
 margin : Attribute msg
 margin =
     class "uk-margin"
+
+
+alert : Attribute msg
+alert =
+    class "uk-alert"
+
+
+alertDanger : Attribute msg
+alertDanger =
+    class "uk-alert-danger"

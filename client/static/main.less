@@ -39,22 +39,63 @@ body {
 
 .discover-pane {
   display: grid;
-    grid-template-columns: 40% auto;
-    grid-column-gap: 30px;
-    grid-row-gap: 30px;
-    grid-template-areas:
-        "main detail"
-        "copy detail";
+  grid-template-columns: 40% auto;
+  grid-column-gap: 30px;
+  grid-row-gap: 30px;
+  grid-template-areas:
+    "main detail"
+    "copy detail";
 
-    .discover-main {
-      grid-area: main;
-    }
+  .discover-main {
+    grid-area: main;
+    min-height: 300px;
+  }
 
-    .discover-copy {
-      grid-area: copy;
-    }
+  .discover-copy {
+    grid-area: copy;
+  }
 
-    .discover-detail {
-      grid-area: detail;
-    }
+  .discover-detail {
+    grid-area: detail;
+  }
+}
+
+.loading-wheel {
+  background-image: url('images/logo.png');
+  color: transparent;
+  height: 80px;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  width: 100%;
+  text-align: center;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  .animation-spin();
+  opacity: 0.8;
+}
+
+.animation-spin() {
+  animation-name: spin;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-duration: 2s;
+}
+
+@keyframes spin {
+  0% {
+    transform:rotate(0deg);
+  }
+  30% {
+    transform:rotate(360deg);
+  }
+  35% {
+    transform:rotate(360deg);
+  }
+  65% {
+    transform:rotate(720deg);
+  }
+  100% {
+    transform:rotate(720deg);
+  }
 }

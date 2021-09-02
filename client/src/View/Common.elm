@@ -1,8 +1,14 @@
-module View.Common exposing (errorToString, webDataView)
+module View.Common exposing
+    ( errorToString
+    , loadingWheel
+    , webDataView
+    )
 
 import Html exposing (..)
+import Html.Attributes exposing (class)
 import Http
 import RemoteData exposing (RemoteData(..), WebData)
+import UIKit
 
 
 errorToString : Http.Error -> String
@@ -28,13 +34,23 @@ webDataView : (a -> Html msg) -> WebData a -> Html msg
 webDataView successView webData =
     case webData of
         NotAsked ->
-            text "TODO Data Not Loading"
+            loadingWheel
 
         Loading ->
-            text "TODO Data Loading"
+            loadingWheel
 
         Failure err ->
-            text ("TODO Data Load Failed " ++ errorToString err)
+            div [ UIKit.alert, UIKit.alertDanger ]
+                [ h4 [] [ text "Data Load Failed" ]
+                , p [] [ text (errorToString err) ]
+                ]
 
         Success result ->
             successView result
+
+
+loadingWheel : Html msg
+loadingWheel =
+    div [ class "loading-wheel" ]
+        [ i [] [ text "Loading..." ]
+        ]
