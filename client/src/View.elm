@@ -23,6 +23,7 @@ view model =
     }
 
 
+headerView : String -> Html msg
 headerView logoPath =
     header []
         [ div [ UIKit.container ]
@@ -36,6 +37,7 @@ headerView logoPath =
         ]
 
 
+mainView : Model -> Html Msg
 mainView model =
     div [ class "main" ]
         [ div [ UIKit.container ]
