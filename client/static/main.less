@@ -36,3 +36,25 @@ body {
     font-family: 'MainFont';
   }
 }
+
+.discover-pane {
+  display: grid;
+    grid-template-columns: 40% auto;
+    grid-column-gap: 30px;
+    grid-row-gap: 30px;
+    grid-template-areas:
+        "main detail"
+        "copy detail";
+
+    .discover-main {
+      grid-area: main;
+    }
+
+    .discover-copy {
+      grid-area: copy;
+    }
+
+    .discover-detail {
+      grid-area: detail;
+    }
+}
