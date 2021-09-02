@@ -122,6 +122,11 @@ An example implementation of Data Mesh on top of [Confluent Cloud](https://www.c
     }
     ```
 
+  Example: Delete a data product:
+  ```
+  curl -X DELETE http://localhost:8080/data-products/lsrc-7xxv2:.:pksqlc-09g26PAGEVIEWS_USER2-value:2
+  ```
+
   Example: Create a new data product using ksqlDB:
   ```
   curl -XPOST -H 'Content-Type: application/json' --data "@ksqldbrequest.json" http://localhost:8080/data-products

@@ -36,7 +36,7 @@ public class DataProductsController {
     public DataProduct postDataProduct(@RequestBody CreateDataProductRequest request) throws Exception {
         return dataProductService.createDataProduct(request);
     }
-    @DeleteMapping
+    @DeleteMapping("/{qualifiedName}")
     public void deleteDataProduct(@PathVariable("qualifiedName") String qualifiedName) {
         dataProductService.deleteDataProduct(qualifiedName);
     }
