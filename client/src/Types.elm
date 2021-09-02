@@ -4,7 +4,9 @@ module Types exposing
     , Flags
     , Model
     , Msg(..)
+    , QualifiedName
     , View(..)
+    , unQualifiedName
     )
 
 import Browser exposing (UrlRequest)
@@ -30,8 +32,9 @@ type Msg
     = NoOp
     | ChangeView UrlRequest
     | SetDataProductsTableState Table.State
-    | GotDataProducts (WebData (Dict String DataProduct))
-    | SelectDataProduct String
+    | GotDataProducts (WebData (Dict QualifiedName DataProduct))
+    | SelectDataProduct QualifiedName
+    | PublishDataProduct QualifiedName
 
 
 type alias Model =
@@ -39,8 +42,8 @@ type alias Model =
     , logoPath : String
     , activeView : View
     , dataProductsTableState : Table.State
-    , dataProducts : WebData (Dict String DataProduct)
-    , activeDataProductKey : Maybe String
+    , dataProducts : WebData (Dict QualifiedName DataProduct)
+    , activeDataProductKey : Maybe QualifiedName
     }
 
 
@@ -55,8 +58,17 @@ type alias DataProductUrls =
     }
 
 
+type alias QualifiedName =
+    String
+
+
+unQualifiedName : QualifiedName -> String
+unQualifiedName str =
+    str
+
+
 type alias DataProduct =
-    { qualifiedName : String
+    , qualifiedName : QualifiedName
     , name : String
     , description : String
     , owner : String

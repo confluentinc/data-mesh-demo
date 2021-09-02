@@ -1,7 +1,8 @@
 module Json exposing (decodeDataProducts)
 
 import Json.Decode as Decode exposing (..)
-import Types exposing (DataProduct, DataProductUrls)
+import RemoteData exposing (RemoteData(..))
+import Types exposing (DataProduct, DataProductUrls, QualifiedName)
 import Url as Url exposing (Url)
 
 
@@ -13,11 +14,16 @@ decodeDataProducts =
 decodeDataProduct : Decoder DataProduct
 decodeDataProduct =
     map5 DataProduct
-        (field "qualifiedName" string)
+        (field "qualifiedName" qualifiedName)
         (field "name" string)
         (field "description" string)
         (field "owner" string)
         (field "urls" decodeDataProductUrls)
+
+
+qualifiedName : Decoder QualifiedName
+qualifiedName =
+    string
 
 
 decodeDataProductUrls : Decoder DataProductUrls

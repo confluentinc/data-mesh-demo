@@ -29,7 +29,7 @@ view model =
 tableConfig : Table.Config DataProduct Msg
 tableConfig =
     Table.customConfig
-        { toId = .qualifiedName
+        { toId = .qualifiedName >> unQualifiedName
         , toMsg = SetDataProductsTableState
         , columns =
             [ Table.stringColumn "Name" .name

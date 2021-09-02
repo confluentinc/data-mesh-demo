@@ -2,8 +2,10 @@ module State exposing (..)
 
 import Browser exposing (..)
 import Browser.Navigation as Nav exposing (Key)
+import Dict exposing (Dict)
 import Html exposing (..)
-import RemoteData exposing (RemoteData(..))
+import Optics
+import RemoteData exposing (RemoteData(..), WebData)
 import Rest
 import Route exposing (routeParser)
 import Table
@@ -68,6 +70,18 @@ update msg model =
             )
 
         SelectDataProduct qualifiedName ->
-            ( { model | activeDataProductKey = Just qualifiedName }
+            ( { model
+                | activeDataProductKey =
+                    if model.activeDataProductKey == Just qualifiedName then
+                        Nothing
+
+                    else
+                        Just qualifiedName
+              }
             , Cmd.none
+            )
+
+        PublishDataProduct qualifiedName ->
+            ( (Optics.dataProductPublished qualifiedName).set True model
+            , Rest.publishDataProduct qualifiedName
             )
