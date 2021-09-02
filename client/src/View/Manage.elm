@@ -5,6 +5,7 @@ import Dict
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
+import RemoteData exposing (RemoteData(..))
 import Route exposing (routeToString)
 import Table exposing (defaultCustomizations)
 import Types exposing (..)
@@ -33,8 +34,17 @@ tableConfig =
         , toMsg = SetDataProductsTableState
         , columns =
             [ Table.stringColumn "Name" .name
+            , Table.veryCustomColumn
+                { name = "Data Product"
+                , viewData =
+                    \dataProduct ->
+                        Table.HtmlDetails []
+                            [ publishButton dataProduct ]
+                , sorter = Table.unsortable
+                }
             , Table.stringColumn "Description" .description
             , Table.stringColumn "Owner" .owner
+            , Table.stringColumn "Other Tags" (\_ -> "")
             ]
         , customizations =
             { defaultCustomizations
@@ -46,3 +56,38 @@ tableConfig =
                     ]
             }
         }
+
+
+publishButton : DataProduct -> Html Msg
+publishButton dataProduct =
+    case
+        dataProduct.isPublished
+    of
+        Success True ->
+            button
+                [ UIKit.button
+                , disabled True
+                ]
+                [ text "Published" ]
+
+        Success False ->
+            button
+                [ UIKit.button
+                , UIKit.buttonPrimary
+                , onClick (PublishDataProduct dataProduct.qualifiedName)
+                ]
+                [ text "Publish" ]
+
+        Loading ->
+            button
+                [ UIKit.button
+                , disabled True
+                ]
+                [ i [] [ text "Publishing..." ] ]
+
+        _ ->
+            button
+                [ UIKit.button
+                , disabled True
+                ]
+                [ text "TODO ???" ]

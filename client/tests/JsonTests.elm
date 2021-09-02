@@ -4,6 +4,7 @@ import Expect exposing (Expectation, fail, pass)
 import Fuzz exposing (Fuzzer, int, list, string)
 import Json exposing (decodeDataProducts)
 import Json.Decode exposing (Decoder, decodeString, errorToString)
+import RemoteData exposing (RemoteData(..))
 import Test exposing (..)
 import Types exposing (..)
 import Url exposing (Protocol(..))
@@ -27,6 +28,7 @@ suite =
                         [ { description = "website users"
                           , name = "users"
                           , owner = "rick"
+                          , isPublished = Success False
                           , qualifiedName = "lsrc-w8v85:.:users-value:1"
                           , urls =
                                 { lineageUrl =
@@ -58,6 +60,7 @@ suite =
                         , { description = "website pageviews"
                           , name = "pageviews"
                           , owner = "adam"
+                          , isPublished = Success False
                           , qualifiedName = "lsrc-w8v85:.:pageviews-value:1"
                           , urls =
                                 { lineageUrl =

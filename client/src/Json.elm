@@ -13,7 +13,8 @@ decodeDataProducts =
 
 decodeDataProduct : Decoder DataProduct
 decodeDataProduct =
-    map5 DataProduct
+    map6 DataProduct
+        (succeed (Success False))
         (field "qualifiedName" qualifiedName)
         (field "name" string)
         (field "description" string)

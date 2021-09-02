@@ -82,6 +82,6 @@ update msg model =
             )
 
         PublishDataProduct qualifiedName ->
-            ( (Optics.dataProductPublished qualifiedName).set True model
+            ( (Optics.dataProductPublished qualifiedName).set (Success True) model
             , Rest.publishDataProduct qualifiedName
             )

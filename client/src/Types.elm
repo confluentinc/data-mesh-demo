@@ -68,6 +68,7 @@ unQualifiedName str =
 
 
 type alias DataProduct =
+    { isPublished : WebData Bool
     , qualifiedName : QualifiedName
     , name : String
     , description : String
