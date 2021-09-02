@@ -1,5 +1,6 @@
 module Types exposing
-    ( Flags
+    ( DataProduct
+    , Flags
     , Model
     , Msg(..)
     , View(..)
@@ -29,4 +30,12 @@ type alias Model =
     { key : Key
     , logoPath : String
     , activeView : View
+    }
+
+
+type alias DataProduct =
+    { qualifiedName : String
+    , name : String
+    , description : String
+    , owner : String
     }
