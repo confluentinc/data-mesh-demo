@@ -1,9 +1,7 @@
 package io.confluent.demo.datamesh;
 
-import io.confluent.demo.datamesh.model.CreateKsqlDbDataProductRequest;
-import io.confluent.demo.datamesh.model.CreateS3DataProductRequest;
-import io.confluent.demo.datamesh.model.DataProduct;
-import io.confluent.demo.datamesh.model.CreateDataProductRequest;
+import io.confluent.demo.datamesh.cc.datacatalog.api.SubjectVersionService;
+import io.confluent.demo.datamesh.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +10,8 @@ import org.springframework.web.server.ServerErrorException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/data-products")
@@ -19,6 +19,8 @@ public class DataProductsController {
 
     @Autowired
     private DataProductService dataProductService;
+    @Autowired
+    private SubjectVersionService subjectVersionService;
 
     @GetMapping
     public List<DataProduct> getDataProducts() {
@@ -36,7 +38,18 @@ public class DataProductsController {
     }
     @DeleteMapping
     public void deleteDataProduct(@PathVariable("qualifiedName") String qualifiedName) {
-
+        dataProductService.deleteDataProduct(qualifiedName);
     }
 
+    @GetMapping(path = "/manage")
+    public ArrayList<DataProductOrTopic> getProductsAndTopics() {
+        List<DataProduct> dps = getDataProducts();
+        List<Topic> topics = subjectVersionService.getPotentialDataProducts()
+            .stream().map(Mapper::ccToTopic).collect(Collectors.toList());
+
+        ArrayList<DataProductOrTopic> rv = new ArrayList<>();
+        rv.addAll(dps);
+        rv.addAll(topics);
+        return rv;
+    }
 }

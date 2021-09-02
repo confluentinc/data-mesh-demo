@@ -108,6 +108,9 @@ public class SubjectVersionService {
                 .collect(Collectors.toList());
         }
     }
+    public List<AtlasEntityWithExtInfo> getPotentialDataProducts() {
+        return getAll(Optional.empty(), Optional.of("DataProduct"));
+    }
     public List<AtlasEntityWithExtInfo> getDataProducts() {
         return getAll(Optional.of("DataProduct"), Optional.empty());
     }
