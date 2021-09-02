@@ -38,7 +38,15 @@ public class TagService {
             .findFirst().orElseThrow(TagNotFoundException::new);
     }
 
-    public TagResponse[] tagSubjectVersionWithDataProduct(
+    public void unTagSubjectVersionAsDataProduct(String entityQualifiedName) {
+        String url = String.format(
+            "/entity/type/sr_subject_version/name/%s/tags/DataProduct",
+            entityQualifiedName);
+
+        restTemplate.delete(url);
+    }
+
+    public TagResponse[] tagSubjectVersionAsDataProduct(
             String entityQualifiedName,
             DataProductTag tag)
     {

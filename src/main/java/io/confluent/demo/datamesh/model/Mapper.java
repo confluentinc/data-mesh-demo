@@ -1,6 +1,9 @@
 package io.confluent.demo.datamesh.model;
 
 import io.confluent.demo.datamesh.cc.datacatalog.model.DataProductEntity;
+import io.confluent.demo.datamesh.cc.urls.model.DataProductUrls;
+
+import java.util.Optional;
 
 /**
  * Place to house functions which map various objects into the
@@ -29,6 +32,7 @@ public class Mapper {
            name,
            dpEntity.getEntity().getAttributes().get("qualifiedName").toString(),
            dpEntity.getDataProductTag().getAttributes().get("owner").toString(),
-           dpEntity.getDataProductTag().getAttributes().get("description").toString());
+           dpEntity.getDataProductTag().getAttributes().get("description").toString(),
+           dpEntity.getUrls());
     }
 }

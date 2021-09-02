@@ -5,6 +5,7 @@ import io.confluent.demo.datamesh.cc.datacatalog.api.TagService;
 import io.confluent.demo.datamesh.cc.datacatalog.model.*;
 import io.confluent.demo.datamesh.cc.ksqldb.api.KsqlDbService;
 import io.confluent.demo.datamesh.cc.schemaregistry.api.SchemaRegistryService;
+import io.confluent.demo.datamesh.cc.urls.api.UrlService;
 import io.confluent.demo.datamesh.model.*;
 import io.confluent.ksql.api.client.ExecuteStatementResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,13 +37,22 @@ public class DataProductService {
     private TagService tagService;
     @Autowired
     private SchemaRegistryService schemaService;
+    @Autowired
+    private UrlService urlService;
 
     private DataProductEntity buildDataProductEntityFromSubjectVersion(AtlasEntityWithExtInfo subjectVersion) {
-        Tag dataProductTag = tagService.getDataProductTagForSubjectVersion(
-                subjectVersion.getEntity().getAttributes().get("qualifiedName").toString());
-        return new DataProductEntity(subjectVersion, dataProductTag);
+        String qualifiedName = subjectVersion.getEntity().getAttributes().get("qualifiedName").toString();
+        return new DataProductEntity(subjectVersion,
+                tagService.getDataProductTagForSubjectVersion(qualifiedName),
+                urlService.getDataProductUrls(qualifiedName));
     }
 
+    private List<DataProduct> atlasEntitiesToDataProducts(List<AtlasEntityWithExtInfo> entities) {
+        return entities.stream()
+            .map(this::buildDataProductEntityFromSubjectVersion)
+            .map(Mapper::ccToDataProduct)
+            .collect(Collectors.toList());
+    }
     public DataProduct get(String qualifiedName) {
         // TODO: Filter on the server side instead of locally with all the results
         return getAll()
@@ -52,12 +62,11 @@ public class DataProductService {
            .orElseThrow(DataProductNotFoundException::new);
     }
 
+    public List<DataProduct> getDataProducts() {
+        return atlasEntitiesToDataProducts(subjectVersionService.getDataProducts());
+    }
     public List<DataProduct> getAll() {
-        return subjectVersionService.getDataProducts()
-            .stream()
-            .map(this::buildDataProductEntityFromSubjectVersion)
-            .map(Mapper::ccToDataProduct)
-            .collect(Collectors.toList());
+        return atlasEntitiesToDataProducts(subjectVersionService.getAll());
     }
 
     public DataProduct createDataProduct(CreateDataProductRequest request) throws Exception {
@@ -72,6 +81,9 @@ public class DataProductService {
                     "Unkonwn type in request body. Expecting @type field = (KSQLDB | S3)");
         }
     }
+    public void deleteDataProduct(String qualifiedName) {
+        tagService.unTagSubjectVersionAsDataProduct(qualifiedName);
+    }
 
     private DataProduct createKsqlDbDataProduct(final CreateKsqlDbDataProductRequest request) throws Exception {
         // The following blocks until a result is obtained from the
@@ -85,7 +97,7 @@ public class DataProductService {
             String subjectName = request.getName() + "-value";
             int latestVersion = schemaService.getLatest(subjectName).version;
             String subjectFQN = String.format(":.:%s:%d", subjectName, latestVersion);
-            TagResponse[] response = tagService.tagSubjectVersionWithDataProduct(
+            TagResponse[] response = tagService.tagSubjectVersionAsDataProduct(
                     subjectFQN,
                     new DataProductTag(request.getOwner(), request.getDescription()));
             return get(response[0].getEntityName());
