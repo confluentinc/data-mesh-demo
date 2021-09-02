@@ -55,7 +55,7 @@ public class DataProductService {
     }
     public DataProduct get(String qualifiedName) {
         // TODO: Filter on the server side instead of locally with all the results
-        return getAll()
+        return getDataProducts()
            .stream()
            .filter(dp -> dp.getQualifiedName().equals(qualifiedName))
            .findFirst()
