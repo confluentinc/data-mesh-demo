@@ -3,7 +3,7 @@ module View.Discover exposing (view)
 import Browser exposing (..)
 import Dict
 import Html exposing (..)
-import Html.Attributes exposing (class, disabled, type_, value)
+import Html.Attributes exposing (class, disabled, href, target, type_, value)
 import Html.Events exposing (onClick)
 import Json.Decode as Json
 import RemoteData exposing (RemoteData(..))
@@ -12,7 +12,7 @@ import Route exposing (routeToString)
 import Table exposing (defaultCustomizations)
 import Types exposing (..)
 import UIKit
-import Url exposing (..)
+import Url exposing (Url)
 import View.Common exposing (webDataView)
 import View.Lorem as Lorem
 
@@ -31,7 +31,7 @@ view model =
         [ div [ class "discover-main" ]
             [ h2 [] [ text "Data Products" ]
             , webDataView
-                    (Table.view tableConfig model.dataProductsTableState << Dict.values)
+                (Table.view tableConfig model.dataProductsTableState << Dict.values)
                 model.dataProducts
             ]
         , div [ class "discover-detail" ]
@@ -83,10 +83,22 @@ dataProductDetailView mDataProduct =
                     , disabledFormRow "Description" dataProduct.description
                     ]
                 , div [ UIKit.margin ]
-                    [ button [ UIKit.button, UIKit.buttonPrimary ] [ text "Start It" ]
-                    , button [ UIKit.button, UIKit.buttonDefault ] [ text "Stop It" ]
+                    [ linkButton "View Lineage" dataProduct.urls.lineageUrl
+                    , linkButton "Export to S3" dataProduct.urls.portUrl
+                    , linkButton "KafkaConnect" dataProduct.urls.schemaUrl
                     ]
                 ]
+
+
+linkButton : String -> Url -> Html msg
+linkButton description url =
+    a
+        [ UIKit.button
+        , UIKit.buttonPrimary
+        , href (Url.toString url)
+        , target "_blank"
+        ]
+        [ text description ]
 
 
 disabledFormRow : String -> String -> Html msg

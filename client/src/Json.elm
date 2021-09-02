@@ -1,7 +1,8 @@
 module Json exposing (decodeDataProducts)
 
-import Json.Decode exposing (..)
-import Types exposing (DataProduct)
+import Json.Decode as Decode exposing (..)
+import Types exposing (DataProduct, DataProductUrls)
+import Url as Url exposing (Url)
 
 
 decodeDataProducts : Decoder (List DataProduct)
@@ -11,8 +12,33 @@ decodeDataProducts =
 
 decodeDataProduct : Decoder DataProduct
 decodeDataProduct =
-    map4 DataProduct
+    map5 DataProduct
         (field "qualifiedName" string)
         (field "name" string)
         (field "description" string)
         (field "owner" string)
+        (field "urls" decodeDataProductUrls)
+
+
+decodeDataProductUrls : Decoder DataProductUrls
+decodeDataProductUrls =
+    map3 DataProductUrls
+        (field "schemaUrl" url)
+        (field "portUrl" url)
+        (field "lineageUrl" url)
+
+
+url : Decoder Url
+url =
+    string
+        |> Decode.andThen
+            (\str ->
+                case
+                    Url.fromString str
+                of
+                    Nothing ->
+                        fail ("Expected URL, got: " ++ str)
+
+                    Just decoded ->
+                        succeed decoded
+            )

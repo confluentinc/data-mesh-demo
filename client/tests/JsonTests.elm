@@ -6,6 +6,7 @@ import Json exposing (decodeDataProducts)
 import Json.Decode exposing (Decoder, decodeString, errorToString)
 import Test exposing (..)
 import Types exposing (..)
+import Url exposing (Protocol(..))
 
 
 suite : Test
@@ -27,11 +28,63 @@ suite =
                           , name = "users"
                           , owner = "rick"
                           , qualifiedName = "lsrc-w8v85:.:users-value:1"
+                          , urls =
+                                { lineageUrl =
+                                    { fragment = Nothing
+                                    , host = "confluent.cloud"
+                                    , path = "/environments/env-dxy51/clusters/lkc-ypvmp/stream-lineage/view/users-value"
+                                    , port_ = Nothing
+                                    , protocol = Https
+                                    , query = Nothing
+                                    }
+                                , portUrl =
+                                    { fragment = Nothing
+                                    , host = "confluent.cloud"
+                                    , path = "/environments/env-dxy51/clusters/lkc-ypvmp/topics/users"
+                                    , port_ = Nothing
+                                    , protocol = Https
+                                    , query = Nothing
+                                    }
+                                , schemaUrl =
+                                    { fragment = Nothing
+                                    , host = "confluent.cloud"
+                                    , path = "/environments/env-dxy51/schema-registry/schemas/users-value"
+                                    , port_ = Nothing
+                                    , protocol = Https
+                                    , query = Nothing
+                                    }
+                                }
                           }
                         , { description = "website pageviews"
                           , name = "pageviews"
                           , owner = "adam"
                           , qualifiedName = "lsrc-w8v85:.:pageviews-value:1"
+                          , urls =
+                                { lineageUrl =
+                                    { fragment = Nothing
+                                    , host = "confluent.cloud"
+                                    , path = "/environments/env-dxy51/clusters/lkc-ypvmp/stream-lineage/view/pageviews-value"
+                                    , port_ = Nothing
+                                    , protocol = Https
+                                    , query = Nothing
+                                    }
+                                , portUrl =
+                                    { fragment = Nothing
+                                    , host = "confluent.cloud"
+                                    , path = "/environments/env-dxy51/clusters/lkc-ypvmp/topics/pageviews"
+                                    , port_ = Nothing
+                                    , protocol = Https
+                                    , query = Nothing
+                                    }
+                                , schemaUrl =
+                                    { fragment = Nothing
+                                    , host = "confluent.cloud"
+                                    , path = "/environments/env-dxy51/schema-registry/schemas/pageviews-value"
+                                    , port_ = Nothing
+                                    , protocol = Https
+                                    , query = Nothing
+                                    }
+                                }
                           }
                         ]
             ]
@@ -46,13 +99,23 @@ dataProductsResponse1 =
     "qualifiedName": "lsrc-w8v85:.:users-value:1",
     "name": "users",
     "description": "website users",
-    "owner": "rick"
+    "owner": "rick",
+    "urls": {
+      "schemaUrl": "https://confluent.cloud/environments/env-dxy51/schema-registry/schemas/users-value",
+      "portUrl": "https://confluent.cloud/environments/env-dxy51/clusters/lkc-ypvmp/topics/users",
+      "lineageUrl": "https://confluent.cloud/environments/env-dxy51/clusters/lkc-ypvmp/stream-lineage/view/users-value"
+    }
   },
   {
     "qualifiedName": "lsrc-w8v85:.:pageviews-value:1",
     "name": "pageviews",
     "description": "website pageviews",
-    "owner": "adam"
+    "owner": "adam",
+    "urls": {
+      "schemaUrl": "https://confluent.cloud/environments/env-dxy51/schema-registry/schemas/pageviews-value",
+      "portUrl": "https://confluent.cloud/environments/env-dxy51/clusters/lkc-ypvmp/topics/pageviews",
+      "lineageUrl": "https://confluent.cloud/environments/env-dxy51/clusters/lkc-ypvmp/stream-lineage/view/pageviews-value"
+    }
   }
 ]
 """
