@@ -54,6 +54,9 @@ public class TagService {
         List<DataProductTagEntityRequest> request = Arrays.asList(
                 new DataProductTagEntityRequest(entityQualifiedName, tag));
 
+        /// 404 Not Found: [{"error_code":4040009,"message":
+        // "Instance sr_subject_version with unique attribute
+        // {qualifiedName=lsrc-7xxv2:.:rc-7xxv2:.:pksqlc-09g26PAGEVIEWS_USER2-value:2} does not exist"}]
         ResponseEntity<TagResponse[]> response = restTemplate.postForEntity(
                 url, request, TagResponse[].class);
 
