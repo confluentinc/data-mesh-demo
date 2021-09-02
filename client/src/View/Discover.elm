@@ -73,7 +73,7 @@ dataProductDetailView : Maybe DataProduct -> Html Msg
 dataProductDetailView mDataProduct =
     case mDataProduct of
         Nothing ->
-            text ""
+            i [] [ text "Select a product from the table on the left." ]
 
         Just dataProduct ->
             div []
