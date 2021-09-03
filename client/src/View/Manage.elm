@@ -22,7 +22,11 @@ view model =
         , p [] [ text "Data Products can be published provided they meet the minimum established criteria. In this case, they must have both a Description and an owner." ]
         , h2 [] [ text "Kafka Topics" ]
         , webDataView
-            (Table.view tableConfig model.dataProductsTableState << Dict.values)
+            (Dict.values
+                >> Table.view
+                    tableConfig
+                    model.dataProductsTableState
+            )
             model.dataProducts
         ]
 

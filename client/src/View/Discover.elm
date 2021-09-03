@@ -31,7 +31,11 @@ view model =
         [ div [ class "discover-main" ]
             [ h2 [] [ text "Data Products" ]
             , webDataView
-                (Table.view tableConfig model.dataProductsTableState << Dict.values)
+                (Dict.values
+                    >> Table.view
+                        (tableConfig model.activeDataProductKey)
+                        model.dataProductsTableState
+                )
                 model.dataProducts
             ]
         , div [ class "discover-detail" ]
