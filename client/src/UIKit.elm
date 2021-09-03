@@ -97,3 +97,8 @@ alert =
 alertDanger : Attribute msg
 alertDanger =
     class "uk-alert-danger"
+
+
+active : Attribute msg
+active =
+    class "uk-active"

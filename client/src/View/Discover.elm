@@ -46,10 +46,10 @@ view model =
         ]
 
 
-tableConfig : Table.Config DataProduct Msg
-tableConfig =
+tableConfig : Maybe QualifiedName -> Table.Config DataProduct Msg
+tableConfig activeDataProductKey =
     Table.customConfig
-        { toId = (.qualifiedName >> unQualifiedName)
+        { toId = .qualifiedName >> unQualifiedName
         , toMsg = SetDataProductsTableState
         , columns =
             [ Table.stringColumn "Name" .name
@@ -64,7 +64,18 @@ tableConfig =
                     , UIKit.tableStriped
                     , UIKit.tableSmall
                     ]
-                , rowAttrs = \dataProduct -> [ onClick (SelectDataProduct dataProduct.qualifiedName) ]
+                , rowAttrs =
+                    \dataProduct ->
+                        [ onClick (SelectDataProduct dataProduct.qualifiedName) ]
+                            ++ (if Just dataProduct.qualifiedName == activeDataProductKey then
+                                    [ UIKit.active
+                                    , class (Debug.toString dataProduct.qualifiedName)
+                                    , class (Debug.toString activeDataProductKey)
+                                    ]
+
+                                else
+                                    [ class "foo" ]
+                               )
             }
         }
 
