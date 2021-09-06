@@ -2,6 +2,7 @@ module State exposing (..)
 
 import Browser exposing (..)
 import Browser.Navigation as Nav exposing (Key)
+import Dialog.Common as Dialog
 import GenericDict exposing (Dict)
 import Html exposing (..)
 import Optics
@@ -21,6 +22,7 @@ init logoPath url key =
       , dataProductsTableState = Table.initialSort "name"
       , dataProducts = Loading
       , activeDataProductKey = Nothing
+      , publishModel = Nothing
       }
     , Rest.getDataProducts
     )
@@ -81,7 +83,66 @@ update msg model =
             , Cmd.none
             )
 
-        PublishDataProduct qualifiedName ->
-            ( (Optics.dataProductPublished qualifiedName).set (Success True) model
-            , Rest.publishDataProduct qualifiedName
+        StartPublishDialog qualifiedName ->
+            let
+                dataProduct : Maybe DataProduct
+                dataProduct =
+                    (Optics.dataProduct qualifiedName).getOption model
+
+                dialog =
+                    case dataProduct of
+                        Just product ->
+                            { qualifiedName = qualifiedName
+                            , name = product.name
+                            , description = product.description
+                            }
+
+                        Nothing ->
+                            { qualifiedName = qualifiedName
+                            , name = ""
+                            , description = ""
+                            }
+            in
+            ( { model | publishModel = Just dialog }
+            , Cmd.none
             )
+
+        AbandonPublishDialog ->
+            ( { model | publishModel = Nothing }
+            , Cmd.none
+            )
+
+        PublishDialogMsg subMsg ->
+            case model.publishModel of
+                Nothing ->
+                    ( model, Cmd.none )
+
+                Just publishModel ->
+                    let
+                        ( subModel, subCmd ) =
+                            updatePublishModel subMsg publishModel
+                    in
+                    ( { model | publishModel = Just subModel }
+                    , subCmd
+                    )
+
+        PublishDataProduct publishModel ->
+            ( model
+            , Rest.publishDataProduct publishModel
+            )
+
+        DataProductPublished publishModel ->
+            ( { model | publishModel = Nothing }
+                |> (Optics.dataProductPublished publishModel.qualifiedName).set (Success True)
+            , Cmd.none
+            )
+
+
+updatePublishModel : PublishDialogMsg -> PublishModel -> ( PublishModel, Cmd Msg )
+updatePublishModel msg model =
+    case msg of
+        PublishDialogSetName newName ->
+            ( { model | name = newName }, Cmd.none )
+
+        PublishDialogSetDescription newDescription ->
+            ( { model | description = newDescription }, Cmd.none )

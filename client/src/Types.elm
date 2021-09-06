@@ -4,6 +4,8 @@ module Types exposing
     , Flags
     , Model
     , Msg(..)
+    , PublishDialogMsg(..)
+    , PublishModel
     , QualifiedName(..)
     , View(..)
     , unQualifiedName
@@ -34,7 +36,16 @@ type Msg
     | SetDataProductsTableState Table.State
     | GotDataProducts (WebData (Dict QualifiedName DataProduct))
     | SelectDataProduct QualifiedName
-    | PublishDataProduct QualifiedName
+    | StartPublishDialog QualifiedName
+    | PublishDialogMsg PublishDialogMsg
+    | PublishDataProduct PublishModel
+    | DataProductPublished PublishModel
+    | AbandonPublishDialog
+
+
+type PublishDialogMsg
+    = PublishDialogSetName String
+    | PublishDialogSetDescription String
 
 
 type alias Model =
@@ -44,6 +55,14 @@ type alias Model =
     , dataProductsTableState : Table.State
     , dataProducts : WebData (Dict QualifiedName DataProduct)
     , activeDataProductKey : Maybe QualifiedName
+    , publishModel : Maybe PublishModel
+    }
+
+
+type alias PublishModel =
+    { qualifiedName : QualifiedName
+    , name : String
+    , description : String
     }
 
 

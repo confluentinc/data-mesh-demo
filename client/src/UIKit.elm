@@ -102,3 +102,13 @@ alertDanger =
 active : Attribute msg
 active =
     class "uk-active"
+
+
+modalTitle : Attribute msg
+modalTitle =
+    class "uk-modal-title"
+
+
+modalClose : Attribute msg
+modalClose =
+    class "uk-modal-close"

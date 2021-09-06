@@ -28,6 +28,13 @@ qualifiedName =
     Lens unQualifiedName (\str _ -> QualifiedName str)
 
 
+dataProduct : QualifiedName -> Optional Model DataProduct
+dataProduct name =
+    webDataProducts
+        |> lensWithPrism RemoteData.prism
+        |> optionalWithOptional (Dict.optional unQualifiedName name)
+
+
 dataProductPublished : QualifiedName -> Optional Model (WebData Bool)
 dataProductPublished name =
     webDataProducts

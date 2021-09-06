@@ -1,10 +1,11 @@
-module View.Manage exposing (view)
+module View.Manage exposing (publishDialog, view)
 
 import Browser exposing (..)
+import Dialog.Common as Dialog
 import GenericDict as Dict
 import Html exposing (..)
-import Html.Attributes exposing (..)
-import Html.Events exposing (onClick)
+import Html.Attributes exposing (autofocus, class, disabled, placeholder, type_, value)
+import Html.Events exposing (onClick, onInput)
 import RemoteData exposing (RemoteData(..))
 import Route exposing (routeToString)
 import Table exposing (defaultCustomizations)
@@ -78,7 +79,7 @@ publishButton dataProduct =
             button
                 [ UIKit.button
                 , UIKit.buttonPrimary
-                , onClick (PublishDataProduct dataProduct.qualifiedName)
+                , onClick (StartPublishDialog dataProduct.qualifiedName)
                 ]
                 [ text "Publish" ]
 
@@ -95,3 +96,69 @@ publishButton dataProduct =
                 , disabled True
                 ]
                 [ text "TODO ???" ]
+
+
+publishDialog : PublishModel -> Dialog.Config Msg
+publishDialog model =
+    { closeMessage = Just AbandonPublishDialog
+    , containerClass = Nothing
+    , header =
+        Just
+            (div [ UIKit.modalTitle ]
+                [ text "Publish" ]
+            )
+    , body =
+        Just
+            (div []
+                [ p []
+                    [ text "Enter the required Data Product tags." ]
+                , form [ UIKit.formHorizontal ]
+                    [ div []
+                        [ label [ UIKit.formLabel ] [ text "Name" ]
+                        , div [ UIKit.formControls ]
+                            [ input
+                                [ type_ "text"
+                                , UIKit.input
+                                , placeholder "Data Product Name"
+                                , autofocus True
+                                , value model.name
+                                , onInput (PublishDialogMsg << PublishDialogSetName)
+                                ]
+                                []
+                            ]
+                        ]
+                    , div []
+                        [ label [ UIKit.formLabel ] [ text "Description" ]
+                        , div [ UIKit.formControls ]
+                            [ input
+                                [ type_ "text"
+                                , UIKit.input
+                                , placeholder "Data Product Description"
+                                , value model.description
+                                , onInput (PublishDialogMsg << PublishDialogSetDescription)
+                                ]
+                                []
+                            ]
+                        ]
+                    ]
+                ]
+            )
+    , footer =
+        Just
+            (div []
+                [ button
+                    [ UIKit.button
+                    , UIKit.buttonDefault
+                    , UIKit.modalClose
+                    , onClick AbandonPublishDialog
+                    ]
+                    [ text "Cancel" ]
+                , button
+                    [ UIKit.button
+                    , UIKit.buttonPrimary
+                    , onClick (PublishDataProduct model)
+                    ]
+                    [ text "Publish" ]
+                ]
+            )
+    }

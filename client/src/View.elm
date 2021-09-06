@@ -1,6 +1,7 @@
 module View exposing (view)
 
 import Browser exposing (..)
+import Dialog.UIKit as Dialog
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
@@ -19,6 +20,8 @@ view model =
     , body =
         [ headerView model.logoPath
         , mainView model
+        , Dialog.view
+            (Maybe.map View.Manage.publishDialog model.publishModel)
         ]
     }
 

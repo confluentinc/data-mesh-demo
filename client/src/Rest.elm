@@ -9,7 +9,8 @@ import Http exposing (Expect, expectJson, get)
 import Json exposing (decodeDataProducts)
 import Json.Decode exposing (Decoder)
 import RemoteData exposing (WebData)
-import Types exposing (Msg(..), QualifiedName, unQualifiedName)
+import Task
+import Types exposing (Msg(..), PublishModel, QualifiedName, unQualifiedName)
 import Url.Builder exposing (absolute)
 
 
@@ -26,9 +27,14 @@ getDataProducts =
         }
 
 
-publishDataProduct : QualifiedName -> Cmd Msg
-publishDataProduct qualifiedName =
-    Cmd.none
+{-| TODO Placeholder
+-}
+publishDataProduct : PublishModel -> Cmd Msg
+publishDataProduct publishModel =
+    DataProductPublished publishModel
+        |> Debug.log "Publishing"
+        |> Task.succeed
+        |> Task.perform identity
 
 
 expectRemoteData : (WebData a -> msg) -> Decoder a -> Expect msg
