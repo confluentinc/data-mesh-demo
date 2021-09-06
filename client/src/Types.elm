@@ -7,7 +7,10 @@ module Types exposing
     , PublishDialogMsg(..)
     , PublishModel
     , QualifiedName(..)
+    , Stream(..)
+    , Topic
     , View(..)
+    , streamQualifiedName
     , unQualifiedName
     )
 
@@ -34,8 +37,8 @@ type Msg
     = NoOp
     | ChangeView UrlRequest
     | SetDataProductsTableState Table.State
-    | GotDataProducts (WebData (Dict QualifiedName DataProduct))
-    | SelectDataProduct QualifiedName
+    | GotStreams (WebData (Dict QualifiedName Stream))
+    | SelectStream QualifiedName
     | StartPublishDialog QualifiedName
     | PublishDialogMsg PublishDialogMsg
     | PublishDataProduct PublishModel
@@ -53,8 +56,8 @@ type alias Model =
     , logoPath : String
     , activeView : View
     , dataProductsTableState : Table.State
-    , dataProducts : WebData (Dict QualifiedName DataProduct)
-    , activeDataProductKey : Maybe QualifiedName
+    , streams : WebData (Dict QualifiedName Stream)
+    , activeStreamKey : Maybe QualifiedName
     , publishModel : Maybe PublishModel
     }
 
@@ -70,13 +73,6 @@ type alias PublishModel =
 -- | See src/main/java/io/confluent/demo/datamesh/cc/urls/api/UrlService.java
 
 
-type alias DataProductUrls =
-    { schemaUrl : Url
-    , portUrl : Url
-    , lineageUrl : Url
-    }
-
-
 type QualifiedName
     = QualifiedName String
 
@@ -86,11 +82,38 @@ unQualifiedName (QualifiedName str) =
     str
 
 
+type Stream
+    = StreamDataProduct DataProduct
+    | StreamTopic Topic
+
+
 type alias DataProduct =
-    { isPublished : WebData Bool
-    , qualifiedName : QualifiedName
+    { qualifiedName : QualifiedName
     , name : String
     , description : String
     , owner : String
     , urls : DataProductUrls
     }
+
+
+type alias Topic =
+    { qualifiedName : QualifiedName
+    , name : String
+    }
+
+
+type alias DataProductUrls =
+    { schemaUrl : Url
+    , portUrl : Url
+    , lineageUrl : Url
+    }
+
+
+streamQualifiedName : Stream -> QualifiedName
+streamQualifiedName stream =
+    case stream of
+        StreamTopic t ->
+            t.qualifiedName
+
+        StreamDataProduct p ->
+            p.qualifiedName

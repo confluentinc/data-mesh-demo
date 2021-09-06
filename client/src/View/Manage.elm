@@ -28,17 +28,25 @@ view model =
                     tableConfig
                     model.dataProductsTableState
             )
-            model.dataProducts
+            model.streams
         ]
 
 
-tableConfig : Table.Config DataProduct Msg
+tableConfig : Table.Config Stream Msg
 tableConfig =
     Table.customConfig
-        { toId = .qualifiedName >> unQualifiedName
+        { toId = streamQualifiedName >> unQualifiedName
         , toMsg = SetDataProductsTableState
         , columns =
-            [ Table.stringColumn "Name" .name
+            [ Table.stringColumn "Name"
+                (\stream ->
+                    case stream of
+                        StreamDataProduct dataProduct ->
+                            dataProduct.name
+
+                        StreamTopic topic ->
+                            topic.name
+                )
             , Table.veryCustomColumn
                 { name = "Data Product"
                 , viewData =
@@ -47,8 +55,22 @@ tableConfig =
                             [ publishButton dataProduct ]
                 , sorter = Table.unsortable
                 }
-            , Table.stringColumn "Description" .description
-            , Table.stringColumn "Owner" .owner
+            , Table.stringColumn "Description"
+                (\stream ->
+                    case stream of
+                        StreamDataProduct dataProduct ->
+                            dataProduct.description
+
+                        StreamTopic topic -> "-"
+                )
+            , Table.stringColumn "Owner"
+                (\stream ->
+                    case stream of
+                        StreamDataProduct dataProduct ->
+                            dataProduct.owner
+
+                        StreamTopic topic -> "-"
+                )
             , Table.stringColumn "Other Tags" (\_ -> "")
             ]
         , customizations =
@@ -63,39 +85,25 @@ tableConfig =
         }
 
 
-publishButton : DataProduct -> Html Msg
-publishButton dataProduct =
+publishButton : Stream -> Html Msg
+publishButton stream =
     case
-        dataProduct.isPublished
+        stream
     of
-        Success True ->
+        StreamDataProduct _ ->
             button
                 [ UIKit.button
                 , disabled True
                 ]
                 [ text "Published" ]
 
-        Success False ->
+        StreamTopic topic ->
             button
                 [ UIKit.button
                 , UIKit.buttonPrimary
-                , onClick (StartPublishDialog dataProduct.qualifiedName)
+                , onClick (StartPublishDialog topic.qualifiedName)
                 ]
                 [ text "Publish" ]
-
-        Loading ->
-            button
-                [ UIKit.button
-                , disabled True
-                ]
-                [ i [] [ text "Publishing..." ] ]
-
-        _ ->
-            button
-                [ UIKit.button
-                , disabled True
-                ]
-                [ text "TODO ???" ]
 
 
 publishDialog : PublishModel -> Dialog.Config Msg

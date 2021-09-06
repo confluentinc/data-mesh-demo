@@ -20,11 +20,11 @@ init logoPath url key =
       , logoPath = logoPath
       , activeView = routeParser url
       , dataProductsTableState = Table.initialSort "name"
-      , dataProducts = Loading
-      , activeDataProductKey = Nothing
+      , streams = Loading
+      , activeStreamKey = Nothing
       , publishModel = Nothing
       }
-    , Rest.getDataProducts
+    , Rest.getStreams
     )
 
 
@@ -66,15 +66,15 @@ update msg model =
                     , Nav.load url
                     )
 
-        GotDataProducts newDataProducts ->
-            ( { model | dataProducts = newDataProducts }
+        GotStreams newStreams ->
+            ( { model | streams = newStreams }
             , Cmd.none
             )
 
-        SelectDataProduct qualifiedName ->
+        SelectStream qualifiedName ->
             ( { model
-                | activeDataProductKey =
-                    if model.activeDataProductKey == Just qualifiedName then
+                | activeStreamKey =
+                    if model.activeStreamKey == Just qualifiedName then
                         Nothing
 
                     else
@@ -87,7 +87,7 @@ update msg model =
             let
                 dataProduct : Maybe DataProduct
                 dataProduct =
-                    (Optics.dataProduct qualifiedName).getOption model
+                    (Optics.streamDataProduct qualifiedName).getOption model
 
                 dialog =
                     case dataProduct of
@@ -133,7 +133,7 @@ update msg model =
 
         DataProductPublished publishModel ->
             ( { model | publishModel = Nothing }
-                |> (Optics.dataProductPublished publishModel.qualifiedName).set (Success True)
+                |> Debug.todo "Update the local copy of the stream with the published version."
             , Cmd.none
             )
 

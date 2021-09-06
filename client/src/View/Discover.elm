@@ -20,27 +20,29 @@ import View.Lorem as Lorem
 view : Model -> Html Msg
 view model =
     let
-        activeDataProduct =
+        activeStream =
             Maybe.map2
                 (Dict.get unQualifiedName)
-                model.activeDataProductKey
-                (RemoteData.toMaybe model.dataProducts)
+                model.activeStreamKey
+                (RemoteData.toMaybe model.streams)
                 |> Maybe.withDefault Nothing
     in
     div [ class "discover-pane" ]
         [ div [ class "discover-main" ]
             [ h2 [] [ text "Data Products" ]
             , webDataView
-                (Dict.values
-                    >> Table.view
-                        (tableConfig model.activeDataProductKey)
-                        model.dataProductsTableState
+                (Table.view
+                    (tableConfig model.activeStreamKey)
+                    model.dataProductsTableState
                 )
-                model.dataProducts
+                (RemoteData.map
+                    (Dict.values >> filterDataProducts)
+                    model.streams
+                )
             ]
         , div [ class "discover-detail" ]
             [ h2 [] [ text "Data Products Information" ]
-            , dataProductDetailView activeDataProduct
+            , streamDetailView activeStream
             ]
         , div [ class "discover-copy" ]
             [ p [] [ text "Discover the data products that are relevant to your domain." ]
@@ -50,8 +52,21 @@ view model =
         ]
 
 
+filterDataProducts : List Stream -> List DataProduct
+filterDataProducts =
+    List.filterMap
+        (\stream ->
+            case stream of
+                StreamDataProduct dataProduct ->
+                    Just dataProduct
+
+                StreamTopic _ ->
+                    Nothing
+        )
+
+
 tableConfig : Maybe QualifiedName -> Table.Config DataProduct Msg
-tableConfig activeDataProductKey =
+tableConfig activeStreamKey =
     Table.customConfig
         { toId = .qualifiedName >> unQualifiedName
         , toMsg = SetDataProductsTableState
@@ -70,27 +85,24 @@ tableConfig activeDataProductKey =
                     ]
                 , rowAttrs =
                     \dataProduct ->
-                        [ onClick (SelectDataProduct dataProduct.qualifiedName) ]
-                            ++ (if Just dataProduct.qualifiedName == activeDataProductKey then
-                                    [ UIKit.active
-                                    , class (Debug.toString dataProduct.qualifiedName)
-                                    , class (Debug.toString activeDataProductKey)
-                                    ]
+                        [ onClick (SelectStream dataProduct.qualifiedName) ]
+                            ++ (if Just dataProduct.qualifiedName == activeStreamKey then
+                                    [ UIKit.active ]
 
                                 else
-                                    [ class "foo" ]
+                                    []
                                )
             }
         }
 
 
-dataProductDetailView : Maybe DataProduct -> Html Msg
-dataProductDetailView mDataProduct =
-    case mDataProduct of
+streamDetailView : Maybe Stream -> Html Msg
+streamDetailView mStream =
+    case mStream of
         Nothing ->
             i [] [ text "Select a product from the table on the left." ]
 
-        Just dataProduct ->
+        Just (StreamDataProduct dataProduct) ->
             div []
                 [ form [ UIKit.formHorizontal ]
                     [ disabledFormRow "Name" dataProduct.name
@@ -101,6 +113,13 @@ dataProductDetailView mDataProduct =
                     [ linkButton "View Lineage" dataProduct.urls.lineageUrl
                     , linkButton "Export to S3" dataProduct.urls.portUrl
                     , linkButton "KafkaConnect" dataProduct.urls.schemaUrl
+                    ]
+                ]
+
+        Just (StreamTopic topic) ->
+            div []
+                [ form [ UIKit.formHorizontal ]
+                    [ disabledFormRow "Name" topic.name
                     ]
                 ]
 

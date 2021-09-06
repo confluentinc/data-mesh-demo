@@ -1,29 +1,29 @@
 module Rest exposing
-    ( getDataProducts
+    ( getStreams
     , publishDataProduct
     )
 
 import GenericDict as Dict
 import GenericDict.Extra as Dict
 import Http exposing (Expect, expectJson, get)
-import Json exposing (decodeDataProducts)
+import Json exposing (decodeStreams)
 import Json.Decode exposing (Decoder)
 import RemoteData exposing (WebData)
 import Task
-import Types exposing (Msg(..), PublishModel, QualifiedName, unQualifiedName)
+import Types exposing (Msg(..), PublishModel, QualifiedName, streamQualifiedName, unQualifiedName)
 import Url.Builder exposing (absolute)
 
 
-getDataProducts : Cmd Msg
-getDataProducts =
+getStreams : Cmd Msg
+getStreams =
     get
-        { url = absolute [ "api", "data-products" ] []
+        { url = absolute [ "api", "data-products", "manage" ] []
         , expect =
             expectRemoteData
-                (RemoteData.map (Dict.fromListBy .qualifiedName unQualifiedName)
-                    >> GotDataProducts
+                (RemoteData.map (Dict.fromListBy streamQualifiedName unQualifiedName)
+                    >> GotStreams
                 )
-                decodeDataProducts
+                decodeStreams
         }
 
 

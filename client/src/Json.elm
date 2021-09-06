@@ -1,25 +1,46 @@
-module Json exposing (decodeDataProducts)
+module Json exposing (decodeStreams)
 
 import Json.Decode as Decode exposing (..)
+import Json.Decode.Extra exposing (url, when)
 import RemoteData exposing (RemoteData(..))
-import Types exposing (DataProduct, DataProductUrls, QualifiedName(..))
+import Types exposing (DataProduct, DataProductUrls, QualifiedName(..), Stream(..), Topic)
 import Url as Url exposing (Url)
 
 
-decodeDataProducts : Decoder (List DataProduct)
-decodeDataProducts =
-    list decodeDataProduct
+whenTypeIs tag =
+    when (field "@type" string) ((==) tag)
+
+
+decodeStreams : Decoder (List Stream)
+decodeStreams =
+    list decodeStream
+
+
+decodeStream : Decoder Stream
+decodeStream =
+    oneOf
+        [ map StreamDataProduct decodeDataProduct
+        , map StreamTopic decodeTopic
+        ]
+
+
+decodeTopic : Decoder Topic
+decodeTopic =
+    whenTypeIs "Topic" <|
+        map2 Topic
+            (field "qualifiedName" qualifiedName)
+            (field "name" string)
 
 
 decodeDataProduct : Decoder DataProduct
 decodeDataProduct =
-    map6 DataProduct
-        (succeed (Success False))
-        (field "qualifiedName" qualifiedName)
-        (field "name" string)
-        (field "description" string)
-        (field "owner" string)
-        (field "urls" decodeDataProductUrls)
+    whenTypeIs "DataProduct" <|
+        map5 DataProduct
+            (field "qualifiedName" qualifiedName)
+            (field "name" string)
+            (field "description" string)
+            (field "owner" string)
+            (field "urls" decodeDataProductUrls)
 
 
 qualifiedName : Decoder QualifiedName
@@ -33,19 +54,3 @@ decodeDataProductUrls =
         (field "schemaUrl" url)
         (field "portUrl" url)
         (field "lineageUrl" url)
-
-
-url : Decoder Url
-url =
-    string
-        |> Decode.andThen
-            (\str ->
-                case
-                    Url.fromString str
-                of
-                    Nothing ->
-                        fail ("Expected URL, got: " ++ str)
-
-                    Just decoded ->
-                        succeed decoded
-            )
