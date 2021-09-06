@@ -43,6 +43,7 @@ webDataView successView webData =
             div [ UIKit.alert, UIKit.alertDanger ]
                 [ h4 [] [ text "Data Load Failed" ]
                 , p [] [ text (errorToString err) ]
+                , p [] [ text "Check your network connection and try reloading." ]
                 ]
 
         Success result ->
