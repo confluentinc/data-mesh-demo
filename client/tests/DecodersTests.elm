@@ -1,6 +1,6 @@
 module DecodersTests exposing (suite)
 
-import Decoders exposing (decodeStreams)
+import Decoders exposing (decodeStream, decodeStreams)
 import Expect exposing (Expectation, fail, pass)
 import Fuzz exposing (Fuzzer, int, list, string)
 import Json.Decode exposing (Decoder, decodeString, errorToString)
@@ -22,6 +22,9 @@ suite =
             , test "sample response 2 - no error" <|
                 \_ ->
                     decodesSuccessfully decodeStreams dataProductsResponse2
+            , test "sample response 3 - no error" <|
+                \_ ->
+                    decodesSuccessfully decodeStream publishDataProductResponse1
             , test "sample response 2 - right result" <|
                 \_ ->
                     decodesTo decodeStreams
@@ -165,6 +168,24 @@ dataProductsResponse2 =
     "qualifiedName": "lsrc-7xxv2:.:pksqlc-09g26PAGEVIEWS_USER2-value:2"
   }
 ]
+"""
+
+
+publishDataProductResponse1 : String
+publishDataProductResponse1 =
+    """
+   {
+  "@type": "DataProduct",
+  "name": "users",
+  "qualifiedName": "lsrc-odr89:.:users-value:1",
+  "description": "website users",
+  "owner": "ybyzek",
+  "urls": {
+    "schemaUrl": "https://confluent.cloud/environments/env-jn132/schema-registry/schemas/users-value",
+    "portUrl": "https://confluent.cloud/environments/env-jn132/clusters/lkc-17pzv/topics/users",
+    "lineageUrl": "https://confluent.cloud/environments/env-jn132/clusters/lkc-17pzv/stream-lineage/view/users-value"
+  }
+}
 """
 
 

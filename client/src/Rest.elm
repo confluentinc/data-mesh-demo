@@ -4,10 +4,11 @@ module Rest exposing
     , publishDataProduct
     )
 
-import Decoders exposing (decodeStreams)
+import Decoders exposing (decodeDataProduct, decodeStreams)
+import Encoders exposing (encodePublishModel)
 import GenericDict as Dict
 import GenericDict.Extra as Dict
-import Http exposing (Expect, expectJson, expectWhatever, get)
+import Http exposing (Expect, expectJson, expectWhatever, get, jsonBody, post)
 import Http.Extra exposing (delete)
 import Json.Decode exposing (Decoder)
 import RemoteData exposing (WebData)
@@ -29,14 +30,16 @@ getStreams =
         }
 
 
-{-| TODO Placeholder
--}
 publishDataProduct : PublishModel -> Cmd Msg
 publishDataProduct publishModel =
-    DataProductPublished publishModel
-        |> Debug.log "Publishing"
-        |> Task.succeed
-        |> Task.perform identity
+    post
+        { url = absolute [ "api", "data-products" ] []
+        , body = jsonBody (encodePublishModel publishModel)
+        , expect =
+            expectRemoteData
+                DataProductPublished
+                decodeDataProduct
+        }
 
 
 deleteDataProduct : QualifiedName -> Cmd Msg

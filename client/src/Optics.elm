@@ -100,3 +100,29 @@ dataProduct =
 streamDataProduct : QualifiedName -> Optional Model DataProduct
 streamDataProduct =
     stream >> optionalWithOptional dataProduct
+
+
+topic : Optional Stream Topic
+topic =
+    Optional
+        (\s ->
+            case s of
+                StreamDataProduct _ ->
+                    Nothing
+
+                StreamTopic r ->
+                    Just r
+        )
+        (\new s ->
+            case s of
+                StreamDataProduct d ->
+                    StreamDataProduct d
+
+                StreamTopic _ ->
+                    StreamTopic new
+        )
+
+
+streamTopic : QualifiedName -> Optional Model Topic
+streamTopic =
+    stream >> optionalWithOptional topic

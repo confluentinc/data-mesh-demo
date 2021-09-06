@@ -42,14 +42,14 @@ type Msg
     | StartPublishDialog QualifiedName
     | PublishDialogMsg PublishDialogMsg
     | PublishDataProduct PublishModel
-    | DataProductPublished PublishModel
+    | DataProductPublished (WebData DataProduct)
     | DeleteDataProduct QualifiedName
     | DataProductDeleted (WebData QualifiedName)
     | AbandonPublishDialog
 
 
 type PublishDialogMsg
-    = PublishDialogSetName String
+    = PublishDialogSetOwner String
     | PublishDialogSetDescription String
 
 
@@ -68,6 +68,7 @@ type alias Model =
 type alias PublishModel =
     { qualifiedName : QualifiedName
     , name : String
+    , owner : String
     , description : String
     }
 

@@ -114,7 +114,7 @@ publishDialog model =
     , header =
         Just
             (div [ UIKit.modalTitle ]
-                [ text "Publish" ]
+                [ text ("Publish: " ++ model.name)]
             )
     , body =
         Just
@@ -123,15 +123,15 @@ publishDialog model =
                     [ text "Enter the required Data Product tags." ]
                 , form [ UIKit.formHorizontal ]
                     [ div []
-                        [ label [ UIKit.formLabel ] [ text "Name" ]
+                        [ label [ UIKit.formLabel ] [ text "Owner" ]
                         , div [ UIKit.formControls ]
                             [ input
                                 [ type_ "text"
                                 , UIKit.input
-                                , placeholder "Data Product Name"
+                                , placeholder "Data Product Owner"
                                 , autofocus True
-                                , value model.name
-                                , onInput (PublishDialogMsg << PublishDialogSetName)
+                                , value model.owner
+                                , onInput (PublishDialogMsg << PublishDialogSetOwner)
                                 ]
                                 []
                             ]

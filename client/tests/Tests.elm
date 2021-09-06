@@ -1,6 +1,7 @@
 module Tests exposing (..)
 
 import DecodersTests
+import EncodersTests
 import Fuzz exposing (Fuzzer, int, list, string)
 import Route exposing (routeParser, routeToString)
 import RouteTests
@@ -15,4 +16,5 @@ suite =
     describe "All"
         [ RouteTests.suite
         , DecodersTests.suite
+        , EncodersTests.suite
         ]

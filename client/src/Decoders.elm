@@ -1,4 +1,8 @@
-module Decoders exposing (decodeStreams)
+module Decoders exposing
+    ( decodeDataProduct
+    , decodeStream
+    , decodeStreams
+    )
 
 import Json.Decode as Decode exposing (..)
 import Json.Decode.Extra exposing (url, when)

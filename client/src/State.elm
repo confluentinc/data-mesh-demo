@@ -88,25 +88,25 @@ update msg model =
 
         StartPublishDialog qualifiedName ->
             let
-                dataProduct : Maybe DataProduct
-                dataProduct =
-                    (Optics.streamDataProduct qualifiedName).getOption model
+                topic : Maybe Topic
+                topic =
+                    (Optics.streamTopic qualifiedName).getOption model
 
+                dialog : Maybe PublishModel
                 dialog =
-                    case dataProduct of
-                        Just product ->
-                            { qualifiedName = qualifiedName
-                            , name = product.name
-                            , description = product.description
-                            }
+                    case topic of
+                        Just t ->
+                            Just
+                                { qualifiedName = t.qualifiedName
+                                , name = t.name
+                                , owner = ""
+                                , description = ""
+                                }
 
                         Nothing ->
-                            { qualifiedName = qualifiedName
-                            , name = ""
-                            , description = ""
-                            }
+                            Nothing
             in
-            ( { model | publishModel = Just dialog }
+            ( { model | publishModel = dialog }
             , Cmd.none
             )
 
@@ -134,9 +134,20 @@ update msg model =
             , Rest.publishDataProduct publishModel
             )
 
-        DataProductPublished publishModel ->
-            ( { model | publishModel = Nothing }
-                |> Debug.todo "Update the local copy of the stream with the published version."
+        DataProductPublished result ->
+            ( { model
+                | publishModel = Nothing
+                , streams =
+                    mapOnSuccess
+                        (\newDataProduct dict ->
+                            Dict.insert unQualifiedName
+                                newDataProduct.qualifiedName
+                                (StreamDataProduct newDataProduct)
+                                dict
+                        )
+                        result
+                        model.streams
+              }
             , Cmd.none
             )
 
@@ -148,17 +159,38 @@ update msg model =
         DataProductDeleted result ->
             ( { model
                 | deleteResult = result
-                , streams = mapOnSuccess (Dict.remove unQualifiedName) result model.streams
+                , streams =
+                    mapOnSuccess
+                        (\key ->
+                            Dict.update unQualifiedName
+                                key
+                                (Maybe.map unpublishStream)
+                        )
+                        result
+                        model.streams
               }
             , Cmd.none
             )
 
 
+unpublishStream : Stream -> Stream
+unpublishStream old =
+    case old of
+        StreamTopic t ->
+            StreamTopic t
+
+        StreamDataProduct d ->
+            StreamTopic
+                { qualifiedName = d.qualifiedName
+                , name = d.name
+                }
+
+
 updatePublishModel : PublishDialogMsg -> PublishModel -> ( PublishModel, Cmd Msg )
 updatePublishModel msg model =
     case msg of
-        PublishDialogSetName newName ->
-            ( { model | name = newName }, Cmd.none )
+        PublishDialogSetOwner newOwner ->
+            ( { model | owner = newOwner }, Cmd.none )
 
         PublishDialogSetDescription newDescription ->
             ( { model | description = newDescription }, Cmd.none )
