@@ -1,9 +1,9 @@
-module Json exposing (decodeStreams)
+module Decoders exposing (decodeStreams)
 
 import Json.Decode as Decode exposing (..)
 import Json.Decode.Extra exposing (url, when)
 import RemoteData exposing (RemoteData(..))
-import Types exposing (DataProduct, DataProductUrls, QualifiedName(..), Stream(..), Topic)
+import Types exposing (..)
 import Url as Url exposing (Url)
 
 
@@ -19,15 +19,15 @@ decodeStreams =
 decodeStream : Decoder Stream
 decodeStream =
     oneOf
-        [ map StreamDataProduct decodeDataProduct
-        , map StreamTopic decodeTopic
+        [ Decode.map StreamDataProduct decodeDataProduct
+        , Decode.map StreamTopic decodeTopic
         ]
 
 
 decodeTopic : Decoder Topic
 decodeTopic =
     whenTypeIs "Topic" <|
-        map2 Topic
+        Decode.map2 Topic
             (field "qualifiedName" qualifiedName)
             (field "name" string)
 
@@ -35,7 +35,7 @@ decodeTopic =
 decodeDataProduct : Decoder DataProduct
 decodeDataProduct =
     whenTypeIs "DataProduct" <|
-        map5 DataProduct
+        Decode.map5 DataProduct
             (field "qualifiedName" qualifiedName)
             (field "name" string)
             (field "description" string)
@@ -45,12 +45,12 @@ decodeDataProduct =
 
 qualifiedName : Decoder QualifiedName
 qualifiedName =
-    map QualifiedName string
+    Decode.map QualifiedName string
 
 
 decodeDataProductUrls : Decoder DataProductUrls
 decodeDataProductUrls =
-    map3 DataProductUrls
+    Decode.map3 DataProductUrls
         (field "schemaUrl" url)
         (field "portUrl" url)
         (field "lineageUrl" url)

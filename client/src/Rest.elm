@@ -4,11 +4,11 @@ module Rest exposing
     , publishDataProduct
     )
 
+import Decoders exposing (decodeStreams)
 import GenericDict as Dict
 import GenericDict.Extra as Dict
 import Http exposing (Expect, expectJson, expectWhatever, get)
 import Http.Extra exposing (delete)
-import Json exposing (decodeStreams)
 import Json.Decode exposing (Decoder)
 import RemoteData exposing (WebData)
 import Task

@@ -1,9 +1,10 @@
-module JsonTests exposing (suite)
+module DecodersTests exposing (suite)
 
+import Decoders exposing (decodeStreams)
 import Expect exposing (Expectation, fail, pass)
 import Fuzz exposing (Fuzzer, int, list, string)
-import Json exposing (decodeStreams)
 import Json.Decode exposing (Decoder, decodeString, errorToString)
+import Json.Encode exposing (encode)
 import RemoteData exposing (RemoteData(..))
 import Test exposing (..)
 import Types exposing (..)
@@ -12,7 +13,7 @@ import Url exposing (Protocol(..))
 
 suite : Test
 suite =
-    describe "JSON"
+    describe "Decoders"
         [ describe
             "Decode Streams"
             [ test "sample response 1 - no error" <|
@@ -193,16 +194,3 @@ decodesTo decoder json expected =
 
         Err err ->
             fail (errorToString err)
-
-
-createProductRequest1 : String
-createProductRequest1 =
-    """
-{
-  "@type": "KSQLDB",
-  "name": "pageviews_user3",
-  "owner": "owner value here",
-  "description": "description value here",
-  "command": "CREATE STREAM PAGEVIEWS_USER3 WITH (KAFKA_TOPIC='pageviews_user3', PARTITIONS=3, REPLICAS=3) AS SELECT * FROM PAGEVIEWS WHERE (PAGEVIEWS.USERID = 'User_3') EMIT CHANGES;"
-}
-"""

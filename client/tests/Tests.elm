@@ -1,7 +1,7 @@
 module Tests exposing (..)
 
+import DecodersTests
 import Fuzz exposing (Fuzzer, int, list, string)
-import JsonTests
 import Route exposing (routeParser, routeToString)
 import RouteTests
 import Test exposing (..)
@@ -14,5 +14,5 @@ suite : Test
 suite =
     describe "All"
         [ RouteTests.suite
-        , JsonTests.suite
+        , DecodersTests.suite
         ]
