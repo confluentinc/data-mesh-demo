@@ -4,14 +4,14 @@ module Types exposing
     , Flags
     , Model
     , Msg(..)
-    , QualifiedName
+    , QualifiedName(..)
     , View(..)
     , unQualifiedName
     )
 
 import Browser exposing (UrlRequest)
 import Browser.Navigation as Nav exposing (Key)
-import Dict exposing (Dict)
+import GenericDict exposing (Dict)
 import RemoteData exposing (WebData)
 import Table
 import Url as Url exposing (Url)
@@ -58,12 +58,12 @@ type alias DataProductUrls =
     }
 
 
-type alias QualifiedName =
-    String
+type QualifiedName
+    = QualifiedName String
 
 
 unQualifiedName : QualifiedName -> String
-unQualifiedName str =
+unQualifiedName (QualifiedName str) =
     str
 
 

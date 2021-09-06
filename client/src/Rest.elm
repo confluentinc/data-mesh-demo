@@ -3,12 +3,13 @@ module Rest exposing
     , publishDataProduct
     )
 
-import Dict.Extra as Dict
+import GenericDict as Dict
+import GenericDict.Extra as Dict
 import Http exposing (Expect, expectJson, get)
 import Json exposing (decodeDataProducts)
 import Json.Decode exposing (Decoder)
 import RemoteData exposing (WebData)
-import Types exposing (Msg(..), QualifiedName)
+import Types exposing (Msg(..), QualifiedName, unQualifiedName)
 import Url.Builder exposing (absolute)
 
 
@@ -18,7 +19,7 @@ getDataProducts =
         { url = absolute [ "api", "data-products" ] []
         , expect =
             expectRemoteData
-                (RemoteData.map (Dict.fromListBy .qualifiedName)
+                (RemoteData.map (Dict.fromListBy .qualifiedName unQualifiedName)
                     >> GotDataProducts
                 )
                 decodeDataProducts

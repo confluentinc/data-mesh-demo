@@ -1,7 +1,7 @@
 module View.Manage exposing (view)
 
 import Browser exposing (..)
-import Dict
+import GenericDict as Dict
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)

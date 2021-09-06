@@ -2,7 +2,7 @@ module State exposing (..)
 
 import Browser exposing (..)
 import Browser.Navigation as Nav exposing (Key)
-import Dict exposing (Dict)
+import GenericDict exposing (Dict)
 import Html exposing (..)
 import Optics
 import RemoteData exposing (RemoteData(..), WebData)

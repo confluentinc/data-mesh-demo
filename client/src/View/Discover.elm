@@ -1,7 +1,7 @@
 module View.Discover exposing (view)
 
 import Browser exposing (..)
-import Dict
+import GenericDict as Dict
 import Html exposing (..)
 import Html.Attributes exposing (class, disabled, href, target, type_, value)
 import Html.Events exposing (onClick)
@@ -22,7 +22,7 @@ view model =
     let
         activeDataProduct =
             Maybe.map2
-                Dict.get
+                (Dict.get unQualifiedName)
                 model.activeDataProductKey
                 (RemoteData.toMaybe model.dataProducts)
                 |> Maybe.withDefault Nothing
