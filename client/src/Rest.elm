@@ -1,11 +1,13 @@
 module Rest exposing
-    ( getStreams
+    ( deleteDataProduct
+    , getStreams
     , publishDataProduct
     )
 
 import GenericDict as Dict
 import GenericDict.Extra as Dict
-import Http exposing (Expect, expectJson, get)
+import Http exposing (Expect, expectJson, expectWhatever, get)
+import Http.Extra exposing (delete)
 import Json exposing (decodeStreams)
 import Json.Decode exposing (Decoder)
 import RemoteData exposing (WebData)
@@ -35,6 +37,19 @@ publishDataProduct publishModel =
         |> Debug.log "Publishing"
         |> Task.succeed
         |> Task.perform identity
+
+
+deleteDataProduct : QualifiedName -> Cmd Msg
+deleteDataProduct qualifiedName =
+    delete
+        { url = absolute [ "api", "data-products", unQualifiedName qualifiedName ] []
+        , expect =
+            expectWhatever
+                (RemoteData.fromResult
+                    >> RemoteData.map (always qualifiedName)
+                    >> DataProductDeleted
+                )
+        }
 
 
 expectRemoteData : (WebData a -> msg) -> Decoder a -> Expect msg

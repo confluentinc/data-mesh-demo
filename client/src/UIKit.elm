@@ -84,6 +84,11 @@ buttonDefault =
     class "uk-button-default"
 
 
+buttonDanger : Attribute msg
+buttonDanger =
+    class "uk-button-danger"
+
+
 margin : Attribute msg
 margin =
     class "uk-margin"

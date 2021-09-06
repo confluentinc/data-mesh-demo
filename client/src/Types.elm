@@ -43,6 +43,8 @@ type Msg
     | PublishDialogMsg PublishDialogMsg
     | PublishDataProduct PublishModel
     | DataProductPublished PublishModel
+    | DeleteDataProduct QualifiedName
+    | DataProductDeleted (WebData QualifiedName)
     | AbandonPublishDialog
 
 
@@ -59,6 +61,7 @@ type alias Model =
     , streams : WebData (Dict QualifiedName Stream)
     , activeStreamKey : Maybe QualifiedName
     , publishModel : Maybe PublishModel
+    , deleteResult : WebData QualifiedName
     }
 
 

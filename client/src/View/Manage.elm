@@ -90,12 +90,13 @@ publishButton stream =
     case
         stream
     of
-        StreamDataProduct _ ->
+        StreamDataProduct dataProduct ->
             button
                 [ UIKit.button
-                , disabled True
+                , UIKit.buttonDanger
+                , onClick (DeleteDataProduct dataProduct.qualifiedName)
                 ]
-                [ text "Published" ]
+                [ text "Unpublish" ]
 
         StreamTopic topic ->
             button

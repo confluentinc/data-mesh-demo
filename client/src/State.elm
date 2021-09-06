@@ -3,10 +3,12 @@ module State exposing (..)
 import Browser exposing (..)
 import Browser.Navigation as Nav exposing (Key)
 import Dialog.Common as Dialog
-import GenericDict exposing (Dict)
+import GenericDict as Dict exposing (Dict)
 import Html exposing (..)
+import Monocle.Optional as Optional
 import Optics
 import RemoteData exposing (RemoteData(..), WebData)
+import RemoteData.Extra exposing (mapOnSuccess)
 import Rest
 import Route exposing (routeParser)
 import Table
@@ -23,6 +25,7 @@ init logoPath url key =
       , streams = Loading
       , activeStreamKey = Nothing
       , publishModel = Nothing
+      , deleteResult = NotAsked
       }
     , Rest.getStreams
     )
@@ -134,6 +137,19 @@ update msg model =
         DataProductPublished publishModel ->
             ( { model | publishModel = Nothing }
                 |> Debug.todo "Update the local copy of the stream with the published version."
+            , Cmd.none
+            )
+
+        DeleteDataProduct qualifiedName ->
+            ( { model | deleteResult = Loading }
+            , Rest.deleteDataProduct qualifiedName
+            )
+
+        DataProductDeleted result ->
+            ( { model
+                | deleteResult = result
+                , streams = mapOnSuccess (Dict.remove unQualifiedName) result model.streams
+              }
             , Cmd.none
             )
 
