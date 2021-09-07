@@ -156,7 +156,17 @@ An example implementation of Data Mesh on top of [Confluent Cloud](https://www.c
 
 ## Client Instructions
 
-### Building
+### Development
+
+```sh
+cd client
+yarn
+yarn dev
+```
+
+The website is now served at http://localhost:9000.
+
+### Production
 
 ```sh
 cd client
