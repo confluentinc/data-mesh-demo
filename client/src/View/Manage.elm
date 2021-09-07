@@ -82,7 +82,6 @@ tableConfig =
                     , UIKit.tableDivider
                     , UIKit.tableStriped
                     , UIKit.tableSmall
-                    , UIKit.tableHover
                     ]
             }
         }
