@@ -1,5 +1,6 @@
 module View.Common exposing
-    ( errorToString
+    ( elementModifying
+    , errorToString
     , loadingWheel
     , webDataView
     )
@@ -55,3 +56,8 @@ loadingWheel =
     div [ class "loading-wheel" ]
         [ i [] [ text "Loading..." ]
         ]
+
+
+elementModifying : Attribute msg
+elementModifying =
+    class "element-modifying"
