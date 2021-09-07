@@ -29,6 +29,11 @@ tableStriped =
     class "uk-table-striped"
 
 
+tableHover : Attribute msg
+tableHover =
+    class "uk-table-hover"
+
+
 tableSmall : Attribute msg
 tableSmall =
     class "uk-table-small"

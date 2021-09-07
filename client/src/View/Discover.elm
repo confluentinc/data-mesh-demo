@@ -82,6 +82,7 @@ tableConfig activeStreamKey =
                     , UIKit.tableDivider
                     , UIKit.tableStriped
                     , UIKit.tableSmall
+                    , UIKit.tableHover
                     ]
                 , rowAttrs =
                     \dataProduct ->
