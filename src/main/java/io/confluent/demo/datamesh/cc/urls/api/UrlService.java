@@ -58,20 +58,27 @@ public class UrlService {
         //https://confluent.cloud/environments/env-nq0gz/clusters/lkc-ypj7p/topics/pageviews/overview
         return String.format("%s/topics/%s", getClusterUrl(), topicName);
     }
-    @GetMapping("/urls/cc/environment/cluster/lineage/{schemaName}")
-    public String getLineageUrl(@PathVariable String schemaName) {
-        //https://confluent.cloud/environments/env-nq0gz/clusters/lkc-ypj7p/stream-lineage/view/topic-pageviews
-        return String.format("%s/stream-lineage/view/%s", getClusterUrl(), schemaName);
+    @GetMapping("/urls/cc/environment/cluster/lineage/{name}")
+    public String getLineageUrl(@PathVariable String name) {
+        //https://confluent.cloud/environments/env-z5187/clusters/lkc-md1o7/stream-lineage/stream/pageviews-value/n/pageviews-value/overview
+        return String.format("%s/stream-lineage/stream/%s/n/%s/overview", getClusterUrl(), name, name);
+    }
+    @GetMapping("/urls/cc/environment/cluster/connectors")
+    public String getConnectorUrl() {
+        //https://confluent.cloud/environments/env-z5187/clusters/lkc-md1o7/connectors/browse
+        return String.format("%s/connectors/browse", getClusterUrl());
     }
 
     @GetMapping("/urls/data-product/{dataProductFQN}")
     public DataProductUrls getDataProductUrls(@PathVariable String dataProductFQN) {
         String schemaName = SubjectVersionService.getQualifiedNameSchemaName(dataProductFQN);
-        String schemaUrl = getSchemaUrl(schemaName);
-        String topicUrl = getTopicUrl(schemaName.split("-value")[0]);
-        String lineageurl = getLineageUrl(schemaName);
+        String topicName  = schemaName.split("-value")[0];
+        String schemaUrl  = getSchemaUrl(schemaName);
+        String topicUrl   = getTopicUrl(topicName);
+        String lineageUrl = getLineageUrl("topic-" + topicName);
+        String exportUrl  = getConnectorUrl();
 
-        return new DataProductUrls(schemaUrl, topicUrl, lineageurl);
+        return new DataProductUrls(schemaUrl, topicUrl, lineageUrl, exportUrl);
     }
 
 }
