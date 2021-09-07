@@ -20,6 +20,7 @@ suite =
                         (encode 2
                             (encodePublishModel
                                 { qualifiedName = QualifiedName "lsrc-7xxv2:.:pksqlc-09g26PAGEVIEWS_USER2-value:2"
+                                , name = "pageviews"
                                 , owner = "ybyzek"
                                 , description = "pageviews users 2"
                                 }
