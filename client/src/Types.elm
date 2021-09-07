@@ -4,8 +4,8 @@ module Types exposing
     , Flags
     , Model
     , Msg(..)
-    , PublishDialogMsg(..)
     , PublishForm
+    , PublishFormMsg(..)
     , QualifiedName(..)
     , Stream(..)
     , Topic
@@ -40,7 +40,7 @@ type Msg
     | GotStreams (WebData (Dict QualifiedName Stream))
     | SelectStream QualifiedName
     | StartPublishDialog QualifiedName
-    | PublishDialogMsg PublishDialogMsg
+    | PublishFormMsg PublishFormMsg
     | PublishDataProduct PublishForm
     | DataProductPublished (WebData DataProduct)
     | DeleteDataProduct QualifiedName
@@ -48,9 +48,9 @@ type Msg
     | AbandonPublishDialog
 
 
-type PublishDialogMsg
-    = PublishDialogSetOwner String
-    | PublishDialogSetDescription String
+type PublishFormMsg
+    = PublishFormSetOwner String
+    | PublishFormSetDescription String
 
 
 type alias Model =

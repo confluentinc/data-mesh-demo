@@ -132,7 +132,7 @@ publishDialog model =
                                 , placeholder "Data Product Owner"
                                 , autofocus True
                                 , value model.owner
-                                , onInput (PublishDialogMsg << PublishDialogSetOwner)
+                                , onInput (PublishFormMsg << PublishFormSetOwner)
                                 ]
                                 []
                             ]
@@ -145,7 +145,7 @@ publishDialog model =
                                 , UIKit.input
                                 , placeholder "Data Product Description"
                                 , value model.description
-                                , onInput (PublishDialogMsg << PublishDialogSetDescription)
+                                , onInput (PublishFormMsg << PublishFormSetDescription)
                                 ]
                                 []
                             ]

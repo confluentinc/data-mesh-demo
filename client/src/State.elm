@@ -114,7 +114,7 @@ update msg model =
             , Cmd.none
             )
 
-        PublishDialogMsg subMsg ->
+        PublishFormMsg subMsg ->
             case model.publishForm of
                 Nothing ->
                     ( model, Cmd.none )
@@ -185,11 +185,11 @@ unpublishStream old =
                 }
 
 
-updatePublishForm : PublishDialogMsg -> PublishForm -> ( PublishForm, Cmd Msg )
+updatePublishForm : PublishFormMsg -> PublishForm -> ( PublishForm, Cmd Msg )
 updatePublishForm msg model =
     case msg of
-        PublishDialogSetOwner newOwner ->
+        PublishFormSetOwner newOwner ->
             ( { model | owner = newOwner }, Cmd.none )
 
-        PublishDialogSetDescription newDescription ->
+        PublishFormSetDescription newDescription ->
             ( { model | description = newDescription }, Cmd.none )
