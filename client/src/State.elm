@@ -25,6 +25,7 @@ init logoPath url key =
       , streams = Loading
       , activeStreamKey = Nothing
       , publishForm = Nothing
+      , publishFormResult = NotAsked
       , deleteResult = NotAsked
       }
     , Rest.getStreams
@@ -105,12 +106,18 @@ update msg model =
                         Nothing ->
                             Nothing
             in
-            ( { model | publishForm = dialog }
+            ( { model
+                | publishForm = dialog
+                , publishFormResult = NotAsked
+              }
             , Cmd.none
             )
 
         AbandonPublishDialog ->
-            ( { model | publishForm = Nothing }
+            ( { model
+                | publishForm = Nothing
+                , publishFormResult = NotAsked
+              }
             , Cmd.none
             )
 
@@ -129,23 +136,30 @@ update msg model =
                     )
 
         PublishDataProduct publishForm ->
-            ( model
+            ( { model
+                | publishFormResult = Loading
+              }
             , Rest.publishDataProduct publishForm
+            )
+
+        DataProductPublished (Success newDataProduct) ->
+            ( { model
+                | publishForm = Nothing
+                , publishFormResult = NotAsked
+                , streams =
+                    RemoteData.map
+                        (Dict.insert unQualifiedName
+                            newDataProduct.qualifiedName
+                            (StreamDataProduct newDataProduct)
+                        )
+                        model.streams
+              }
+            , Cmd.none
             )
 
         DataProductPublished result ->
             ( { model
-                | publishForm = Nothing
-                , streams =
-                    mapOnSuccess
-                        (\newDataProduct dict ->
-                            Dict.insert unQualifiedName
-                                newDataProduct.qualifiedName
-                                (StreamDataProduct newDataProduct)
-                                dict
-                        )
-                        result
-                        model.streams
+                | publishFormResult = result
               }
             , Cmd.none
             )

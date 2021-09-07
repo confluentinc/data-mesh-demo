@@ -6,13 +6,13 @@ import GenericDict as Dict
 import Html exposing (..)
 import Html.Attributes exposing (autofocus, class, disabled, placeholder, type_, value)
 import Html.Events exposing (onClick, onInput)
-import RemoteData exposing (RemoteData(..))
+import RemoteData exposing (RemoteData(..), WebData)
 import Route exposing (routeToString)
 import Table exposing (defaultCustomizations)
 import Types exposing (..)
 import UIKit
 import Url exposing (..)
-import View.Common exposing (webDataView)
+import View.Common exposing (webDataView,errorView)
 import View.Lorem as Lorem
 
 
@@ -61,7 +61,8 @@ tableConfig =
                         StreamDataProduct dataProduct ->
                             dataProduct.description
 
-                        StreamTopic topic -> "-"
+                        StreamTopic topic ->
+                            "-"
                 )
             , Table.stringColumn "Owner"
                 (\stream ->
@@ -69,7 +70,8 @@ tableConfig =
                         StreamDataProduct dataProduct ->
                             dataProduct.owner
 
-                        StreamTopic topic -> "-"
+                        StreamTopic topic ->
+                            "-"
                 )
             , Table.stringColumn "Other Tags" (\_ -> "")
             ]
@@ -108,20 +110,36 @@ publishButton stream =
                 [ text "Publish" ]
 
 
-publishDialog : PublishForm -> Dialog.Config Msg
-publishDialog model =
+publishDialog : WebData PublishFormResult -> PublishForm -> Dialog.Config Msg
+publishDialog result model =
+    let
+        disabledAttribute =
+            disabled (RemoteData.isLoading result)
+    in
     { closeMessage = Just AbandonPublishDialog
     , containerClass = Nothing
     , header =
         Just
             (div [ UIKit.modalTitle ]
-                [ text ("Publish: " ++ model.topic.name)]
+                [ text ("Publish: " ++ model.topic.name) ]
             )
     , body =
         Just
             (div []
                 [ p []
                     [ text "Enter the required Data Product tags." ]
+                , case result of
+                    Failure err ->
+                        errorView err
+
+                    Success _ ->
+                        text ""
+
+                    Loading ->
+                        text ""
+
+                    NotAsked ->
+                        text ""
                 , form [ UIKit.formHorizontal ]
                     [ div []
                         [ label [ UIKit.formLabel ] [ text "Owner" ]
@@ -132,6 +150,7 @@ publishDialog model =
                                 , placeholder "Data Product Owner"
                                 , autofocus True
                                 , value model.owner
+                                , disabledAttribute
                                 , onInput (PublishFormMsg << PublishFormSetOwner)
                                 ]
                                 []
@@ -145,6 +164,7 @@ publishDialog model =
                                 , UIKit.input
                                 , placeholder "Data Product Description"
                                 , value model.description
+                                , disabledAttribute
                                 , onInput (PublishFormMsg << PublishFormSetDescription)
                                 ]
                                 []
@@ -160,12 +180,14 @@ publishDialog model =
                     [ UIKit.button
                     , UIKit.buttonDefault
                     , UIKit.modalClose
+                    , disabledAttribute
                     , onClick AbandonPublishDialog
                     ]
                     [ text "Cancel" ]
                 , button
                     [ UIKit.button
                     , UIKit.buttonPrimary
+                    , disabledAttribute
                     , onClick (PublishDataProduct model)
                     ]
                     [ text "Publish" ]

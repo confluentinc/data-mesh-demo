@@ -1,6 +1,6 @@
 module View.Common exposing
     ( elementModifying
-    , errorToString
+    , errorView
     , loadingWheel
     , webDataView
     )
@@ -41,14 +41,19 @@ webDataView successView webData =
             loadingWheel
 
         Failure err ->
-            div [ UIKit.alert, UIKit.alertDanger ]
-                [ h4 [] [ text "Data Load Failed" ]
-                , p [] [ text (errorToString err) ]
-                , p [] [ text "Check your network connection and try reloading." ]
-                ]
+            errorView err
 
         Success result ->
             successView result
+
+
+errorView : Http.Error -> Html msg
+errorView err =
+    div [ UIKit.alert, UIKit.alertDanger ]
+        [ h4 [] [ text "Data Load Failed" ]
+        , p [] [ text (errorToString err) ]
+        , p [] [ text "Check your network connection and try again." ]
+        ]
 
 
 loadingWheel : Html msg

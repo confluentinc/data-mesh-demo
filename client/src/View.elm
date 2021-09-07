@@ -21,7 +21,7 @@ view model =
         [ headerView model.logoPath
         , mainView model
         , Dialog.view
-            (Maybe.map View.Manage.publishDialog model.publishForm)
+            (Maybe.map (View.Manage.publishDialog model.publishFormResult) model.publishForm)
         ]
     }
 
