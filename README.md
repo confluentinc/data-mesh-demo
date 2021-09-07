@@ -5,6 +5,8 @@ An example implementation of Data Mesh on top of [Confluent Cloud](https://www.c
 ### Prerequisties
 * Java 11
 * Gradle
+* Node
+* Yarn
 * jq
 * A user account in [Confluent Cloud](https://www.confluent.io/confluent-cloud/tryfree/)
 * Local install of [Confluent Cloud CLI](https://docs.confluent.io/ccloud-cli/current/install.html) v1.36.0 or later
@@ -151,3 +153,16 @@ An example implementation of Data Mesh on top of [Confluent Cloud](https://www.c
   ```
   ./scripts/destroy-data-mesh.sh stack-configs/java-service-account-<SERVICE_ACCOUNT_ID>.config
   ```
+
+## Client Instructions
+
+### Building
+
+```sh
+cd client
+yarn
+yarn build
+```
+
+The client files are now in `client/dist/`. They can be hosted by the
+main webserver by _...TODO..._.
