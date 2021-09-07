@@ -10,7 +10,7 @@ encodePublishModel : PublishModel -> Value
 encodePublishModel publishModel =
     object
         [ ( "@type", string "TOPIC" )
-        , ( "qualifiedName", qualifiedName publishModel.qualifiedName )
+        , ( "qualifiedName", qualifiedName publishModel.topic.qualifiedName )
         , ( "dataProductTag"
           , object
                 [ ( "owner", string publishModel.owner )

@@ -19,10 +19,12 @@ suite =
                     Expect.equal (String.trim publishDataProductRequest1)
                         (encode 2
                             (encodePublishModel
-                                { qualifiedName = QualifiedName "lsrc-7xxv2:.:pksqlc-09g26PAGEVIEWS_USER2-value:2"
-                                , name = "pageviews"
-                                , owner = "ybyzek"
+                                { owner = "ybyzek"
                                 , description = "pageviews users 2"
+                                , topic =
+                                    { qualifiedName = QualifiedName "lsrc-7xxv2:.:pksqlc-09g26PAGEVIEWS_USER2-value:2"
+                                    , name = "pageviews"
+                                    }
                                 }
                             )
                         )

@@ -66,8 +66,7 @@ type alias Model =
 
 
 type alias PublishModel =
-    { qualifiedName : QualifiedName
-    , name : String
+    { topic : Topic
     , owner : String
     , description : String
     }

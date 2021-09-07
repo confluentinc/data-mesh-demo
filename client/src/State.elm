@@ -97,8 +97,7 @@ update msg model =
                     case topic of
                         Just t ->
                             Just
-                                { qualifiedName = t.qualifiedName
-                                , name = t.name
+                                { topic = t
                                 , owner = ""
                                 , description = ""
                                 }

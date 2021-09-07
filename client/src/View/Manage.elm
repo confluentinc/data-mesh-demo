@@ -115,7 +115,7 @@ publishDialog model =
     , header =
         Just
             (div [ UIKit.modalTitle ]
-                [ text ("Publish: " ++ model.name)]
+                [ text ("Publish: " ++ model.topic.name)]
             )
     , body =
         Just
