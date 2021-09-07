@@ -113,7 +113,7 @@ streamDetailView mStream =
                 , div [ UIKit.margin ]
                     [ linkButton "View Lineage" dataProduct.urls.lineageUrl
                     , linkButton "Export to S3" dataProduct.urls.portUrl
-                    , linkButton "KafkaConnect" dataProduct.urls.schemaUrl
+                    , linkButton "Kafka Connect" dataProduct.urls.schemaUrl
                     ]
                 ]
 
