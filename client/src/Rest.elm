@@ -5,7 +5,7 @@ module Rest exposing
     )
 
 import Decoders exposing (decodeDataProduct, decodeStreams)
-import Encoders exposing (encodePublishModel)
+import Encoders exposing (encodePublishForm)
 import GenericDict as Dict
 import GenericDict.Extra as Dict
 import Http exposing (Expect, expectJson, expectWhatever, get, jsonBody, post)
@@ -13,7 +13,7 @@ import Http.Extra exposing (delete)
 import Json.Decode exposing (Decoder)
 import RemoteData exposing (WebData)
 import Task
-import Types exposing (Msg(..), PublishModel, QualifiedName, streamQualifiedName, unQualifiedName)
+import Types exposing (Msg(..), PublishForm, QualifiedName, streamQualifiedName, unQualifiedName)
 import Url.Builder exposing (absolute)
 
 
@@ -30,11 +30,11 @@ getStreams =
         }
 
 
-publishDataProduct : PublishModel -> Cmd Msg
-publishDataProduct publishModel =
+publishDataProduct : PublishForm -> Cmd Msg
+publishDataProduct publishForm =
     post
         { url = absolute [ "api", "data-products" ] []
-        , body = jsonBody (encodePublishModel publishModel)
+        , body = jsonBody (encodePublishForm publishForm)
         , expect =
             expectRemoteData
                 DataProductPublished

@@ -1,6 +1,6 @@
 module EncodersTests exposing (suite)
 
-import Encoders exposing (encodePublishModel)
+import Encoders exposing (encodePublishForm)
 import Expect exposing (Expectation, fail, pass)
 import Fuzz exposing (Fuzzer, int, list, string)
 import Json.Encode exposing (encode)
@@ -18,7 +18,7 @@ suite =
                 \_ ->
                     Expect.equal (String.trim publishDataProductRequest1)
                         (encode 2
-                            (encodePublishModel
+                            (encodePublishForm
                                 { owner = "ybyzek"
                                 , description = "pageviews users 2"
                                 , topic =

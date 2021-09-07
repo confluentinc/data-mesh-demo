@@ -5,7 +5,7 @@ module Types exposing
     , Model
     , Msg(..)
     , PublishDialogMsg(..)
-    , PublishModel
+    , PublishForm
     , QualifiedName(..)
     , Stream(..)
     , Topic
@@ -41,7 +41,7 @@ type Msg
     | SelectStream QualifiedName
     | StartPublishDialog QualifiedName
     | PublishDialogMsg PublishDialogMsg
-    | PublishDataProduct PublishModel
+    | PublishDataProduct PublishForm
     | DataProductPublished (WebData DataProduct)
     | DeleteDataProduct QualifiedName
     | DataProductDeleted (WebData QualifiedName)
@@ -60,12 +60,12 @@ type alias Model =
     , dataProductsTableState : Table.State
     , streams : WebData (Dict QualifiedName Stream)
     , activeStreamKey : Maybe QualifiedName
-    , publishModel : Maybe PublishModel
+    , publishForm : Maybe PublishForm
     , deleteResult : WebData QualifiedName
     }
 
 
-type alias PublishModel =
+type alias PublishForm =
     { topic : Topic
     , owner : String
     , description : String

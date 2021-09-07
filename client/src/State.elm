@@ -24,7 +24,7 @@ init logoPath url key =
       , dataProductsTableState = Table.initialSort "name"
       , streams = Loading
       , activeStreamKey = Nothing
-      , publishModel = Nothing
+      , publishForm = Nothing
       , deleteResult = NotAsked
       }
     , Rest.getStreams
@@ -92,7 +92,7 @@ update msg model =
                 topic =
                     (Optics.streamTopic qualifiedName).getOption model
 
-                dialog : Maybe PublishModel
+                dialog : Maybe PublishForm
                 dialog =
                     case topic of
                         Just t ->
@@ -105,37 +105,37 @@ update msg model =
                         Nothing ->
                             Nothing
             in
-            ( { model | publishModel = dialog }
+            ( { model | publishForm = dialog }
             , Cmd.none
             )
 
         AbandonPublishDialog ->
-            ( { model | publishModel = Nothing }
+            ( { model | publishForm = Nothing }
             , Cmd.none
             )
 
         PublishDialogMsg subMsg ->
-            case model.publishModel of
+            case model.publishForm of
                 Nothing ->
                     ( model, Cmd.none )
 
-                Just publishModel ->
+                Just publishForm ->
                     let
                         ( subModel, subCmd ) =
-                            updatePublishModel subMsg publishModel
+                            updatePublishForm subMsg publishForm
                     in
-                    ( { model | publishModel = Just subModel }
+                    ( { model | publishForm = Just subModel }
                     , subCmd
                     )
 
-        PublishDataProduct publishModel ->
+        PublishDataProduct publishForm ->
             ( model
-            , Rest.publishDataProduct publishModel
+            , Rest.publishDataProduct publishForm
             )
 
         DataProductPublished result ->
             ( { model
-                | publishModel = Nothing
+                | publishForm = Nothing
                 , streams =
                     mapOnSuccess
                         (\newDataProduct dict ->
@@ -185,8 +185,8 @@ unpublishStream old =
                 }
 
 
-updatePublishModel : PublishDialogMsg -> PublishModel -> ( PublishModel, Cmd Msg )
-updatePublishModel msg model =
+updatePublishForm : PublishDialogMsg -> PublishForm -> ( PublishForm, Cmd Msg )
+updatePublishForm msg model =
     case msg of
         PublishDialogSetOwner newOwner ->
             ( { model | owner = newOwner }, Cmd.none )

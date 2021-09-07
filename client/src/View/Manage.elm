@@ -108,7 +108,7 @@ publishButton stream =
                 [ text "Publish" ]
 
 
-publishDialog : PublishModel -> Dialog.Config Msg
+publishDialog : PublishForm -> Dialog.Config Msg
 publishDialog model =
     { closeMessage = Just AbandonPublishDialog
     , containerClass = Nothing

@@ -1,4 +1,4 @@
-module Encoders exposing (encodePublishModel)
+module Encoders exposing (encodePublishForm)
 
 import Json.Encode as Encode exposing (..)
 import RemoteData exposing (RemoteData(..))
@@ -6,15 +6,15 @@ import Types exposing (..)
 import Url as Url exposing (Url)
 
 
-encodePublishModel : PublishModel -> Value
-encodePublishModel publishModel =
+encodePublishForm : PublishForm -> Value
+encodePublishForm publishForm =
     object
         [ ( "@type", string "TOPIC" )
-        , ( "qualifiedName", qualifiedName publishModel.topic.qualifiedName )
+        , ( "qualifiedName", qualifiedName publishForm.topic.qualifiedName )
         , ( "dataProductTag"
           , object
-                [ ( "owner", string publishModel.owner )
-                , ( "description", string publishModel.description )
+                [ ( "owner", string publishForm.owner )
+                , ( "description", string publishForm.description )
                 ]
           )
         ]
