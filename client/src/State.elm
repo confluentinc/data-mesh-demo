@@ -21,6 +21,7 @@ init logoPath url key =
     ( { key = key
       , logoPath = logoPath
       , activeView = routeParser url
+      , createOption = Enrich
       , dataProductsTableState = Table.initialSort "name"
       , streams = Loading
       , activeStreamKey = Nothing
@@ -69,6 +70,11 @@ update msg model =
                     ( model
                     , Nav.load url
                     )
+
+        HighlightCreateOption newOption ->
+            ( { model | createOption = newOption }
+            , Cmd.none
+            )
 
         GotStreams newStreams ->
             ( { model | streams = newStreams }

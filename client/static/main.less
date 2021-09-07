@@ -37,11 +37,15 @@ body {
   }
 }
 
-.discover-pane {
+.discover-pane,
+.create-pane {
   display: grid;
-  grid-template-columns: 40% auto;
   grid-column-gap: 30px;
   grid-row-gap: 30px;
+  grid-template-columns: 40% auto;
+}
+
+.discover-pane {
   grid-template-areas:
     "main detail"
     "copy detail";
@@ -57,6 +61,30 @@ body {
 
   .discover-detail {
     grid-area: detail;
+  }
+}
+
+.create-pane {
+  grid-template-areas:
+    "main main"
+    "use-cases detail"
+    "publish publish";
+
+  .create-main {
+    grid-area: main;
+    min-height: 300px;
+  }
+
+  .create-use-cases {
+    grid-area: use-cases;
+  }
+
+  .create-detail {
+    grid-area: detail;
+  }
+
+  .create-publish {
+    grid-area: publish;
   }
 }
 

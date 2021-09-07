@@ -1,5 +1,6 @@
 module Types exposing
-    ( DataProduct
+    ( CreateOption(..)
+    , DataProduct
     , DataProductUrls
     , Flags
     , Model
@@ -34,12 +35,19 @@ type View
     | NotFound
 
 
+type CreateOption
+    = Enrich
+    | Filter
+    | Aggregate
+
+
 type Msg
     = NoOp
     | ChangeView UrlRequest
     | SetDataProductsTableState Table.State
     | GotStreams (WebData (Dict QualifiedName Stream))
     | SelectStream QualifiedName
+    | HighlightCreateOption CreateOption
     | StartPublishDialog QualifiedName
     | PublishFormMsg PublishFormMsg
     | PublishDataProduct PublishForm
@@ -58,6 +66,7 @@ type alias Model =
     { key : Key
     , logoPath : String
     , activeView : View
+    , createOption : CreateOption
     , dataProductsTableState : Table.State
     , streams : WebData (Dict QualifiedName Stream)
     , activeStreamKey : Maybe QualifiedName
