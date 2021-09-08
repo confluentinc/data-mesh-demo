@@ -125,10 +125,10 @@ streamDetailView mStream =
                     , disabledFormRow "Description" dataProduct.description
                     ]
                 , div [ UIKit.margin ]
-                    [ linkButton "Overview" dataProduct.urls.portUrl
+                    [ linkButton "Topic" dataProduct.urls.portUrl
                     , linkButton "Schema" dataProduct.urls.schemaUrl
-                    , linkButton "View Lineage" dataProduct.urls.lineageUrl
-                    , linkButton "Export to S3" dataProduct.urls.exportUrl
+                    , linkButton "Lineage" dataProduct.urls.lineageUrl
+                    , linkButton "Export" dataProduct.urls.exportUrl
                     ]
                 ]
 
