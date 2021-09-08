@@ -1,10 +1,11 @@
 module Rest exposing
     ( deleteDataProduct
     , getStreams
+    , getUseCases
     , publishDataProduct
     )
 
-import Decoders exposing (decodeDataProduct, decodeStreams)
+import Decoders exposing (decodeDataProduct, decodeStreams, decodeUseCases)
 import Encoders exposing (encodePublishForm)
 import GenericDict as Dict
 import GenericDict.Extra as Dict
@@ -52,6 +53,19 @@ deleteDataProduct qualifiedName =
                     >> RemoteData.map (always qualifiedName)
                     >> DataProductDeleted
                 )
+        }
+
+
+getUseCases : Cmd Msg
+getUseCases =
+    get
+        { url = absolute [ "api", "use-cases" ] []
+        , expect =
+            expectRemoteData
+                (RemoteData.map (Dict.fromListBy .name identity)
+                    >> GotUseCases
+                )
+                decodeUseCases
         }
 
 

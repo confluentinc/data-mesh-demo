@@ -1,6 +1,7 @@
 module View.Create exposing (view)
 
 import Browser exposing (..)
+import GenericDict as Dict exposing (Dict)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
@@ -9,14 +10,30 @@ import Table exposing (defaultCustomizations)
 import Types exposing (..)
 import UIKit
 import Url exposing (..)
+import View.Common exposing (webDataView)
 
 
 view : Model -> Html Msg
 view model =
     div [ class "create-pane" ]
         [ mainView
-        , useCasesView model.createOption
-        , useCasesDetail model.createOption
+        , webDataView
+            (useCasesView model.activeUseCaseKey)
+            model.useCases
+        , webDataView
+            (\useCases ->
+                let
+                    activeUseCase =
+                        Maybe.andThen (\k -> Dict.get identity k useCases) model.activeUseCaseKey
+                in
+                case activeUseCase of
+                    Nothing ->
+                        text ""
+
+                    Just active ->
+                        useCasesDetail active
+            )
+            model.useCases
         , publishView
         ]
 
@@ -32,8 +49,8 @@ mainView =
         ]
 
 
-useCasesView : CreateOption -> Html Msg
-useCasesView activeOption =
+useCasesView : Maybe String -> Dict String UseCase -> Html Msg
+useCasesView activeUseCaseKey useCases =
     div [ class "create-use-cases" ]
         [ h2 [] [ text "Sample Business Use-Cases" ]
         , table
@@ -45,44 +62,29 @@ useCasesView activeOption =
             [ thead []
                 [ tr [] [ text "Options" ]
                 , tbody []
-                    (List.map
-                        (\option ->
-                            tr
-                                ([ onClick (HighlightCreateOption option) ]
-                                    ++ (if activeOption == option then
-                                            [ UIKit.active ]
+                    (useCases
+                        |> Dict.values
+                        |> List.map
+                            (\useCase ->
+                                tr
+                                    ([ onClick (SelectUseCase useCase.name) ]
+                                        ++ (if activeUseCaseKey == Just useCase.name then
+                                                [ UIKit.active ]
 
-                                        else
-                                            []
-                                       )
-                                )
-                                [ td [] (createOptionCopy option) ]
-                        )
-                        [ Enrich
-                        , Filter
-                        , Aggregate
-                        ]
+                                            else
+                                                []
+                                           )
+                                    )
+                                    [ td [] [ text useCase.description ] ]
+                            )
                     )
                 ]
             ]
         ]
 
 
-createOptionCopy : CreateOption -> List (Html msg)
-createOptionCopy createOption =
-    case createOption of
-        Enrich ->
-            [ text "Option 1: Enrich the pageviews" ]
-
-        Filter ->
-            [ text "Option 2: Filter out specific pageviews" ]
-
-        Aggregate ->
-            [ text "Option 3: Aggregate to find the most popular pages" ]
-
-
-useCasesDetail : CreateOption -> Html msg
-useCasesDetail createOption =
+useCasesDetail : UseCase -> Html msg
+useCasesDetail useCase =
     div [ class "create-use-detail" ]
         [ h2 [] [ text "Application Information" ]
         , table
@@ -100,29 +102,13 @@ useCasesDetail createOption =
                             , td [] [ pre [] [ text content ] ]
                             ]
                     )
-                    [ ( "Name", "pageviews" )
-                    , ( "Data Product Inputs", "pageviews, users" )
+                    [ ( "Name", useCase.name )
+                    , ( "Data Product Inputs", useCase.inputs )
                     , ( "Query"
-                      , case createOption of
-                            Enrich ->
-                                enrichQuery
-
-                            Filter ->
-                                "TODO"
-
-                            Aggregate ->
-                                "TODO"
+                      , useCase.ksqlDbCommand
                       )
                     , ( "Output Topic"
-                      , case createOption of
-                            Enrich ->
-                                "enriched_pageviews"
-
-                            Filter ->
-                                "filtered_pageviews"
-
-                            Aggregate ->
-                                "popular_pages"
+                      , useCase.outputTopic
                       )
                     ]
                 )

@@ -1,6 +1,6 @@
 module DecodersTests exposing (suite)
 
-import Decoders exposing (decodeStream, decodeStreams)
+import Decoders exposing (decodeStream, decodeStreams, decodeUseCases)
 import Expect exposing (Expectation, fail, pass)
 import Fuzz exposing (Fuzzer, int, list, string)
 import Json.Decode exposing (Decoder, decodeString, errorToString)
@@ -113,6 +113,29 @@ suite =
                             }
                         ]
             ]
+        , test "use-cases response - correct result" <|
+            \_ ->
+                decodesTo decodeUseCases
+                    useCasesResponse1
+                    [ { description = "Enrich an event stream"
+                      , inputs = "pageviews,users"
+                      , ksqlDbCommand = "CREATE TABLE ..."
+                      , name = "pageviews_enriched"
+                      , outputTopic = "pageviews_enriched"
+                      }
+                    , { description = "Filter an event stream"
+                      , inputs = "pageviews"
+                      , ksqlDbCommand = "CREATE STREAM..."
+                      , name = "filtered_pageviews"
+                      , outputTopic = "filtered_pageviews"
+                      }
+                    , { description = "Aggrevate an event stream"
+                      , inputs = "pageviews"
+                      , ksqlDbCommand = "CREATE STREAM..."
+                      , name = "aggregation"
+                      , outputTopic = "aggregation"
+                      }
+                    ]
         ]
 
 
@@ -158,4 +181,33 @@ publishDataProductResponse1 =
     "exportUrl": "https://confluent.cloud/environments/env-jn132/clusters/lkc-17pzv/connectors/browse"
   }
 }
+"""
+
+
+useCasesResponse1 : String
+useCasesResponse1 =
+    """
+[
+  {
+    "description": "Enrich an event stream",
+    "name": "pageviews_enriched",
+    "inputs": "pageviews,users",
+    "ksqlDbCommand": "CREATE TABLE ...",
+    "outputTopic": "pageviews_enriched"
+  },
+  {
+    "description": "Filter an event stream",
+    "name": "filtered_pageviews",
+    "inputs": "pageviews",
+    "ksqlDbCommand": "CREATE STREAM...",
+    "outputTopic": "filtered_pageviews"
+  },
+  {
+    "description": "Aggrevate an event stream",
+    "name": "aggregation",
+    "inputs": "pageviews",
+    "ksqlDbCommand": "CREATE STREAM...",
+    "outputTopic": "aggregation"
+  }
+]
 """

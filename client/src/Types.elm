@@ -1,6 +1,5 @@
 module Types exposing
-    ( CreateOption(..)
-    , DataProduct
+    ( DataProduct
     , DataProductUrls
     , Flags
     , Model
@@ -11,6 +10,7 @@ module Types exposing
     , QualifiedName(..)
     , Stream(..)
     , Topic
+    , UseCase
     , View(..)
     , streamQualifiedName
     , unQualifiedName
@@ -39,19 +39,14 @@ type View
     | NotFound
 
 
-type CreateOption
-    = Enrich
-    | Filter
-    | Aggregate
-
-
 type Msg
     = NoOp
     | ChangeView UrlRequest
     | SetDataProductsTableState Table.State
-    | GotStreams (WebData (Dict QualifiedName Stream))
     | SelectStream QualifiedName
-    | HighlightCreateOption CreateOption
+    | GotStreams (WebData (Dict QualifiedName Stream))
+    | SelectUseCase String
+    | GotUseCases (WebData (Dict String UseCase))
     | StartPublishDialog QualifiedName
     | PublishFormMsg PublishFormMsg
     | PublishDataProduct PublishForm
@@ -70,10 +65,11 @@ type alias Model =
     { key : Key
     , flags : Flags
     , activeView : View
-    , createOption : CreateOption
     , dataProductsTableState : Table.State
-    , streams : WebData (Dict QualifiedName Stream)
     , activeStreamKey : Maybe QualifiedName
+    , streams : WebData (Dict QualifiedName Stream)
+    , activeUseCaseKey : Maybe String
+    , useCases : WebData (Dict String UseCase)
     , publishForm : Maybe PublishForm
     , publishFormResult : WebData DataProduct
     , deleteResult : WebData QualifiedName
@@ -129,6 +125,15 @@ type alias DataProductUrls =
     , portUrl : Url
     , lineageUrl : Url
     , exportUrl : Url
+    }
+
+
+type alias UseCase =
+    { description : String
+    , name : String
+    , inputs : String
+    , ksqlDbCommand : String
+    , outputTopic : String
     }
 
 

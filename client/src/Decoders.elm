@@ -2,6 +2,7 @@ module Decoders exposing
     ( decodeDataProduct
     , decodeStream
     , decodeStreams
+    , decodeUseCases
     )
 
 import Json.Decode as Decode exposing (..)
@@ -59,3 +60,18 @@ decodeDataProductUrls =
         (field "portUrl" url)
         (field "lineageUrl" url)
         (field "exportUrl" url)
+
+
+decodeUseCases : Decoder (List UseCase)
+decodeUseCases =
+    list decodeUseCase
+
+
+decodeUseCase : Decoder UseCase
+decodeUseCase =
+    Decode.map5 UseCase
+        (field "description" string)
+        (field "name" string)
+        (field "inputs" string)
+        (field "ksqlDbCommand" string)
+        (field "outputTopic" string)

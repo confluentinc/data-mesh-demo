@@ -21,15 +21,19 @@ init flags url key =
     ( { key = key
       , flags = flags
       , activeView = routeParser url
-      , createOption = Enrich
       , dataProductsTableState = Table.initialSort "name"
-      , streams = Loading
       , activeStreamKey = Nothing
+      , streams = Loading
+      , activeUseCaseKey = Nothing
+      , useCases = Loading
       , publishForm = Nothing
       , publishFormResult = NotAsked
       , deleteResult = NotAsked
       }
-    , Rest.getStreams
+    , Cmd.batch
+        [ Rest.getStreams
+        , Rest.getUseCases
+        ]
     )
 
 
@@ -71,16 +75,6 @@ update msg model =
                     , Nav.load url
                     )
 
-        HighlightCreateOption newOption ->
-            ( { model | createOption = newOption }
-            , Cmd.none
-            )
-
-        GotStreams newStreams ->
-            ( { model | streams = newStreams }
-            , Cmd.none
-            )
-
         SelectStream qualifiedName ->
             ( { model
                 | activeStreamKey =
@@ -90,6 +84,28 @@ update msg model =
                     else
                         Just qualifiedName
               }
+            , Cmd.none
+            )
+
+        GotStreams newStreams ->
+            ( { model | streams = newStreams }
+            , Cmd.none
+            )
+
+        SelectUseCase name ->
+            ( { model
+                | activeUseCaseKey =
+                    if model.activeUseCaseKey == Just name then
+                        Nothing
+
+                    else
+                        Just name
+              }
+            , Cmd.none
+            )
+
+        GotUseCases newUseCases ->
+            ( { model | useCases = newUseCases }
             , Cmd.none
             )
 
