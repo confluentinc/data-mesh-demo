@@ -14,7 +14,6 @@ public class AuditLogController {
     }
 
     public void sendAuditLogEntry(AuditLogEntry entry) {
-        System.out.println(String.format("!!! %s", entry.getMessage()));
         messagingTemplate.convertAndSend("/topic/audit-log", entry);
     }
 }
