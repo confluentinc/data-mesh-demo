@@ -5,6 +5,7 @@ import io.confluent.demo.datamesh.cc.datacatalog.api.TagService;
 import io.confluent.demo.datamesh.cc.datacatalog.model.*;
 import io.confluent.demo.datamesh.cc.ksqldb.api.KsqlDbService;
 import io.confluent.demo.datamesh.cc.schemaregistry.api.SchemaRegistryService;
+import io.confluent.demo.datamesh.cc.schemaregistry.model.Schema;
 import io.confluent.demo.datamesh.cc.urls.api.UrlService;
 import io.confluent.demo.datamesh.model.*;
 import io.confluent.ksql.api.client.ExecuteStatementResult;
@@ -42,9 +43,13 @@ public class DataProductService {
 
     private DataProductEntity buildDataProductEntityFromSubjectVersion(AtlasEntityWithExtInfo subjectVersion) {
         String qualifiedName = subjectVersion.getEntity().getAttributes().get("qualifiedName").toString();
-        return new DataProductEntity(subjectVersion,
+        Schema schema = schemaService
+                .getLatest((String)subjectVersion.getEntity().getAttributes().get("name"));
+        return new DataProductEntity(
+                subjectVersion,
                 tagService.getDataProductTagForSubjectVersion(qualifiedName),
-                urlService.getDataProductUrls(qualifiedName));
+                urlService.getDataProductUrls(qualifiedName),
+                schema);
     }
 
     private List<DataProduct> atlasEntitiesToDataProducts(List<AtlasEntityWithExtInfo> entities) {

@@ -36,8 +36,8 @@ public class Mapper {
      */
     public static DataProduct ccToDataProduct(DataProductEntity dpEntity) {
         String name = dpEntity.getEntity().getAttributes()
-            .get("name")
-            .toString();
+          .get("name")
+          .toString();
 
         // Strips off the topic naming scheme to set a more friendly name
         int i = name.indexOf("-value");
@@ -46,10 +46,11 @@ public class Mapper {
         }
 
         return new DataProduct(
-           name,
-           dpEntity.getEntity().getAttributes().get("qualifiedName").toString(),
-           dpEntity.getDataProductTag().getAttributes().get("owner").toString(),
-           dpEntity.getDataProductTag().getAttributes().get("description").toString(),
-           dpEntity.getUrls());
+          name,
+          dpEntity.getEntity().getAttributes().get("qualifiedName").toString(),
+          dpEntity.getDataProductTag().getAttributes().get("owner").toString(),
+          dpEntity.getDataProductTag().getAttributes().get("description").toString(),
+          dpEntity.getUrls(),
+          dpEntity.getSchema());
     }
 }
