@@ -3,7 +3,7 @@ module EncodersTests exposing (suite)
 import Encoders exposing (encodePublishForm)
 import Expect exposing (Expectation, fail, pass)
 import Fuzz exposing (Fuzzer, int, list, string)
-import Json.Encode exposing (encode)
+import Json.Encode exposing (Value, encode)
 import RemoteData exposing (RemoteData(..))
 import Test exposing (..)
 import Types exposing (..)
@@ -16,18 +16,15 @@ suite =
         [ describe "encodes publish request"
             [ test "publish request 1 - matches golden encoding." <|
                 \_ ->
-                    Expect.equal (String.trim publishDataProductRequest1)
-                        (encode 2
-                            (encodePublishForm
-                                { owner = "ybyzek"
-                                , description = "pageviews users 2"
-                                , topic =
-                                    { qualifiedName = QualifiedName "lsrc-7xxv2:.:pksqlc-09g26PAGEVIEWS_USER2-value:2"
-                                    , name = "pageviews"
-                                    }
-                                }
-                            )
-                        )
+                    encodesTo encodePublishForm
+                        publishDataProductRequest1
+                        { owner = "ybyzek"
+                        , description = "pageviews users 2"
+                        , topic =
+                            { qualifiedName = QualifiedName "lsrc-7xxv2:.:pksqlc-09g26PAGEVIEWS_USER2-value:2"
+                            , name = "pageviews"
+                            }
+                        }
             ]
         ]
 
@@ -35,7 +32,7 @@ suite =
 publishDataProductRequest1 : String
 publishDataProductRequest1 =
     """
- {
+{
   "@type": "TOPIC",
   "qualifiedName": "lsrc-7xxv2:.:pksqlc-09g26PAGEVIEWS_USER2-value:2",
   "dataProductTag": {
@@ -44,3 +41,10 @@ publishDataProductRequest1 =
   }
 }
 """
+
+
+encodesTo : (a -> Value) -> String -> a -> Expectation
+encodesTo encoder expected value =
+    Expect.equal
+        (String.trim expected)
+        (encode 2 (encoder value))
