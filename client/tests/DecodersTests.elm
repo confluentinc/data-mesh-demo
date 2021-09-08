@@ -7,6 +7,7 @@ import Json.Decode exposing (Decoder, decodeString, errorToString)
 import Json.Encode exposing (encode)
 import RemoteData exposing (RemoteData(..))
 import Test exposing (..)
+import TestUtils exposing (decodesTo)
 import Types exposing (..)
 import Url exposing (Protocol(..))
 
@@ -158,31 +159,3 @@ publishDataProductResponse1 =
   }
 }
 """
-
-
-decodesSuccessfully : Decoder a -> String -> Expectation
-decodesSuccessfully decoder json =
-    let
-        decoded =
-            decodeString decoder json
-    in
-    case decoded of
-        Ok _ ->
-            pass
-
-        Err err ->
-            fail (errorToString err)
-
-
-decodesTo : Decoder a -> String -> a -> Expectation
-decodesTo decoder json expected =
-    let
-        decoded =
-            decodeString decoder json
-    in
-    case decoded of
-        Ok actual ->
-            Expect.equal expected actual
-
-        Err err ->
-            fail (errorToString err)

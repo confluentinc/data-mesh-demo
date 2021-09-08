@@ -6,6 +6,7 @@ import Fuzz exposing (Fuzzer, int, list, string)
 import Json.Encode exposing (Value, encode)
 import RemoteData exposing (RemoteData(..))
 import Test exposing (..)
+import TestUtils exposing (encodesTo)
 import Types exposing (..)
 import Url exposing (Protocol(..))
 
@@ -41,10 +42,3 @@ publishDataProductRequest1 =
   }
 }
 """
-
-
-encodesTo : (a -> Value) -> String -> a -> Expectation
-encodesTo encoder expected value =
-    Expect.equal
-        (String.trim expected)
-        (encode 2 (encoder value))
