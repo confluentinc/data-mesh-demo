@@ -3,6 +3,7 @@ module Tests exposing (..)
 import DecodersTests
 import EncodersTests
 import Fuzz exposing (Fuzzer, int, list, string)
+import Json.ExtrasTests
 import Route exposing (routeParser, routeToString)
 import RouteTests
 import Test exposing (..)
@@ -17,4 +18,5 @@ suite =
         [ RouteTests.suite
         , DecodersTests.suite
         , EncodersTests.suite
+        , Json.ExtrasTests.suite
         ]
