@@ -30,11 +30,11 @@ public class UseCasesController {
     }
     private UseCase getAggregateUseCase() {
         return new UseCase(
-                "Aggrevate an event stream",
-                "pageviews_aggregation",
+                "Aggregate an event stream",
+                "pageviews_aggregated",
                 "pageviews",
-                "CREATE TABLE PAGEVIEWS_AGGREGATION with (kafka_topic='pageviews_aggregation') AS SELECT USERID, COUNT(*) AS numusers FROM PAGEVIEWS WINDOW TUMBLING (size 30 second) GROUP BY USERID HAVING COUNT(*) > 1;",
-                "pageviews_aggregation");
+                "CREATE TABLE PAGEVIEWS_AGGREGATED with (kafka_topic='pageviews_aggregated') AS SELECT USERID, COUNT(*) AS numusers FROM PAGEVIEWS WINDOW TUMBLING (size 30 second) GROUP BY USERID HAVING COUNT(*) > 1;",
+                "pageviews_aggregated");
     }
     @GetMapping
     public List<UseCase> getDataProducts() {
