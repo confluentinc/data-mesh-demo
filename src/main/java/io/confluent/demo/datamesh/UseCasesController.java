@@ -17,7 +17,7 @@ public class UseCasesController {
                 "Enrich an event stream",
                 "pageviews_enriched",
                 "pageviews,users",
-                "CREATE TABLE ...",
+                "CREATE STREAM PAGEVIEWS_ENRICHED AS SELECT U.ID AS USERID, U.REGIONID AS REGION, U.GENDER AS GENDER, V.PAGEID AS PAGE FROM PAGEVIEWS V INNER JOIN USERS U ON V.USERID = U.ID EMIT CHANGES;",
                 "pageviews_enriched");
     }
     private UseCase getFilterUseCase() {
