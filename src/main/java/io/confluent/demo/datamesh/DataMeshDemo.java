@@ -1,20 +1,11 @@
 package io.confluent.demo.datamesh;
 
-import io.confluent.demo.datamesh.cc.datacatalog.api.SubjectVersionService;
-import io.confluent.demo.datamesh.cc.datacatalog.api.TagService;
-import io.confluent.demo.datamesh.cc.datacatalog.model.DataProductTag;
-import io.confluent.demo.datamesh.cc.datacatalog.model.TagResponse;
-import io.confluent.demo.datamesh.cc.ksqldb.api.KsqlDbService;
 import io.confluent.demo.datamesh.cc.schemaregistry.api.SchemaRegistryService;
-import io.confluent.demo.datamesh.cc.schemaregistry.model.LatestResponse;
-import io.confluent.demo.datamesh.model.CreateDataProductRequest;
-import io.confluent.demo.datamesh.model.CreateKsqlDbDataProductRequest;
-import io.confluent.demo.datamesh.model.DataProduct;
+import io.confluent.demo.datamesh.cc.schemaregistry.model.Schema;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
@@ -34,7 +25,7 @@ public class DataMeshDemo {
 	}
 
 	@GetMapping("/testme")
-	public LatestResponse testMe() throws Exception {
+	public Schema testMe() throws Exception {
 		return testSchemaService.getLatest("pageviews-value");
 		//return testDpService.createDataProduct(request);
 

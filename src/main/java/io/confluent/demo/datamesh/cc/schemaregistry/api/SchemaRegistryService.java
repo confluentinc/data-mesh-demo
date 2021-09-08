@@ -1,14 +1,10 @@
 package io.confluent.demo.datamesh.cc.schemaregistry.api;
 
-import io.confluent.demo.datamesh.cc.datacatalog.api.TagService;
-import io.confluent.demo.datamesh.cc.datacatalog.model.Tag;
-import io.confluent.demo.datamesh.cc.schemaregistry.model.LatestResponse;
+import io.confluent.demo.datamesh.cc.schemaregistry.model.Schema;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Arrays;
 
 @Service
 public class SchemaRegistryService {
@@ -31,9 +27,9 @@ public class SchemaRegistryService {
                 .build();
     }
 
-    public LatestResponse getLatest(String name) {
+    public Schema getLatest(String name) {
         String url = String.format("/subjects/%s/versions/latest", name);
-        return restTemplate.getForObject(url, LatestResponse.class);
+        return restTemplate.getForObject(url, Schema.class);
     }
 
 }
