@@ -16,10 +16,10 @@ import Types exposing (..)
 import Url exposing (..)
 
 
-init : String -> Url -> Key -> ( Model, Cmd Msg )
-init logoPath url key =
+init : Flags -> Url -> Key -> ( Model, Cmd Msg )
+init flags url key =
     ( { key = key
-      , logoPath = logoPath
+      , flags = flags
       , activeView = routeParser url
       , createOption = Enrich
       , dataProductsTableState = Table.initialSort "name"

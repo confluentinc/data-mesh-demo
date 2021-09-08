@@ -7,5 +7,9 @@ import "uikit/dist/js/uikit-icons.js";
 
 Elm.Main.init({
   node: document.getElementById("app"),
-  flags: logoPath
+  flags: {
+    images: {
+      logo: logoPath
+    }
+  }
 });

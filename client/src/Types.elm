@@ -25,7 +25,11 @@ import Url as Url exposing (Url)
 
 
 type alias Flags =
-    String
+    { images :
+        { logo :
+            String
+        }
+    }
 
 
 type View
@@ -64,7 +68,7 @@ type PublishFormMsg
 
 type alias Model =
     { key : Key
-    , logoPath : String
+    , flags : Flags
     , activeView : View
     , createOption : CreateOption
     , dataProductsTableState : Table.State

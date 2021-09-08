@@ -18,7 +18,7 @@ view : Model -> Document Msg
 view model =
     { title = "Data Mesh"
     , body =
-        [ headerView model.logoPath
+        [ headerView model.flags.images.logo
         , mainView model
         , Dialog.view
             (Maybe.map (View.Manage.publishDialog model.publishFormResult) model.publishForm)
