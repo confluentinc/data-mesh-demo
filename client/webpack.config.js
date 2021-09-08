@@ -68,7 +68,6 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: 'static/index.html',
-      title: 'Stream',
       chunks: ['index']
     }),
     new FaviconsWebpackPlugin('static/images/logo.png')
