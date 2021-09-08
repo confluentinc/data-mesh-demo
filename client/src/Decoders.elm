@@ -54,7 +54,8 @@ qualifiedName =
 
 decodeDataProductUrls : Decoder DataProductUrls
 decodeDataProductUrls =
-    Decode.map3 DataProductUrls
+    Decode.map4 DataProductUrls
         (field "schemaUrl" url)
         (field "portUrl" url)
         (field "lineageUrl" url)
+        (field "exportUrl" url)

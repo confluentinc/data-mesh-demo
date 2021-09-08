@@ -21,15 +21,61 @@ suite =
                     decodesTo decodeStream
                         publishDataProductResponse1
                         (StreamDataProduct
+                            { description = "website pageviews"
+                            , name = "pageviews"
+                            , owner = "kris"
+                            , qualifiedName = QualifiedName "lsrc-odr89:.:pageviews-value:1"
+                            , urls =
+                                { exportUrl =
+                                    { fragment = Nothing
+                                    , host = "confluent.cloud"
+                                    , path = "/environments/env-jn132/clusters/lkc-17pzv/connectors/browse"
+                                    , port_ = Nothing
+                                    , protocol = Https
+                                    , query = Nothing
+                                    }
+                                , lineageUrl =
+                                    { fragment = Nothing
+                                    , host = "confluent.cloud"
+                                    , path = "/environments/env-jn132/clusters/lkc-17pzv/stream-lineage/stream/topic-pageviews/n/topic-pageviews/overview"
+                                    , port_ = Nothing
+                                    , protocol = Https
+                                    , query = Nothing
+                                    }
+                                , portUrl =
+                                    { fragment = Nothing
+                                    , host = "confluent.cloud"
+                                    , path = "/environments/env-jn132/clusters/lkc-17pzv/topics/pageviews"
+                                    , port_ = Nothing
+                                    , protocol = Https
+                                    , query = Nothing
+                                    }
+                                , schemaUrl =
+                                    { fragment = Nothing
+                                    , host = "confluent.cloud"
+                                    , path = "/environments/env-jn132/schema-registry/schemas/pageviews-value"
+                                    , port_ = Nothing
+                                    , protocol = Https
+                                    , query = Nothing
+                                    }
+                                }
+                            }
+                        )
+            , test "streams response - correct result" <|
+                \_ ->
+                    decodesTo decodeStreams
+                        dataProductsResponse1
+                        [ StreamDataProduct
                             { description = "website users"
                             , name = "users"
-                            , owner = "ybyzek"
+                            , owner = "kris"
                             , qualifiedName = QualifiedName "lsrc-odr89:.:users-value:1"
                             , urls =
                                 { lineageUrl =
                                     { fragment = Nothing
                                     , host = "confluent.cloud"
-                                    , path = "/environments/env-jn132/clusters/lkc-17pzv/stream-lineage/view/users-value"
+                                    , path =
+                                        "/environments/env-jn132/clusters/lkc-17pzv/stream-lineage/stream/topic-users/n/topic-users/overview"
                                     , port_ = Nothing
                                     , protocol = Https
                                     , query = Nothing
@@ -50,71 +96,10 @@ suite =
                                     , protocol = Https
                                     , query = Nothing
                                     }
-                                }
-                            }
-                        )
-            , test "streams response - correct result" <|
-                \_ ->
-                    decodesTo decodeStreams
-                        dataProductsResponse1
-                        [ StreamDataProduct
-                            { description = "website users"
-                            , name = "users"
-                            , owner = "rick"
-                            , qualifiedName = QualifiedName "lsrc-7xxv2:.:users-value:1"
-                            , urls =
-                                { lineageUrl =
+                                , exportUrl =
                                     { fragment = Nothing
                                     , host = "confluent.cloud"
-                                    , path = "/environments/env-6qx3j/clusters/lkc-1771v/stream-lineage/view/users-value"
-                                    , port_ = Nothing
-                                    , protocol = Https
-                                    , query = Nothing
-                                    }
-                                , portUrl =
-                                    { fragment = Nothing
-                                    , host = "confluent.cloud"
-                                    , path = "/environments/env-6qx3j/clusters/lkc-1771v/topics/users"
-                                    , port_ = Nothing
-                                    , protocol = Https
-                                    , query = Nothing
-                                    }
-                                , schemaUrl =
-                                    { fragment = Nothing
-                                    , host = "confluent.cloud"
-                                    , path = "/environments/env-6qx3j/schema-registry/schemas/users-value"
-                                    , port_ = Nothing
-                                    , protocol = Https
-                                    , query = Nothing
-                                    }
-                                }
-                            }
-                        , StreamDataProduct
-                            { description = "website pageviews"
-                            , name = "pageviews"
-                            , owner = "adam"
-                            , qualifiedName = QualifiedName "lsrc-7xxv2:.:pageviews-value:1"
-                            , urls =
-                                { lineageUrl =
-                                    { fragment = Nothing
-                                    , host = "confluent.cloud"
-                                    , path = "/environments/env-6qx3j/clusters/lkc-1771v/stream-lineage/view/pageviews-value"
-                                    , port_ = Nothing
-                                    , protocol = Https
-                                    , query = Nothing
-                                    }
-                                , portUrl =
-                                    { fragment = Nothing
-                                    , host = "confluent.cloud"
-                                    , path = "/environments/env-6qx3j/clusters/lkc-1771v/topics/pageviews"
-                                    , port_ = Nothing
-                                    , protocol = Https
-                                    , query = Nothing
-                                    }
-                                , schemaUrl =
-                                    { fragment = Nothing
-                                    , host = "confluent.cloud"
-                                    , path = "/environments/env-6qx3j/schema-registry/schemas/pageviews-value"
+                                    , path = "/environments/env-jn132/clusters/lkc-17pzv/connectors/browse"
                                     , port_ = Nothing
                                     , protocol = Https
                                     , query = Nothing
@@ -122,8 +107,8 @@ suite =
                                 }
                             }
                         , StreamTopic
-                            { name = "pksqlc-09g26PAGEVIEWS_USER2"
-                            , qualifiedName = QualifiedName "lsrc-7xxv2:.:pksqlc-09g26PAGEVIEWS_USER2-value:2"
+                            { name = "pageviews"
+                            , qualifiedName = QualifiedName "lsrc-odr89:.:pageviews-value:1"
                             }
                         ]
             ]
@@ -137,31 +122,20 @@ dataProductsResponse1 =
   {
     "@type": "DataProduct",
     "name": "users",
-    "qualifiedName": "lsrc-7xxv2:.:users-value:1",
+    "qualifiedName": "lsrc-odr89:.:users-value:1",
     "description": "website users",
-    "owner": "rick",
+    "owner": "kris",
     "urls": {
-      "schemaUrl": "https://confluent.cloud/environments/env-6qx3j/schema-registry/schemas/users-value",
-      "portUrl": "https://confluent.cloud/environments/env-6qx3j/clusters/lkc-1771v/topics/users",
-      "lineageUrl": "https://confluent.cloud/environments/env-6qx3j/clusters/lkc-1771v/stream-lineage/view/users-value"
-    }
-  },
-  {
-    "@type": "DataProduct",
-    "name": "pageviews",
-    "qualifiedName": "lsrc-7xxv2:.:pageviews-value:1",
-    "description": "website pageviews",
-    "owner": "adam",
-    "urls": {
-      "schemaUrl": "https://confluent.cloud/environments/env-6qx3j/schema-registry/schemas/pageviews-value",
-      "portUrl": "https://confluent.cloud/environments/env-6qx3j/clusters/lkc-1771v/topics/pageviews",
-      "lineageUrl": "https://confluent.cloud/environments/env-6qx3j/clusters/lkc-1771v/stream-lineage/view/pageviews-value"
+      "schemaUrl": "https://confluent.cloud/environments/env-jn132/schema-registry/schemas/users-value",
+      "portUrl": "https://confluent.cloud/environments/env-jn132/clusters/lkc-17pzv/topics/users",
+      "lineageUrl": "https://confluent.cloud/environments/env-jn132/clusters/lkc-17pzv/stream-lineage/stream/topic-users/n/topic-users/overview",
+      "exportUrl": "https://confluent.cloud/environments/env-jn132/clusters/lkc-17pzv/connectors/browse"
     }
   },
   {
     "@type": "Topic",
-    "name": "pksqlc-09g26PAGEVIEWS_USER2",
-    "qualifiedName": "lsrc-7xxv2:.:pksqlc-09g26PAGEVIEWS_USER2-value:2"
+    "name": "pageviews",
+    "qualifiedName": "lsrc-odr89:.:pageviews-value:1"
   }
 ]
 """
@@ -170,16 +144,17 @@ dataProductsResponse1 =
 publishDataProductResponse1 : String
 publishDataProductResponse1 =
     """
-   {
+{
   "@type": "DataProduct",
-  "name": "users",
-  "qualifiedName": "lsrc-odr89:.:users-value:1",
-  "description": "website users",
-  "owner": "ybyzek",
+  "name": "pageviews",
+  "qualifiedName": "lsrc-odr89:.:pageviews-value:1",
+  "description": "website pageviews",
+  "owner": "kris",
   "urls": {
-    "schemaUrl": "https://confluent.cloud/environments/env-jn132/schema-registry/schemas/users-value",
-    "portUrl": "https://confluent.cloud/environments/env-jn132/clusters/lkc-17pzv/topics/users",
-    "lineageUrl": "https://confluent.cloud/environments/env-jn132/clusters/lkc-17pzv/stream-lineage/view/users-value"
+    "schemaUrl": "https://confluent.cloud/environments/env-jn132/schema-registry/schemas/pageviews-value",
+    "portUrl": "https://confluent.cloud/environments/env-jn132/clusters/lkc-17pzv/topics/pageviews",
+    "lineageUrl": "https://confluent.cloud/environments/env-jn132/clusters/lkc-17pzv/stream-lineage/stream/topic-pageviews/n/topic-pageviews/overview",
+    "exportUrl": "https://confluent.cloud/environments/env-jn132/clusters/lkc-17pzv/connectors/browse"
   }
 }
 """

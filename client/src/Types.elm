@@ -128,6 +128,7 @@ type alias DataProductUrls =
     { schemaUrl : Url
     , portUrl : Url
     , lineageUrl : Url
+    , exportUrl : Url
     }
 
 
