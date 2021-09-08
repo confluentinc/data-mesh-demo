@@ -63,7 +63,7 @@ function create_data_product () {
 function create_ksqldb_app() {
   MAX_WAIT=720
   echo "Waiting up to $MAX_WAIT seconds for Confluent Cloud ksqlDB cluster to be UP"
-  ccloud::retry $MAX_WAIT ccloud::validate_ccloud_ksqldb_endpoint_ready $KSQLDB_ENDPOINT
+  ccloud::retry $MAX_WAIT ccloud::validate_ccloud_ksqldb_endpoint_ready $KSQLDB_ENDPOINT || exit 1
   CMD="ccloud ksql app list -o json | jq -r '.[].id'"
   ksqlDBAppId=$(eval $CMD) \
     && print_pass "Retrieved ksqlDB application ID: $ksqlDBAppId" \
