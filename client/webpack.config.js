@@ -1,6 +1,7 @@
 'use strict';
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack');
 
@@ -69,7 +70,8 @@ module.exports = {
       template: 'static/index.html',
       title: 'Stream',
       chunks: ['index']
-    })
+    }),
+    new FaviconsWebpackPlugin('static/images/logo.png')
   ].concat(plugins),
 
   output: {
