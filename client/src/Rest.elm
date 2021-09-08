@@ -21,7 +21,7 @@ import Url.Builder exposing (absolute)
 getStreams : Cmd Msg
 getStreams =
     get
-        { url = absolute [ "api", "data-products", "manage" ] []
+        { url = absolute [ "data-products", "manage" ] []
         , expect =
             expectRemoteData
                 (RemoteData.map (Dict.fromListBy streamQualifiedName unQualifiedName)
@@ -34,7 +34,7 @@ getStreams =
 publishDataProduct : PublishForm -> Cmd Msg
 publishDataProduct publishForm =
     post
-        { url = absolute [ "api", "data-products" ] []
+        { url = absolute [ "data-products" ] []
         , body = jsonBody (encodePublishForm publishForm)
         , expect =
             expectRemoteData
@@ -46,7 +46,7 @@ publishDataProduct publishForm =
 deleteDataProduct : QualifiedName -> Cmd Msg
 deleteDataProduct qualifiedName =
     delete
-        { url = absolute [ "api", "data-products", unQualifiedName qualifiedName ] []
+        { url = absolute [ "data-products", unQualifiedName qualifiedName ] []
         , expect =
             expectWhatever
                 (RemoteData.fromResult
@@ -59,7 +59,7 @@ deleteDataProduct qualifiedName =
 getUseCases : Cmd Msg
 getUseCases =
     get
-        { url = absolute [ "api", "use-cases" ] []
+        { url = absolute [ "use-cases" ] []
         , expect =
             expectRemoteData
                 (RemoteData.map (Dict.fromListBy .name identity)
