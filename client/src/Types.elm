@@ -33,19 +33,18 @@ type alias Flags =
 
 
 type View
-    = Discover
-    | Create
+    = Discover (Maybe QualifiedName)
+    | Create (Maybe String)
     | Manage
     | NotFound
 
 
 type Msg
     = NoOp
-    | ChangeView UrlRequest
+    | ChangeUrl UrlRequest
+    | ChangeView View
     | SetDataProductsTableState Table.State
-    | SelectStream QualifiedName
     | GotStreams (WebData (Dict QualifiedName Stream))
-    | SelectUseCase String
     | GotUseCases (WebData (Dict String UseCase))
     | StartPublishDialog QualifiedName
     | PublishFormMsg PublishFormMsg
@@ -66,9 +65,7 @@ type alias Model =
     , flags : Flags
     , activeView : View
     , dataProductsTableState : Table.State
-    , activeStreamKey : Maybe QualifiedName
     , streams : WebData (Dict QualifiedName Stream)
-    , activeUseCaseKey : Maybe String
     , useCases : WebData (Dict String UseCase)
     , publishForm : Maybe PublishForm
     , publishFormResult : WebData DataProduct

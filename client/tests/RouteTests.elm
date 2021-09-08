@@ -15,19 +15,35 @@ suite =
         [ describe
             "routeParser"
             [ test "root" <|
-                \_ -> parsesTo Discover "http://localhost/"
+                \_ -> parsesTo (Discover Nothing) "http://localhost/"
             , test "discover" <|
-                \_ -> parsesTo Discover "http://localhost/#discover"
+                \_ -> parsesTo (Discover Nothing) "http://localhost/#discover"
+            , test "discover/<name>" <|
+                \_ -> parsesTo (Discover (Just (QualifiedName "lsrc"))) "http://localhost/#discover/lsrc"
             , test "create" <|
-                \_ -> parsesTo Create "http://localhost/#create"
+                \_ -> parsesTo (Create Nothing) "http://localhost/#create"
+            , test "create/<name>" <|
+                \_ -> parsesTo (Create (Just "enrich")) "http://localhost/#create/enrich"
             , test "manage" <|
                 \_ -> parsesTo Manage "http://localhost/#manage"
             ]
         , describe
             "routeToString"
-            [ test "discover" <| \_ -> Expect.equal "#/discover" (routeToString Discover)
-            , test "create" <| \_ -> Expect.equal "#/create" (routeToString Create)
-            , test "manage" <| \_ -> Expect.equal "#/manage" (routeToString Manage)
+            [ test "discover" <|
+                \_ ->
+                    Expect.equal "#/discover" (routeToString (Discover Nothing))
+            , test "discover/<name>" <|
+                \_ ->
+                    Expect.equal "#/discover/crsl" (routeToString (Discover (Just (QualifiedName "crsl"))))
+            , test "create" <|
+                \_ ->
+                    Expect.equal "#/create" (routeToString (Create Nothing))
+            , test "create/<name>" <|
+                \_ ->
+                    Expect.equal "#/create/aggregate" (routeToString (Create (Just "aggregate")))
+            , test "manage" <|
+                \_ ->
+                    Expect.equal "#/manage" (routeToString Manage)
             ]
         ]
 

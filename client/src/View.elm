@@ -47,17 +47,17 @@ mainView model =
             [ ul
                 [ UIKit.tab ]
                 (List.map (tabView model.activeView)
-                    [ ( Discover, "Discover & Export" )
-                    , ( Create, "Create" )
+                    [ ( Discover Nothing, "Discover & Export" )
+                    , ( Create Nothing, "Create" )
                     , ( Manage, "Manage & Publish" )
                     ]
                 )
             , case model.activeView of
-                Discover ->
-                    View.Discover.view model
+                Discover mQualifiedName ->
+                    View.Discover.view mQualifiedName model
 
-                Create ->
-                    View.Create.view model
+                Create mName ->
+                    View.Create.view mName model
 
                 Manage ->
                     View.Manage.view model

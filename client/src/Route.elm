@@ -1,8 +1,12 @@
-module Route exposing (routeParser, routeToString)
+module Route exposing
+    ( routeParser
+    , routeToString
+    )
 
+import Dialog.Common exposing (maybe)
 import Types exposing (..)
 import Url as Url exposing (Url)
-import Url.Parser as Url exposing (Parser, map, oneOf, s, top)
+import Url.Parser as Url exposing ((</>), Parser, map, oneOf, s, string, top)
 
 
 routeParser : Url -> View
@@ -19,9 +23,11 @@ routeParser url =
 parser : Parser (View -> View) View
 parser =
     oneOf
-        [ map Discover top
-        , map Discover (s "discover")
-        , map Create (s "create")
+        [ map (Discover Nothing) top
+        , map (Discover Nothing) (s "discover")
+        , map (Discover << Just << QualifiedName) (s "discover" </> string)
+        , map (Create Nothing) (s "create")
+        , map (Create << Just) (s "create" </> string)
         , map Manage (s "manage")
         ]
 
@@ -34,11 +40,25 @@ routeToString view =
 routeToPieces : View -> List String
 routeToPieces view =
     case view of
-        Discover ->
+        Discover mQualifiedName ->
             [ "discover" ]
+                ++ (case mQualifiedName of
+                        Nothing ->
+                            []
 
-        Create ->
+                        Just qualifiedName ->
+                            [ unQualifiedName qualifiedName ]
+                   )
+
+        Create mName ->
             [ "create" ]
+                ++ (case mName of
+                        Nothing ->
+                            []
+
+                        Just name ->
+                            [ name ]
+                   )
 
         Manage ->
             [ "manage" ]

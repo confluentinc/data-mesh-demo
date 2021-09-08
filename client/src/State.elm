@@ -22,9 +22,7 @@ init flags url key =
       , flags = flags
       , activeView = routeParser url
       , dataProductsTableState = Table.initialSort "name"
-      , activeStreamKey = Nothing
       , streams = Loading
-      , activeUseCaseKey = Nothing
       , useCases = Loading
       , publishForm = Nothing
       , publishFormResult = NotAsked
@@ -44,7 +42,7 @@ onUrlChange _ =
 
 onUrlRequest : UrlRequest -> Msg
 onUrlRequest =
-    ChangeView
+    ChangeUrl
 
 
 subscriptions : Model -> Sub Msg
@@ -63,44 +61,23 @@ update msg model =
             , Cmd.none
             )
 
-        ChangeView urlRequest ->
+        ChangeUrl urlRequest ->
             case urlRequest of
                 Internal url ->
-                    ( { model | activeView = routeParser url }
-                    , Nav.pushUrl model.key (Url.toString url)
-                    )
+                    update (ChangeView (routeParser url)) model
 
                 External url ->
                     ( model
                     , Nav.load url
                     )
 
-        SelectStream qualifiedName ->
-            ( { model
-                | activeStreamKey =
-                    if model.activeStreamKey == Just qualifiedName then
-                        Nothing
-
-                    else
-                        Just qualifiedName
-              }
-            , Cmd.none
+        ChangeView view ->
+            ( { model | activeView = view }
+            , Nav.pushUrl model.key (Route.routeToString view)
             )
 
         GotStreams newStreams ->
             ( { model | streams = newStreams }
-            , Cmd.none
-            )
-
-        SelectUseCase name ->
-            ( { model
-                | activeUseCaseKey =
-                    if model.activeUseCaseKey == Just name then
-                        Nothing
-
-                    else
-                        Just name
-              }
             , Cmd.none
             )
 

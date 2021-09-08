@@ -17,13 +17,13 @@ import View.Common exposing (webDataView)
 import View.Lorem as Lorem
 
 
-view : Model -> Html Msg
-view model =
+view : Maybe QualifiedName -> Model -> Html Msg
+view activeStreamKey model =
     let
         activeStream =
             Maybe.map2
                 (Dict.get unQualifiedName)
-                model.activeStreamKey
+                activeStreamKey
                 (RemoteData.toMaybe model.streams)
                 |> Maybe.withDefault Nothing
     in
@@ -32,7 +32,7 @@ view model =
             [ h2 [] [ text "Data Products" ]
             , webDataView
                 (Table.view
-                    (tableConfig model.activeStreamKey)
+                    (tableConfig activeStreamKey)
                     model.dataProductsTableState
                 )
                 (RemoteData.map
@@ -85,13 +85,28 @@ tableConfig activeStreamKey =
                     ]
                 , rowAttrs =
                     \dataProduct ->
-                        [ onClick (SelectStream dataProduct.qualifiedName) ]
-                            ++ (if Just dataProduct.qualifiedName == activeStreamKey then
-                                    [ UIKit.active ]
+                        let
+                            isActive =
+                                Just dataProduct.qualifiedName == activeStreamKey
+                        in
+                        (if isActive then
+                            [ UIKit.active ]
 
-                                else
-                                    []
-                               )
+                         else
+                            []
+                        )
+                            ++ [ onClick
+                                    (ChangeView
+                                        (Discover
+                                            (if isActive then
+                                                Nothing
+
+                                             else
+                                                Just dataProduct.qualifiedName
+                                            )
+                                        )
+                                    )
+                               ]
             }
         }
 

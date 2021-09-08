@@ -13,25 +13,20 @@ import Url exposing (..)
 import View.Common exposing (webDataView)
 
 
-view : Model -> Html Msg
-view model =
+view : Maybe String -> Model -> Html Msg
+view activeUseCaseKey model =
     div [ class "create-pane" ]
         [ mainView
         , webDataView
-            (useCasesView model.activeUseCaseKey)
+            (useCasesView activeUseCaseKey)
             model.useCases
         , webDataView
             (\useCases ->
                 let
                     activeUseCase =
-                        Maybe.andThen (\k -> Dict.get identity k useCases) model.activeUseCaseKey
+                        Maybe.andThen (\k -> Dict.get identity k useCases) activeUseCaseKey
                 in
-                case activeUseCase of
-                    Nothing ->
-                        text ""
-
-                    Just active ->
-                        useCasesDetail active
+                useCasesDetail activeUseCase
             )
             model.useCases
         , publishView
@@ -60,64 +55,70 @@ useCasesView activeUseCaseKey useCases =
             , UIKit.tableSmall
             ]
             [ thead []
-                [ tr [] [ text "Options" ]
-                , tbody []
-                    (useCases
-                        |> Dict.values
-                        |> List.map
-                            (\useCase ->
-                                tr
-                                    ([ onClick (SelectUseCase useCase.name) ]
-                                        ++ (if activeUseCaseKey == Just useCase.name then
-                                                [ UIKit.active ]
+                [ tr [] [ th [] [ text "Options" ] ] ]
+            , tbody []
+                (useCases
+                    |> Dict.values
+                    |> List.indexedMap
+                        (\index useCase ->
+                            tr
+                                (if activeUseCaseKey == Just useCase.name then
+                                    [ UIKit.active, onClick (ChangeView (Create Nothing)) ]
 
-                                            else
-                                                []
-                                           )
-                                    )
-                                    [ td [] [ text useCase.description ] ]
-                            )
-                    )
-                ]
+                                 else
+                                    [ onClick (ChangeView (Create (Just useCase.name))) ]
+                                )
+                                [ td []
+                                    [ text (String.fromInt (index + 1) ++ ": " ++ useCase.description) ]
+                                ]
+                        )
+                )
             ]
         ]
 
 
-useCasesDetail : UseCase -> Html msg
-useCasesDetail useCase =
+useCasesDetail : Maybe UseCase -> Html msg
+useCasesDetail mUseCase =
     div [ class "create-use-detail" ]
         [ h2 [] [ text "Application Information" ]
-        , table
-            [ UIKit.table
-            , UIKit.tableDivider
-            , UIKit.tableStriped
-            , UIKit.tableSmall
-            ]
-            [ tbody []
-                (List.map
-                    (\( title, content ) ->
-                        tr
-                            []
-                            [ th [] [ text title ]
-                            , td [] [ pre [] [ text content ] ]
+        , case mUseCase of
+            Nothing ->
+                i [] [ text "Select a use case from the table on the left." ]
+
+            Just useCase ->
+                div []
+                    [ table
+                        [ UIKit.table
+                        , UIKit.tableDivider
+                        , UIKit.tableStriped
+                        , UIKit.tableSmall
+                        ]
+                        [ tbody []
+                            (List.map
+                                (\( title, content ) ->
+                                    tr
+                                        []
+                                        [ th [] [ text title ]
+                                        , td [] [ pre [] [ text content ] ]
+                                        ]
+                                )
+                                [ ( "Name", useCase.name )
+                                , ( "Data Product Inputs", useCase.inputs )
+                                , ( "Query"
+                                  , useCase.ksqlDbCommand
+                                  )
+                                , ( "Output Topic"
+                                  , useCase.outputTopic
+                                  )
+                                ]
+                            )
+                        , a
+                            [ UIKit.button
+                            , UIKit.buttonPrimary
                             ]
-                    )
-                    [ ( "Name", useCase.name )
-                    , ( "Data Product Inputs", useCase.inputs )
-                    , ( "Query"
-                      , useCase.ksqlDbCommand
-                      )
-                    , ( "Output Topic"
-                      , useCase.outputTopic
-                      )
+                            [ text "Run this ksqlDB app" ]
+                        ]
                     ]
-                )
-            ]
-        , a
-            [ UIKit.button
-            , UIKit.buttonPrimary
-            ]
-            [ text "Run this ksqlDB app" ]
         ]
 
 
