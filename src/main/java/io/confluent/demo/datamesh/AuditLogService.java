@@ -7,12 +7,8 @@ import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class AuditLogService implements ClientHttpRequestInterceptor {
@@ -35,10 +31,5 @@ public class AuditLogService implements ClientHttpRequestInterceptor {
         sendAuditLogEntry(String.format("%s: %s", request.getMethod().name(), request.getURI().toString()));
         ClientHttpResponse response = execution.execute(request, body);
         return response;
-
-        //LOGGER.debug("Request body: {}", new String(reqBody, StandardCharsets.UTF_8));
-        //InputStreamReader isr = new InputStreamReader(response.getBody(), StandardCharsets.UTF_8);
-        //String body = new BufferedReader(isr).lines().collect(Collectors.joining("\n"));
-        //LOGGER.debug("Response body: {}", body);
     }
 }
