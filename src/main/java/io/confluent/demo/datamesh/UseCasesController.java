@@ -22,7 +22,7 @@ public class UseCasesController {
     }
     private UseCase getFilterUseCase() {
         return new UseCase(
-                "Filter an event stream for User_1",
+                "Filter an event stream",
                 "pageviews_filtered_user_1",
                 "pageviews",
                 "CREATE STREAM PAGEVIEWS_FILTERED_USER_1 with (kafka_topic='pageviews_filtered_user_1') AS SELECT * FROM PAGEVIEWS WHERE USERID = 'User_1';",
