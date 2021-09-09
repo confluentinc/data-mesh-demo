@@ -17,24 +17,24 @@ public class UseCasesController {
                 "Enrich an event stream",
                 "pageviews_enriched",
                 "pageviews,users",
-                "CREATE TABLE ...",
+                "CREATE STREAM PAGEVIEWS_ENRICHED with (kafka_topic='pageviews_enriched') AS SELECT U.ID AS USERID, U.REGIONID AS REGION, U.GENDER AS GENDER, V.PAGEID AS PAGE FROM PAGEVIEWS V INNER JOIN USERS U ON V.USERID = U.ID;",
                 "pageviews_enriched");
     }
     private UseCase getFilterUseCase() {
         return new UseCase(
                 "Filter an event stream",
-                "filtered_pageviews",
+                "pageviews_filtered_user_1",
                 "pageviews",
-                "CREATE STREAM...",
-                "filtered_pageviews");
+                "CREATE STREAM PAGEVIEWS_FILTERED_USER_1 with (kafka_topic='pageviews_filtered_user_1') AS SELECT * FROM PAGEVIEWS WHERE USERID = 'User_1';",
+                "pageviews_filtered_user_1");
     }
     private UseCase getAggregateUseCase() {
         return new UseCase(
-                "Aggrevate an event stream",
-                "aggregation",
+                "Aggregate an event stream",
+                "pageviews_count_by_user",
                 "pageviews",
-                "CREATE STREAM...",
-                "aggregation");
+                "CREATE TABLE PAGEVIEWS_COUNT_BY_USER with (kafka_topic='pageviews_count_by_user') AS SELECT USERID, COUNT(*) AS numusers FROM PAGEVIEWS WINDOW TUMBLING (size 30 second) GROUP BY USERID HAVING COUNT(*) > 1;",
+                "pageviews_count_by_user");
     }
     @GetMapping
     public List<UseCase> getDataProducts() {
