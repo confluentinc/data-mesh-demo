@@ -40,12 +40,13 @@ decodeTopic =
 decodeDataProduct : Decoder DataProduct
 decodeDataProduct =
     whenTypeIs "DataProduct" <|
-        Decode.map5 DataProduct
+        Decode.map6 DataProduct
             (field "qualifiedName" qualifiedName)
             (field "name" string)
             (field "description" string)
             (field "owner" string)
             (field "urls" decodeDataProductUrls)
+            (field "schema" decodeKsqlSchema)
 
 
 qualifiedName : Decoder QualifiedName
@@ -60,6 +61,15 @@ decodeDataProductUrls =
         (field "portUrl" url)
         (field "lineageUrl" url)
         (field "exportUrl" url)
+
+
+decodeKsqlSchema : Decoder KsqlSchema
+decodeKsqlSchema =
+    Decode.map4 KsqlSchema
+        (field "subject" string)
+        (field "version" int)
+        (field "id" int)
+        (field "schema" string)
 
 
 decodeUseCases : Decoder (List UseCase)

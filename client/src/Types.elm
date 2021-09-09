@@ -2,6 +2,7 @@ module Types exposing
     ( DataProduct
     , DataProductUrls
     , Flags
+    , KsqlSchema
     , Model
     , Msg(..)
     , PublishForm
@@ -19,6 +20,7 @@ module Types exposing
 import Browser exposing (UrlRequest)
 import Browser.Navigation as Nav exposing (Key)
 import GenericDict exposing (Dict)
+import Json.Encode as Encode
 import RemoteData exposing (WebData)
 import Table
 import Url as Url exposing (Url)
@@ -108,6 +110,7 @@ type alias DataProduct =
     , description : String
     , owner : String
     , urls : DataProductUrls
+    , schema : KsqlSchema
     }
 
 
@@ -122,6 +125,14 @@ type alias DataProductUrls =
     , portUrl : Url
     , lineageUrl : Url
     , exportUrl : Url
+    }
+
+
+type alias KsqlSchema =
+    { subject : String
+    , version : Int
+    , id : Int
+    , schema : String
     }
 
 

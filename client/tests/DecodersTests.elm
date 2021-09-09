@@ -3,8 +3,8 @@ module DecodersTests exposing (suite)
 import Decoders exposing (decodeStream, decodeStreams, decodeUseCases)
 import Expect exposing (Expectation, fail, pass)
 import Fuzz exposing (Fuzzer, int, list, string)
-import Json.Decode exposing (Decoder, decodeString, errorToString)
-import Json.Encode exposing (encode)
+import Json.Decode as Decode exposing (Decoder, decodeString, errorToString)
+import Json.Encode as Encode exposing (encode)
 import RemoteData exposing (RemoteData(..))
 import Test exposing (..)
 import TestUtils exposing (decodesTo)
@@ -17,52 +17,7 @@ suite =
     describe "Decoders"
         [ describe
             "Decode Streams"
-            [ test "publish response - correct result" <|
-                \_ ->
-                    decodesTo decodeStream
-                        publishDataProductResponse1
-                        (StreamDataProduct
-                            { description = "website pageviews"
-                            , name = "pageviews"
-                            , owner = "kris"
-                            , qualifiedName = QualifiedName "lsrc-odr89:.:pageviews-value:1"
-                            , urls =
-                                { exportUrl =
-                                    { fragment = Nothing
-                                    , host = "confluent.cloud"
-                                    , path = "/environments/env-jn132/clusters/lkc-17pzv/connectors/browse"
-                                    , port_ = Nothing
-                                    , protocol = Https
-                                    , query = Nothing
-                                    }
-                                , lineageUrl =
-                                    { fragment = Nothing
-                                    , host = "confluent.cloud"
-                                    , path = "/environments/env-jn132/clusters/lkc-17pzv/stream-lineage/stream/topic-pageviews/n/topic-pageviews/overview"
-                                    , port_ = Nothing
-                                    , protocol = Https
-                                    , query = Nothing
-                                    }
-                                , portUrl =
-                                    { fragment = Nothing
-                                    , host = "confluent.cloud"
-                                    , path = "/environments/env-jn132/clusters/lkc-17pzv/topics/pageviews"
-                                    , port_ = Nothing
-                                    , protocol = Https
-                                    , query = Nothing
-                                    }
-                                , schemaUrl =
-                                    { fragment = Nothing
-                                    , host = "confluent.cloud"
-                                    , path = "/environments/env-jn132/schema-registry/schemas/pageviews-value"
-                                    , port_ = Nothing
-                                    , protocol = Https
-                                    , query = Nothing
-                                    }
-                                }
-                            }
-                        )
-            , test "streams response - correct result" <|
+            [ test "streams response - correct result" <|
                 \_ ->
                     decodesTo decodeStreams
                         dataProductsResponse1
@@ -106,12 +61,71 @@ suite =
                                     , query = Nothing
                                     }
                                 }
+                            , schema =
+                                { subject = "users-value"
+                                , version = 1
+                                , id = 100002
+                                , schema = "{\"type\":\"record\",\"name\":\"users\",\"namespace\":\"ksql\",\"fields\":[{\"name\":\"registertime\",\"type\":\"long\"},{\"name\":\"userid\",\"type\":\"string\"},{\"name\":\"regionid\",\"type\":\"string\"},{\"name\":\"gender\",\"type\":\"string\"}],\"connect.name\":\"ksql.users\"}"
+                                }
                             }
                         , StreamTopic
                             { name = "pageviews"
                             , qualifiedName = QualifiedName "lsrc-odr89:.:pageviews-value:1"
                             }
                         ]
+            , test
+                "publish response - correct result"
+              <|
+                \_ ->
+                    decodesTo decodeStream
+                        publishDataProductResponse1
+                        (StreamDataProduct
+                            { description = "website pageviews"
+                            , name = "pageviews"
+                            , owner = "kris"
+                            , qualifiedName = QualifiedName "lsrc-odr89:.:pageviews-value:1"
+                            , urls =
+                                { exportUrl =
+                                    { fragment = Nothing
+                                    , host = "confluent.cloud"
+                                    , path = "/environments/env-jn132/clusters/lkc-17pzv/connectors/browse"
+                                    , port_ = Nothing
+                                    , protocol = Https
+                                    , query = Nothing
+                                    }
+                                , lineageUrl =
+                                    { fragment = Nothing
+                                    , host = "confluent.cloud"
+                                    , path = "/environments/env-jn132/clusters/lkc-17pzv/stream-lineage/stream/topic-pageviews/n/topic-pageviews/overview"
+                                    , port_ = Nothing
+                                    , protocol = Https
+                                    , query = Nothing
+                                    }
+                                , portUrl =
+                                    { fragment = Nothing
+                                    , host = "confluent.cloud"
+                                    , path = "/environments/env-jn132/clusters/lkc-17pzv/topics/pageviews"
+                                    , port_ = Nothing
+                                    , protocol = Https
+                                    , query = Nothing
+                                    }
+                                , schemaUrl =
+                                    { fragment = Nothing
+                                    , host = "confluent.cloud"
+                                    , path = "/environments/env-jn132/schema-registry/schemas/pageviews-value"
+                                    , port_ = Nothing
+                                    , protocol = Https
+                                    , query = Nothing
+                                    }
+                                }
+                            , schema =
+                                { subject = "pageviews-value"
+                                , version = 1
+                                , id = 100001
+                                , schema = "{\"type\":\"record\",\"name\":\"pageviews\",\"namespace\":\"ksql\",\"fields\":[{\"name\":\"viewtime\",\"type\":\"long\"},{\"name\":\"userid\",\"type\":\"string\"},{\"name\":\"pageid\",\"type\":\"string\"}],\"connect.name\":\"ksql.pageviews\"}"
+                                }
+                            }
+                        )
             ]
         , test "use-cases response - correct result" <|
             \_ ->
@@ -154,6 +168,12 @@ dataProductsResponse1 =
       "portUrl": "https://confluent.cloud/environments/env-jn132/clusters/lkc-17pzv/topics/users",
       "lineageUrl": "https://confluent.cloud/environments/env-jn132/clusters/lkc-17pzv/stream-lineage/stream/topic-users/n/topic-users/overview",
       "exportUrl": "https://confluent.cloud/environments/env-jn132/clusters/lkc-17pzv/connectors/browse"
+    },
+    "schema": {
+      "subject": "users-value",
+      "version": 1,
+      "id": 100002,
+      "schema": "{\\"type\\":\\"record\\",\\"name\\":\\"users\\",\\"namespace\\":\\"ksql\\",\\"fields\\":[{\\"name\\":\\"registertime\\",\\"type\\":\\"long\\"},{\\"name\\":\\"userid\\",\\"type\\":\\"string\\"},{\\"name\\":\\"regionid\\",\\"type\\":\\"string\\"},{\\"name\\":\\"gender\\",\\"type\\":\\"string\\"}],\\"connect.name\\":\\"ksql.users\\"}"
     }
   },
   {
@@ -162,6 +182,7 @@ dataProductsResponse1 =
     "qualifiedName": "lsrc-odr89:.:pageviews-value:1"
   }
 ]
+
 """
 
 
@@ -179,6 +200,12 @@ publishDataProductResponse1 =
     "portUrl": "https://confluent.cloud/environments/env-jn132/clusters/lkc-17pzv/topics/pageviews",
     "lineageUrl": "https://confluent.cloud/environments/env-jn132/clusters/lkc-17pzv/stream-lineage/stream/topic-pageviews/n/topic-pageviews/overview",
     "exportUrl": "https://confluent.cloud/environments/env-jn132/clusters/lkc-17pzv/connectors/browse"
+  },
+  "schema": {
+    "subject": "pageviews-value",
+    "version": 1,
+    "id": 100001,
+    "schema": "{\\"type\\":\\"record\\",\\"name\\":\\"pageviews\\",\\"namespace\\":\\"ksql\\",\\"fields\\":[{\\"name\\":\\"viewtime\\",\\"type\\":\\"long\\"},{\\"name\\":\\"userid\\",\\"type\\":\\"string\\"},{\\"name\\":\\"pageid\\",\\"type\\":\\"string\\"}],\\"connect.name\\":\\"ksql.pageviews\\"}"
   }
 }
 """

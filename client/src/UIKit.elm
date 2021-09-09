@@ -54,6 +54,11 @@ input =
     class "uk-input"
 
 
+textarea : Attribute msg
+textarea =
+    class "uk-textarea"
+
+
 formControls : Attribute msg
 formControls =
     class "uk-form-controls"

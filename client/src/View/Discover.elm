@@ -3,9 +3,9 @@ module View.Discover exposing (view)
 import Browser exposing (..)
 import GenericDict as Dict
 import Html exposing (..)
-import Html.Attributes exposing (class, disabled, href, target, type_, value)
+import Html.Attributes exposing (class, disabled, href, rows, target, type_, value, wrap)
 import Html.Events exposing (onClick)
-import Json.Decode as Json
+import Json.Extras as Json
 import RemoteData exposing (RemoteData(..))
 import Rest
 import Route exposing (routeToString)
@@ -120,11 +120,24 @@ streamDetailView mStream =
         Just (StreamDataProduct dataProduct) ->
             div []
                 [ form [ UIKit.formHorizontal ]
-                    [ disabledFormRow "Name" dataProduct.name
-                    , disabledFormRow "Owner" dataProduct.owner
-                    , disabledFormRow "Description" dataProduct.description
+                    [ disabledFormInput "Name" dataProduct.name
+                    , disabledFormInput "Owner" dataProduct.owner
+                    , disabledFormInput "Description" dataProduct.description
+                    , div []
+                        [ label [ UIKit.formLabel ] [ text "Schema" ]
+                        , div [ UIKit.formControls ]
+                            [ textarea
+                                [ UIKit.textarea
+                                , value (Json.prettyPrintIfPossible dataProduct.schema.schema)
+                                , disabled True
+                                , rows 10
+                                , wrap "soft"
+                                ]
+                                []
+                            ]
+                        ]
                     ]
-                , div [ UIKit.margin ]
+                , div [ UIKit.margin, UIKit.buttonGroup, class "uk-width-1-1" ]
                     [ linkButton "Topic" dataProduct.urls.portUrl
                     , linkButton "Schema" dataProduct.urls.schemaUrl
                     , linkButton "Lineage" dataProduct.urls.lineageUrl
@@ -135,7 +148,7 @@ streamDetailView mStream =
         Just (StreamTopic topic) ->
             div []
                 [ form [ UIKit.formHorizontal ]
-                    [ disabledFormRow "Name" topic.name
+                    [ disabledFormInput "Name" topic.name
                     ]
                 ]
 
@@ -147,12 +160,13 @@ linkButton description url =
         , UIKit.buttonPrimary
         , href (Url.toString url)
         , target "_blank"
+        , class "uk-width-1-4"
         ]
         [ text description ]
 
 
-disabledFormRow : String -> String -> Html msg
-disabledFormRow inputLabel inputValue =
+disabledFormInput : String -> String -> Html msg
+disabledFormInput inputLabel inputValue =
     div []
         [ label [ UIKit.formLabel ] [ text inputLabel ]
         , div [ UIKit.formControls ]
