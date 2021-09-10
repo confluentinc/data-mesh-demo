@@ -1,8 +1,8 @@
 {
-  "name": "demo-scene",
-  "version": "1.0.0",
+  "name": "data-mesh-demo",
+  "version": "0.0.1",
   "main": "index.js",
-  "repository": "git@github.com:confluentinc/demo-scene.git",
+  "repository": "https://github.com/confluentinc/data-mesh-demo",
   "author": "Kris Jenkins <kjenkins@confluent.io>",
   "license": "All Rights Reserved",
   "private": true,
