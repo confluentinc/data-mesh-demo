@@ -1,6 +1,6 @@
 {
-  "name": "demo-scene",
-  "short_name": "demo-scene",
+  "name": "data-mesh-demo",
+  "short_name": "data-mesh-demo",
   "dir": "auto",
   "lang": "en-US",
   "display": "standalone",
