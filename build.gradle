@@ -40,8 +40,13 @@ yarn_build {
 	dependsOn('yarn_install')
 	inputs.files fileTree("${project.projectDir}/client")
 }
-//assemble.dependsOn = ['yarn_build']
-bootJar.dependsOn  = ['yarn_build']
+
+processResources {
+	dependsOn('yarn_build')
+	from("${project.buildDir}/generated/static") {into('static') }
+}
+
+//bootJar.dependsOn  = ['yarn_build']
 
 test {
 	useJUnitPlatform()
