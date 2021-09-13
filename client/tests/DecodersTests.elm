@@ -143,7 +143,7 @@ suite =
                       , name = "filtered_pageviews"
                       , outputTopic = "filtered_pageviews"
                       }
-                    , { description = "Aggrevate an event stream"
+                    , { description = "Aggregate an event stream"
                       , inputs = "pageviews"
                       , ksqlDbCommand = "CREATE STREAM..."
                       , name = "aggregation"
@@ -230,7 +230,7 @@ useCasesResponse1 =
     "outputTopic": "filtered_pageviews"
   },
   {
-    "description": "Aggrevate an event stream",
+    "description": "Aggregate an event stream",
     "name": "aggregation",
     "inputs": "pageviews",
     "ksqlDbCommand": "CREATE STREAM...",
