@@ -26,6 +26,26 @@ import Table
 import Url as Url exposing (Url)
 
 
+type alias Model =
+    { key : Key
+    , flags : Flags
+    , activeView : View
+    , dataProductsTableState : Table.State
+    , streams : WebData (Dict QualifiedName Stream)
+    , useCases : WebData (Dict String UseCase)
+    , publishForm : Maybe PublishForm
+    , publishFormResult : WebData DataProduct
+    , deleteResult : WebData QualifiedName
+    }
+
+
+type alias PublishForm =
+    { topic : Topic
+    , owner : String
+    , description : String
+    }
+
+
 type alias Flags =
     { images :
         { logo :
@@ -60,26 +80,6 @@ type Msg
 type PublishFormMsg
     = PublishFormSetOwner String
     | PublishFormSetDescription String
-
-
-type alias Model =
-    { key : Key
-    , flags : Flags
-    , activeView : View
-    , dataProductsTableState : Table.State
-    , streams : WebData (Dict QualifiedName Stream)
-    , useCases : WebData (Dict String UseCase)
-    , publishForm : Maybe PublishForm
-    , publishFormResult : WebData DataProduct
-    , deleteResult : WebData QualifiedName
-    }
-
-
-type alias PublishForm =
-    { topic : Topic
-    , owner : String
-    , description : String
-    }
 
 
 type alias PublishFormResult =
