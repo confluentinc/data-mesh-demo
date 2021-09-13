@@ -1,7 +1,7 @@
 module State exposing (..)
 
 import Browser exposing (..)
-import Browser.Navigation as Nav exposing (Key)
+import Browser.Navigation as Nav
 import Dialog.Common as Dialog
 import GenericDict as Dict exposing (Dict)
 import Html exposing (..)
@@ -16,9 +16,9 @@ import Types exposing (..)
 import Url exposing (..)
 
 
-init : Flags -> Url -> Key -> ( Model, Cmd Msg )
-init flags url key =
-    ( { key = key
+init : Flags -> Url -> Nav.Key -> ( Model, Cmd Msg )
+init flags url navKey =
+    ( { navKey = navKey
       , flags = flags
       , activeView = routeParser url
       , dataProductsTableState = Table.initialSort "name"
@@ -73,7 +73,7 @@ update msg model =
 
         ChangeView view ->
             ( { model | activeView = view }
-            , Nav.pushUrl model.key (Route.routeToString view)
+            , Nav.pushUrl model.navKey (Route.routeToString view)
             )
 
         GotStreams newStreams ->

@@ -18,7 +18,7 @@ module Types exposing
     )
 
 import Browser exposing (UrlRequest)
-import Browser.Navigation as Nav exposing (Key)
+import Browser.Navigation as Nav
 import GenericDict exposing (Dict)
 import Json.Encode as Encode
 import RemoteData exposing (WebData)
@@ -27,7 +27,7 @@ import Url as Url exposing (Url)
 
 
 type alias Model =
-    { key : Key
+    { navKey : Nav.Key
     , flags : Flags
     , activeView : View
     , dataProductsTableState : Table.State
