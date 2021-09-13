@@ -4,6 +4,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'com.github.node-gradle.node' version '3.1.0'
 	id 'org.barfuin.gradle.taskinfo' version '1.0.1'
+	id 'com.google.cloud.tools.jib' version '3.1.4'
 	id 'java'
 }
 
@@ -51,7 +52,10 @@ processResources {
 	from("${project.buildDir}/generated/static") {into('static') }
 }
 
-//bootJar.dependsOn  = ['yarn_build']
+jib.to {
+	image = 'cnfldemos/data-mesh-demo'
+	tags = ["${version}"]
+}
 
 test {
 	useJUnitPlatform()
