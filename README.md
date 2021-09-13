@@ -2,7 +2,7 @@
 
 An example implementation of Data Mesh on top of [Confluent Cloud](https://www.confluent.io/confluent-cloud/tryfree/).
 
-### Prerequisties
+## Prerequisties
 * Java 11
 * Gradle
 * Node
@@ -11,9 +11,11 @@ An example implementation of Data Mesh on top of [Confluent Cloud](https://www.c
 * A user account in [Confluent Cloud](https://www.confluent.io/confluent-cloud/tryfree/)
 * Local install of [Confluent Cloud CLI](https://docs.confluent.io/ccloud-cli/current/install.html) v1.36.0 or later
 
-### Instructions (WIP during development)
+## Instructions (WIP during development)
 
-#### Bringup
+### Bringup
+
+#### To build a Confluent Cloud account and create initial data products
 
 * Clone the repository locally and change directories
   ```
@@ -31,7 +33,9 @@ An example implementation of Data Mesh on top of [Confluent Cloud](https://www.c
   Congrats! You are ready to start using the data products in the Data Mesh.
   ```
 
-* Build a local web service by running the following command:
+#### To Compile and run the demo locally:
+
+* Build the web service and client code by running the following command:
    ```
    ./gradlew bootJar
    ```
@@ -50,6 +54,16 @@ An example implementation of Data Mesh on top of [Confluent Cloud](https://www.c
   ```
 	2021-08-06 14:31:22.531  INFO 42900 --- [           main] io.confluent.demo.datamesh.DataMeshDemo  : Started DataMeshDemo in 1.901 seconds (JVM running for 2.331)
   ```
+
+#### To run a pre-packaged Docker version 
+
+Substitute in your stack config service account file path as appropriate:
+
+```
+docker run -it --rm -p 8080:8080 -v $(pwd)/stack-configs/java-service-account-<SERVICE_ACCOUNT_ID>.config:/java-service-account-<SERVICE_ACCOUNT_ID>.config:ro cnfldemos/data-mesh-demo:0.0.1-SNAPSHOT --spring.config.location=file:/java-service-account-<SERVICE_ACCOUNT_ID>.config
+```
+
+### Usage
 
 * Use endpoint `localhost:8080` to interact with the REST API.
 
