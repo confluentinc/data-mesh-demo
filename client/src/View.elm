@@ -1,11 +1,14 @@
 module View exposing (view)
 
+import Array exposing (Array)
 import Browser exposing (..)
 import Dialog.UIKit as Dialog
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
+import Json.Encode as Encode
 import Route exposing (routeToString)
+import Stomp exposing (AuditLogMsg)
 import Types exposing (..)
 import UIKit
 import Url exposing (..)
@@ -20,6 +23,7 @@ view model =
     , body =
         [ headerView model.flags.images.logo
         , mainView model
+        , footerView model.auditLogMsgs
         , Dialog.view
             (Maybe.map (View.Manage.publishDialog model.publishFormResult) model.publishForm)
         ]
@@ -77,3 +81,27 @@ tabView activeView ( tab, label ) =
 notFoundView : Model -> Html msg
 notFoundView model =
     h2 [] [ text "Not Found" ]
+
+
+footerView auditLogMsgs =
+    footer []
+        [ auditLogMsgsView auditLogMsgs ]
+
+
+auditLogMsgsView : Array (Result String AuditLogMsg) -> Html msg
+auditLogMsgsView msgs =
+    code []
+        (msgs
+            |> Array.toList
+            |> List.map auditLogMsgView
+        )
+
+
+auditLogMsgView : Result String AuditLogMsg -> Html msg
+auditLogMsgView auditLogMsg =
+    case auditLogMsg of
+        Err err ->
+            div [] [ text err ]
+
+        Ok result ->
+            div [] [ text result.message ]

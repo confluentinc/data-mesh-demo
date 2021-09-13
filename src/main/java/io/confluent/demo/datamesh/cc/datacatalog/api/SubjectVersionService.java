@@ -1,9 +1,12 @@
 package io.confluent.demo.datamesh.cc.datacatalog.api;
 
+import io.confluent.demo.datamesh.AuditLogController;
+import io.confluent.demo.datamesh.AuditLogService;
 import io.confluent.demo.datamesh.cc.datacatalog.model.AtlasClassification;
 import io.confluent.demo.datamesh.cc.datacatalog.model.AtlasEntityHeader;
 import io.confluent.demo.datamesh.cc.datacatalog.model.AtlasEntityWithExtInfo;
 import io.confluent.demo.datamesh.cc.datacatalog.model.SearchResult;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
@@ -29,12 +32,15 @@ public class SubjectVersionService {
 
     public SubjectVersionService(
             RestTemplateBuilder builder,
+            AuditLogService auditService,
             @Value("${confluent.cloud.schemaregistry.auth.key}") String srKey,
             @Value("${confluent.cloud.schemaregistry.auth.secret}") String srSecret,
             @Value("${confluent.cloud.schemaregistry.url}") String baseUrl) {
+
         restTemplate = builder
             .rootUri(baseUrl + "/catalog/v1")
             .basicAuthentication(srKey, srSecret)
+            .additionalInterceptors(auditService)
             .build();
     }
 

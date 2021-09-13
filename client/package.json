@@ -13,7 +13,7 @@
     "testw": "elm-test --watch"
   },
   "dependencies": {
-    "css-loader": "^5.2.6",
+    "css-loader": "^6.2.0",
     "elm": "^0.19.1-5",
     "elm-test": "^0.19.1-revision7",
     "elm-webpack-loader": "^8.0.0",
@@ -27,6 +27,6 @@
     "uuid": "^8.3.2",
     "webpack": "^5.42.0",
     "webpack-cli": "^4.7.2",
-    "webpack-dev-server": "^3.11.2"
+    "webpack-dev-server": "^4.2.0"
   }
 }
