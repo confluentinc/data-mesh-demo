@@ -6,6 +6,7 @@ import Fuzz exposing (Fuzzer, int, list, string)
 import Json.ExtrasTests
 import Route exposing (routeParser, routeToString)
 import RouteTests
+import StompTests
 import Test exposing (..)
 import Types exposing (..)
 import Url as Url
@@ -18,5 +19,6 @@ suite =
         [ RouteTests.suite
         , DecodersTests.suite
         , EncodersTests.suite
+        , StompTests.suite
         , Json.ExtrasTests.suite
         ]

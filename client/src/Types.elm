@@ -1,33 +1,21 @@
-module Types exposing
-    ( DataProduct
-    , DataProductUrls
-    , Flags
-    , KsqlSchema
-    , Model
-    , Msg(..)
-    , PublishForm
-    , PublishFormMsg(..)
-    , PublishFormResult
-    , QualifiedName(..)
-    , Stream(..)
-    , Topic
-    , UseCase
-    , View(..)
-    , streamQualifiedName
-    , unQualifiedName
-    )
+module Types exposing (..)
 
+import Array exposing (Array)
 import Browser exposing (UrlRequest)
 import Browser.Navigation as Nav
 import GenericDict exposing (Dict)
 import Json.Encode as Encode
-import RemoteData exposing (WebData)
+import RemoteData exposing (RemoteData, WebData)
+import Stomp exposing (AuditLogMsg)
+import Stomp.Client as Stomp
 import Table
 import Url as Url exposing (Url)
 
 
 type alias Model =
     { navKey : Nav.Key
+    , stompSession : Stomp.Session Stomp.Msg
+    , auditLogMsgs : Array (Result String AuditLogMsg)
     , flags : Flags
     , activeView : View
     , dataProductsTableState : Table.State
@@ -65,6 +53,7 @@ type Msg
     = NoOp
     | ChangeUrl UrlRequest
     | ChangeView View
+    | StompMsg Stomp.Msg
     | SetDataProductsTableState Table.State
     | GotStreams (WebData (Dict QualifiedName Stream))
     | GotUseCases (WebData (Dict String UseCase))

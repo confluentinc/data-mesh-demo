@@ -8,6 +8,7 @@
 }
 
 header {
+  grid-area: header;
   background-color: @heading-color;
 
   .uk-container {
@@ -31,10 +32,28 @@ header {
   }
 }
 
+.main {
+  grid-area: main;
+}
+
+footer {
+  grid-area: footer;
+  overflow-y: scroll;
+  max-height: 300px
+}
+
 body {
   h1, h2, h3, h4, h5, h6 {
     font-family: 'MainFont';
   }
+
+  height: 100vh;
+  display: grid;
+  grid-template-areas:
+    "header"
+    "main"
+    "footer";
+  grid-template-rows: auto 1fr auto;
 }
 
 .discover-pane,

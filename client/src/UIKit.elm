@@ -109,6 +109,11 @@ alert =
     class "uk-alert"
 
 
+alertWarning : Attribute msg
+alertWarning =
+    class "uk-alert-warning"
+
+
 alertDanger : Attribute msg
 alertDanger =
     class "uk-alert-danger"
