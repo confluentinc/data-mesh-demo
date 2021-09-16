@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/data-products")
+@RequestMapping("/priv/data-products")
 public class DataProductsController {
 
     @Autowired

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/use-cases")
+@RequestMapping("/priv/use-cases")
 public class UseCasesController {
 
     private UseCase getEnrichUseCase() {

@@ -47,7 +47,7 @@ An example implementation of Data Mesh on top of [Confluent Cloud](https://www.c
 
 * Start the web service, passing in as an argument the configuration file that was auto generated from `./scripts/create-data-mesh.sh`.
   ```
-  java -jar build/libs/datamesh-0.0.1-SNAPSHOT.jar --spring.config.location=file:$(pwd)/stack-configs/java-service-account-<SERVICE_ACCOUNT_ID>.config
+  java -jar build/libs/datamesh-0.0.1-SNAPSHOT.jar --spring.config.additional-location=file:$(pwd)/stack-configs/java-service-account-<SERVICE_ACCOUNT_ID>.config
   ```
 
   It is successful and will wait for requests when you see a log message similar to this:

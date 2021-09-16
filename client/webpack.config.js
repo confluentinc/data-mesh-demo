@@ -23,12 +23,12 @@ module.exports = {
     compress: true,
     port: 9000,
     proxy: {
-      '/socket': {
-        target: 'ws://localhost:8080',
+      '/priv/socket': {
+        target: 'ws://localhost:8081',
         ws: true
       },
       '/': {
-        target: 'http://localhost:8080'
+        target: 'http://localhost:8081'
       }
     }
   },
