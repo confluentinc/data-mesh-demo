@@ -24,11 +24,11 @@ module.exports = {
     port: 9000,
     proxy: {
       '/priv/socket': {
-        target: 'ws://localhost:8081',
+        target: 'ws://localhost:10002',
         ws: true
       },
-      '/': {
-        target: 'http://localhost:8081'
+      '/priv': {
+        target: 'http://localhost:10002'
       }
     }
   },
