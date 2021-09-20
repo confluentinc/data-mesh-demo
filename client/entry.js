@@ -1,3 +1,5 @@
+/*global WebSocket*/
+
 import './static/main.less';
 import logoPath from './static/images/logo.png';
 import {Elm} from './src/Main.elm';
