@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RestController
-@RequestMapping("/subjects")
+@RequestMapping("/priv/subjects")
 public class SubjectVersionService {
     private final RestTemplate restTemplate;
 
