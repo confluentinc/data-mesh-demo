@@ -35,7 +35,8 @@ type alias PublishForm =
 
 
 type alias Flags =
-    { images :
+    { hostedMode : Bool
+    , images :
         { logo :
             String
         }
