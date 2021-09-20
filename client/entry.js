@@ -5,7 +5,9 @@ import "uikit/dist/css/uikit.min.css";
 import "uikit/dist/js/uikit.min.js";
 import "uikit/dist/js/uikit-icons.js";
 
-var socket = new WebSocket("ws://" + window.location.host + "/priv/socket", ["v12.stomp"]);
+var protocol = window.location.protocol == "https:" ? "wss:" : "ws:";
+var socket = new WebSocket(protocol + "//" + window.location.host + "/priv/socket", ["v12.stomp"]);
+
 socket.onopen = function() {
   var app = Elm.Main.init({
     node: document.getElementById("app"),
