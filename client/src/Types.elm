@@ -51,7 +51,8 @@ type View
 
 
 type Msg
-    = ChangeUrl UrlRequest
+    = NoOp
+    | ChangeUrl UrlRequest
     | ChangeView View
       --
     | StompMsg Stomp.Msg

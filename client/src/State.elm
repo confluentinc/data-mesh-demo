@@ -46,8 +46,8 @@ init flags url navKey =
 
 
 onUrlChange : Url -> Msg
-onUrlChange url =
-    ChangeUrl (Internal url)
+onUrlChange _ =
+    NoOp
 
 
 onUrlRequest : UrlRequest -> Msg
@@ -64,6 +64,9 @@ subscriptions model =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        NoOp ->
+            ( model, Cmd.none )
+
         ChangeUrl urlRequest ->
             case urlRequest of
                 Internal url ->
