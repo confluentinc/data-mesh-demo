@@ -14,10 +14,10 @@ import Url as Url exposing (Url)
 
 type alias Model =
     { navKey : Nav.Key
-    , stompSession : Stomp.Session Stomp.Msg
-    , auditLogMsgs : Array (Result String AuditLogMsg)
     , flags : Flags
     , activeView : View
+    , stompSession : Stomp.Session Stomp.Msg
+    , auditLogMsgs : Array (Result String AuditLogMsg)
     , dataProductsTableState : Table.State
     , streams : WebData (Dict QualifiedName Stream)
     , useCases : WebData (Dict String UseCase)
@@ -52,17 +52,22 @@ type View
 type Msg
     = ChangeUrl UrlRequest
     | ChangeView View
+      --
     | StompMsg Stomp.Msg
+      --
     | SetDataProductsTableState Table.State
+      --
     | GotStreams (WebData (Dict QualifiedName Stream))
     | GotUseCases (WebData (Dict String UseCase))
+      --
     | StartPublishDialog QualifiedName
     | PublishFormMsg PublishFormMsg
     | PublishDataProduct PublishForm
     | DataProductPublished (WebData PublishFormResult)
+    | AbandonPublishDialog
+      --
     | DeleteDataProduct QualifiedName
     | DataProductDeleted (WebData QualifiedName)
-    | AbandonPublishDialog
 
 
 type PublishFormMsg
