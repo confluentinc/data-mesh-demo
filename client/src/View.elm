@@ -90,18 +90,19 @@ footerView auditLogMsgs =
 
 auditLogMsgsView : Array (Result String AuditLogMsg) -> Html msg
 auditLogMsgsView msgs =
-    code []
-        (msgs
-            |> Array.toList
-            |> List.map auditLogMsgView
-        )
+        pre []
+            (msgs
+                |> Array.toList
+                |> List.map auditLogMsgView
+                |> List.intersperse (text "\n")
+            )
 
 
 auditLogMsgView : Result String AuditLogMsg -> Html msg
 auditLogMsgView auditLogMsg =
     case auditLogMsg of
         Err err ->
-            div [] [ text err ]
+            text err
 
         Ok result ->
-            div [] [ text result.message ]
+            text result.message
