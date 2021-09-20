@@ -50,8 +50,7 @@ type View
 
 
 type Msg
-    = NoOp
-    | ChangeUrl UrlRequest
+    = ChangeUrl UrlRequest
     | ChangeView View
     | StompMsg Stomp.Msg
     | SetDataProductsTableState Table.State
