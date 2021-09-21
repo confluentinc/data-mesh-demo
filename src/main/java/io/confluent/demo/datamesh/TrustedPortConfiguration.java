@@ -13,7 +13,7 @@ import org.springframework.util.StringUtils;
 import java.util.HashSet;
 import java.util.Set;
 
-@Configuration
+//@Configuration
 public class TrustedPortConfiguration {
 
     @Value("${server.port:8080}")
