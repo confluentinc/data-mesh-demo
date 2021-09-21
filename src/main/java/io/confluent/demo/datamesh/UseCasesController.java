@@ -17,7 +17,7 @@ public class UseCasesController {
                 "Enrich an event stream",
                 "pageviews_enriched",
                 "pageviews,users",
-                "CREATE STREAM PAGEVIEWS_ENRICHED with (kafka_topic='pageviews_enriched') AS SELECT U.ID AS USERID, U.REGIONID AS REGION, U.GENDER AS GENDER, V.PAGEID AS PAGE FROM PAGEVIEWS V INNER JOIN USERS U ON V.USERID = U.ID;",
+                "CREATE STREAM PAGEVIEWS_ENRICHED\n    with (kafka_topic='pageviews_enriched')\n    AS SELECT U.ID AS USERID, U.REGIONID AS REGION,\n        U.GENDER AS GENDER, V.PAGEID AS PAGE\n    FROM PAGEVIEWS V INNER JOIN USERS U \n    ON V.USERID = U.ID;",
                 "pageviews_enriched");
     }
     private UseCase getFilterUseCase() {
@@ -25,7 +25,7 @@ public class UseCasesController {
                 "Filter an event stream",
                 "pageviews_filtered_user_1",
                 "pageviews",
-                "CREATE STREAM PAGEVIEWS_FILTERED_USER_1 with (kafka_topic='pageviews_filtered_user_1') AS SELECT * FROM PAGEVIEWS WHERE USERID = 'User_1';",
+                "CREATE STREAM PAGEVIEWS_FILTERED_USER_1\n    with (kafka_topic='pageviews_filtered_user_1')\n    AS SELECT * FROM PAGEVIEWS WHERE USERID = 'User_1';",
                 "pageviews_filtered_user_1");
     }
     private UseCase getAggregateUseCase() {
@@ -33,7 +33,7 @@ public class UseCasesController {
                 "Aggregate an event stream",
                 "pageviews_count_by_user",
                 "pageviews",
-                "CREATE TABLE PAGEVIEWS_COUNT_BY_USER with (kafka_topic='pageviews_count_by_user') AS SELECT USERID, COUNT(*) AS numusers FROM PAGEVIEWS WINDOW TUMBLING (size 30 second) GROUP BY USERID HAVING COUNT(*) > 1;",
+                "CREATE TABLE PAGEVIEWS_COUNT_BY_USER\n    with (kafka_topic='pageviews_count_by_user')\n    AS SELECT USERID, COUNT(*) AS numusers\n    FROM PAGEVIEWS WINDOW TUMBLING (size 30 second)\n    GROUP BY USERID HAVING COUNT(*) > 1;",
                 "pageviews_count_by_user");
     }
     @GetMapping
