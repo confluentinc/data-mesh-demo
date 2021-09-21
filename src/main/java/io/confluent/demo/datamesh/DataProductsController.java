@@ -45,7 +45,10 @@ public class DataProductsController {
     public ArrayList<DataProductOrTopic> getProductsAndTopics() {
         List<DataProduct> dps = getDataProducts();
         List<Topic> topics = subjectVersionService.getPotentialDataProducts()
-            .stream().map(Mapper::ccToTopic).collect(Collectors.toList());
+            .stream()
+            .map(Mapper::ccToTopic)
+            .filter(topic -> !topic.getName().startsWith("_"))
+            .collect(Collectors.toList());
 
         ArrayList<DataProductOrTopic> rv = new ArrayList<>();
         rv.addAll(dps);
