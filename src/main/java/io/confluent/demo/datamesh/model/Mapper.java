@@ -2,9 +2,6 @@ package io.confluent.demo.datamesh.model;
 
 import io.confluent.demo.datamesh.cc.datacatalog.model.AtlasEntityWithExtInfo;
 import io.confluent.demo.datamesh.cc.datacatalog.model.DataProductEntity;
-import io.confluent.demo.datamesh.cc.urls.model.DataProductUrls;
-
-import java.util.Optional;
 
 /**
  * Place to house functions which map various objects into the

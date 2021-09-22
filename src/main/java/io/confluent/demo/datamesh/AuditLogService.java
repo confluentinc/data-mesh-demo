@@ -1,17 +1,15 @@
 package io.confluent.demo.datamesh;
 
 import io.confluent.demo.datamesh.model.AuditLogEntry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
-import org.springframework.http.client.ClientHttpRequestExecution;
-import org.springframework.http.client.ClientHttpRequestInterceptor;
-import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-
 @Service
-public class AuditLogService implements ClientHttpRequestInterceptor {
+public class AuditLogService {
+
+    Logger logger = LoggerFactory.getLogger(AuditLogService.class);
 
     @Autowired
     private AuditLogController controller;
@@ -20,16 +18,7 @@ public class AuditLogService implements ClientHttpRequestInterceptor {
         this.sendAuditLogEntry(new AuditLogEntry(logMsg));
     }
     public void sendAuditLogEntry(AuditLogEntry entry) {
+        logger.info(String.format("Sending Audit Log Entry with message: %s", entry.getMessage()));
         controller.sendAuditLogEntry(entry);
-    }
-
-    @Override
-    public ClientHttpResponse intercept(
-            final HttpRequest request, final byte[] body,
-            final ClientHttpRequestExecution execution) throws IOException {
-
-        sendAuditLogEntry(String.format("%s: %s", request.getMethod().name(), request.getURI().toString()));
-        ClientHttpResponse response = execution.execute(request, body);
-        return response;
     }
 }

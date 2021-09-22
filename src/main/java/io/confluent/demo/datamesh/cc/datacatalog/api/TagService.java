@@ -1,6 +1,7 @@
 package io.confluent.demo.datamesh.cc.datacatalog.api;
 
 import io.confluent.demo.datamesh.cc.datacatalog.model.*;
+import io.confluent.demo.datamesh.model.AuditLogEntry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TagService {
@@ -38,15 +40,20 @@ public class TagService {
             .findFirst().orElseThrow(TagNotFoundException::new);
     }
 
-    public void unTagSubjectVersionAsDataProduct(String entityQualifiedName) {
+    public TagServiceResponse unTagSubjectVersionAsDataProduct(String entityQualifiedName) {
         String url = String.format(
             "/entity/type/sr_subject_version/name/%s/tags/DataProduct",
             entityQualifiedName);
 
         restTemplate.delete(url);
+        return new TagServiceResponse(
+                Optional.empty(),
+                Optional.of(new AuditLogEntry(
+                        "Delete DataProduct tag from entity",
+                        new String[]{ String.format("DELETE %s", url) })));
     }
 
-    public TagResponse[] tagSubjectVersionAsDataProduct(
+    public TagServiceResponse tagSubjectVersionAsDataProduct(
             String entityQualifiedName,
             DataProductTag tag)
     {
@@ -60,7 +67,10 @@ public class TagService {
         ResponseEntity<TagResponse[]> response = restTemplate.postForEntity(
                 url, request, TagResponse[].class);
 
-        return response.getBody();
+        return new TagServiceResponse(
+                Optional.of(response.getBody()),
+                Optional.of(new AuditLogEntry("Tag entity as DataProduct",
+                        new String[]{ String.format("POST %s", url) })));
     }
 
 }
