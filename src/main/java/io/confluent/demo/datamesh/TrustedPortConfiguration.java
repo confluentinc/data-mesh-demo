@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.web.servlet.TomcatServletWebServer
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
 
 import java.util.HashSet;

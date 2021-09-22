@@ -8,7 +8,7 @@ import io.confluent.demo.datamesh.cc.schemaregistry.api.SchemaRegistryService;
 import io.confluent.demo.datamesh.cc.schemaregistry.model.Schema;
 import io.confluent.demo.datamesh.cc.urls.api.UrlService;
 import io.confluent.demo.datamesh.model.*;
-import io.confluent.ksql.api.client.ExecuteStatementResult;
+import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -58,61 +59,58 @@ public class DataProductService {
             .map(Mapper::ccToDataProduct)
             .collect(Collectors.toList());
     }
-    public DataProduct get(String qualifiedName) {
+    public Pair<DataProduct, Optional<AuditLogEntry>> get(String qualifiedName) {
         // TODO: Filter on the server side instead of locally with all the results
-        return getDataProducts()
-           .stream()
-           .filter(dp -> dp.getQualifiedName().equals(qualifiedName))
-           .findFirst()
-           .orElseThrow(DataProductNotFoundException::new);
+        Pair<List<DataProduct>, Optional<AuditLogEntry>> response = getDataProducts();
+        return new Pair<>(
+                response.getValue0()
+                    .stream()
+                    .filter(dp -> dp.getQualifiedName().equals(qualifiedName))
+                    .findFirst()
+                    .orElseThrow(DataProductNotFoundException::new),
+                response.getValue1());
     }
 
-    public List<DataProduct> getDataProducts() {
-        return atlasEntitiesToDataProducts(subjectVersionService.getDataProducts());
+    public Pair<List<DataProduct>, Optional<AuditLogEntry>> getDataProducts() {
+        SubjectVersionServiceResult result = subjectVersionService.getDataProducts();
+        return new Pair<>(
+            atlasEntitiesToDataProducts(subjectVersionService.getDataProducts().getEntities()),
+            result.getAuditLogEntry());
     }
     public List<DataProduct> getAll() {
-        return atlasEntitiesToDataProducts(subjectVersionService.getAll());
+        return atlasEntitiesToDataProducts(subjectVersionService.getAll().getEntities());
     }
 
-    public DataProduct createDataProduct(CreateDataProductRequest request) throws Exception {
-        if (request instanceof CreateS3DataProductRequest) {
-            return null;
-        }
-        else if (request instanceof CreateTopicDataProductRequest) {
+    public Pair<DataProduct, Optional<AuditLogEntry>> createDataProduct(CreateDataProductRequest request) throws Exception {
+        if (request instanceof CreateTopicDataProductRequest) {
             return createTopicDataProduct((CreateTopicDataProductRequest)request);
         }
+        else if (request instanceof CreateS3DataProductRequest) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Unknown type in request body. Expecting @type field = (TOPIC)");
+        }
         else if (request instanceof CreateKsqlDbDataProductRequest) {
-            return createKsqlDbDataProduct((CreateKsqlDbDataProductRequest) request);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Unknown type in request body. Expecting @type field = (TOPIC)");
         }
         else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Unkonwn type in request body. Expecting @type field = (TOPIC | KSQLDB | S3)");
+                    "Unknown type in request body. Expecting @type field = (TOPIC)");
         }
     }
-    public void deleteDataProduct(String qualifiedName) {
-        tagService.unTagSubjectVersionAsDataProduct(qualifiedName);
+    public Optional<AuditLogEntry> deleteDataProduct(String qualifiedName) {
+        return tagService.unTagSubjectVersionAsDataProduct(qualifiedName).getAuditLogEntry();
     }
 
-    private DataProduct createKsqlDbDataProduct(final CreateKsqlDbDataProductRequest request) throws Exception {
-        // The following blocks until a result is obtained from the
-        // ksqlDB service. The queryId will contain the ID of the new
-        // persistent query that was created, and we'll use that to know if
-        // we should crate a new Data Product in the subject service
-        ExecuteStatementResult result = ksqlService.execute(request.getCommand()).get();
-        if (result.queryId().isEmpty()) {
-            throw new DataProductCreateException(result.toString());
-        } else {
-            String subjectName = request.getEventualSubjectName();
-            int latestVersion = schemaService.getLatest(subjectName).version;
-            String subjectFQN = String.format(":.:%s:%d", subjectName, latestVersion);
-            TagResponse[] response = tagService.tagSubjectVersionAsDataProduct(
-                    subjectFQN,
-                    new DataProductTag(request.getOwner(), request.getDescription()));
-            return get(response[0].getEntityName());
-        }
-    }
-    private DataProduct createTopicDataProduct(final CreateTopicDataProductRequest request) throws Exception {
-        tagService.tagSubjectVersionAsDataProduct(request.getQualifiedName(), request.getDataProductTag());
-        return get(request.getQualifiedName());
+    private Pair<DataProduct, Optional<AuditLogEntry>> createTopicDataProduct(final CreateTopicDataProductRequest request)
+            throws Exception {
+
+        TagServiceResponse tagResponse =
+                tagService.tagSubjectVersionAsDataProduct(request.getQualifiedName(), request.getDataProductTag());
+
+        Pair<DataProduct, Optional<AuditLogEntry>> getDataProductResponse =
+                get(request.getQualifiedName());
+
+        return new Pair<>(getDataProductResponse.getValue0(), tagResponse.getAuditLogEntry());
     }
 }

@@ -1,12 +1,7 @@
 package io.confluent.demo.datamesh.cc.datacatalog.api;
 
-import io.confluent.demo.datamesh.AuditLogController;
-import io.confluent.demo.datamesh.AuditLogService;
-import io.confluent.demo.datamesh.cc.datacatalog.model.AtlasClassification;
-import io.confluent.demo.datamesh.cc.datacatalog.model.AtlasEntityHeader;
-import io.confluent.demo.datamesh.cc.datacatalog.model.AtlasEntityWithExtInfo;
-import io.confluent.demo.datamesh.cc.datacatalog.model.SearchResult;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.confluent.demo.datamesh.cc.datacatalog.model.*;
+import io.confluent.demo.datamesh.model.AuditLogEntry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
@@ -19,7 +14,6 @@ import org.springframework.web.client.RestTemplate;
 import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -32,7 +26,6 @@ public class SubjectVersionService {
 
     public SubjectVersionService(
             RestTemplateBuilder builder,
-            AuditLogService auditService,
             @Value("${confluent.cloud.schemaregistry.auth.key}") String srKey,
             @Value("${confluent.cloud.schemaregistry.auth.secret}") String srSecret,
             @Value("${confluent.cloud.schemaregistry.url}") String baseUrl) {
@@ -40,7 +33,6 @@ public class SubjectVersionService {
         restTemplate = builder
             .rootUri(baseUrl + "/catalog/v1")
             .basicAuthentication(srKey, srSecret)
-            .additionalInterceptors(auditService)
             .build();
     }
 
@@ -76,17 +68,30 @@ public class SubjectVersionService {
         // Must match the pattern: "lsrc-wqxng:.:pageviews-value:1"
         return srSubjectVersionFQN.split(":")[2];
     }
+    public static String getQualifiedNameTopicName(String srSubjectVersionFQN) {
+        // Must match the pattern: "lsrc-wqxng:.:pageviews-value:1"
+        return srSubjectVersionFQN.split(":")[2].split("-")[0];
+    }
 
     public AtlasEntityWithExtInfo getSubjectVersionEntity(String qualifiedName) {
         OffsetDateTime odt;
         String entityUrl = String.format("/entity/type/sr_subject_version/name/%s", qualifiedName);
         return restTemplate.getForObject(entityUrl, AtlasEntityWithExtInfo.class);
     }
-    public List<AtlasEntityWithExtInfo> getAll() {
+
+    public SubjectVersionServiceResult getAll() {
         return getAll(Optional.empty(), Optional.empty());
     }
+
+    public SubjectVersionServiceResult getPotentialDataProducts() {
+        return getAll(Optional.empty(), Optional.of("DataProduct"));
+    }
+    public SubjectVersionServiceResult getDataProducts() {
+        return getAll(Optional.of("DataProduct"), Optional.empty());
+    }
+
     @GetMapping
-    public List<AtlasEntityWithExtInfo> getAll(
+    public SubjectVersionServiceResult getAll(
             @RequestParam Optional<String> includeTag,
             @RequestParam Optional<String> excludeTag) {
 
@@ -99,26 +104,27 @@ public class SubjectVersionService {
                 SearchResult.class);
 
         List<AtlasEntityWithExtInfo> found = filterForDuplicates(result);
-        if (excludeTag.isEmpty()) {
-            return found;
-        } else {
-            return found.stream()
-                .filter(entry -> {
-                    return Optional.ofNullable(entry.getEntity().getClassifications())
-                        .orElse(Collections.<AtlasClassification> emptyList())
+
+        // TODO: Figure out if it's possible to both filter including and excluding tags on the server side
+        if (excludeTag.isPresent()) {
+            found = found
                         .stream()
-                        .filter(c -> excludeTag.get().equals(c.getTypeName()))
-                        .findAny()
-                        .isEmpty();
-                })
-                .collect(Collectors.toList());
+                        .filter(entry -> {
+                                return Optional.ofNullable(entry.getEntity().getClassifications())
+                                        .orElse(Collections.emptyList())
+                                        .stream()
+                                        .filter(c -> excludeTag.get().equals(c.getTypeName()))
+                                        .findAny()
+                                        .isEmpty(); })
+                        .collect(Collectors.toList());
         }
+
+        AuditLogEntry auditLogEntry = new AuditLogEntry(
+                "Search Confluent Cloud Data Catalog",
+                new String[]{ String.format("GET %s", searchUrl) });
+
+        return new SubjectVersionServiceResult(found, Optional.of(auditLogEntry));
     }
-    public List<AtlasEntityWithExtInfo> getPotentialDataProducts() {
-        return getAll(Optional.empty(), Optional.of("DataProduct"));
-    }
-    public List<AtlasEntityWithExtInfo> getDataProducts() {
-        return getAll(Optional.of("DataProduct"), Optional.empty());
-    }
+
 
 }
