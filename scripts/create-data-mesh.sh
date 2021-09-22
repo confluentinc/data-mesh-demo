@@ -38,13 +38,13 @@ printf "\n";print_process_start "====== Add new tag definition to the Data Catal
 echo -e "\nDefine a new tag in the Data Catalog called DataProduct:"
 curl -X POST -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} ${SCHEMA_REGISTRY_URL}/catalog/v1/types/tagdefs \
   --header 'Content-Type: application/json' \
-  --data '[{ "entityTypes" : [ "sr_subject_version" ], "name" : "DataProduct", "description" : "Data Product Attributes" , "attributeDefs" : [ { "name" : "owner", "cardinality" : "SINGLE", "typeName" : "string" }, { "name" : "description", "isOptional" : "true", "cardinality" : "SINGLE", "typeName" : "string" } ] }]'
+  --data '[{ "entityTypes" : [ "sr_subject_version" ], "name" : "DataProduct", "description" : "Data Product Attributes" , "attributeDefs" : [ { "name" : "owner", "cardinality" : "SINGLE", "typeName" : "string" }, { "name" : "description", "isOptional" : "true", "cardinality" : "SINGLE", "typeName" : "string" }, { "name" : "domain", "isOptional" : "true", "cardinality" : "SINGLE", "typeName" : "string" }, { "name" : "sla", "isOptional" : "true", "cardinality" : "SINGLE", "typeName" : "string" }, { "name" : "quality", "isOptional" : "true", "cardinality" : "SINGLE", "typeName" : "string" } ] }]'
 echo -e "\n\nView the new tag definition:"
 curl -s -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} ${SCHEMA_REGISTRY_URL}/catalog/v1/types/tagdefs/DataProduct | jq .
 
 # Create Data Products
-create_data_product pageviews adam || exit 1
-create_data_product users rick || exit 1
+create_data_product pageviews @edge-team || exit 1
+create_data_product users @edge-team || exit 1
 
 printf "\n";print_process_start "====== Prepare ksqlDB entities for new Data Products."
 create_ksqldb_app || exit 1

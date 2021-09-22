@@ -3,6 +3,11 @@ package io.confluent.demo.datamesh.model;
 import io.confluent.demo.datamesh.cc.datacatalog.model.AtlasEntityWithExtInfo;
 import io.confluent.demo.datamesh.cc.datacatalog.model.DataProductEntity;
 
+import java.util.Map;
+import java.util.Optional;
+
+import static java.util.Optional.ofNullable;
+
 /**
  * Place to house functions which map various objects into the
  * Data Mesh Demo data model
@@ -42,12 +47,17 @@ public class Mapper {
            name = name.substring(0, i);
         }
 
+        Map<String, Object> dataProductAttributes = dpEntity.getDataProductTag().getAttributes();
+
         return new DataProduct(
-          name,
-          dpEntity.getEntity().getAttributes().get("qualifiedName").toString(),
-          dpEntity.getDataProductTag().getAttributes().get("owner").toString(),
-          dpEntity.getDataProductTag().getAttributes().get("description").toString(),
-          dpEntity.getUrls(),
-          dpEntity.getSchema());
+            name,
+            dpEntity.getEntity().getAttributes().get("qualifiedName").toString(),
+            (String)Optional.ofNullable(dataProductAttributes.getOrDefault("owner", "n/a")).orElse("n/a"),
+            (String)Optional.ofNullable(dataProductAttributes.getOrDefault("description", "n/a")).orElse("n/a"),
+            dpEntity.getUrls(),
+            dpEntity.getSchema(),
+            (String)Optional.ofNullable(dataProductAttributes.getOrDefault("domain", "n/a")).orElse("n/a"),
+            (String)Optional.ofNullable(dataProductAttributes.getOrDefault("sla", "n/a")).orElse("n/a"),
+            (String)Optional.ofNullable(dataProductAttributes.getOrDefault("quality", "n/a")).orElse("n/a"));
     }
 }

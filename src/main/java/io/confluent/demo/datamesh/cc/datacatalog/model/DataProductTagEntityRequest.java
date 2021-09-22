@@ -1,17 +1,26 @@
 package io.confluent.demo.datamesh.cc.datacatalog.model;
 
-import io.confluent.demo.datamesh.cc.datacatalog.model.DataProductTag;
-
 public class DataProductTagEntityRequest {
     class Attributes {
+
         private final String owner;
         private final String description;
-        public Attributes(String owner, String description) {
+        private final String domain;
+        private final String sla;
+        private final String quality;
+
+        public Attributes(String owner, String description, String domain, String sla, String quality) {
             this.owner = owner;
             this.description = description;
+            this.domain = domain;
+            this.sla = sla;
+            this.quality = quality;
         }
         public String getOwner() {return this.owner;}
         public String getDescription() {return this.description;}
+        public String getDomain() {return this.domain;}
+        public String getSla() {return this.sla;}
+        public String getQuality() {return this.quality;}
     }
 
     private final String entityName;
@@ -19,7 +28,9 @@ public class DataProductTagEntityRequest {
 
     public DataProductTagEntityRequest(String entityName, DataProductTag tag) {
         this.entityName = entityName;
-        this.attributes = new Attributes(tag.getOwner(), tag.getDescription());
+        this.attributes = new Attributes(
+                tag.getOwner(), tag.getDescription(),
+                tag.getDomain(), tag.getSla(), tag.getQuality());
     }
 
     public String getEntityType() {return "sr_subject_version";}
