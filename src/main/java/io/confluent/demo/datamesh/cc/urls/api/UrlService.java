@@ -44,6 +44,7 @@ public class UrlService {
                 getClusterUrl(),
                 ksqlDbId);
     }
+    public String getKsqlDbId() {return this.ksqlDbId;}
     @GetMapping("/urls/cc/environment/schema-registry")
     public String getSchemaRegistryUrl() {
         return String.format("%s/schema-registry", getEnvironmentUrl());
