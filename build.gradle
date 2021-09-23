@@ -44,15 +44,15 @@ node {
 	nodeProjectDir = file("${project.projectDir}/client")
 }
 
-//yarn_build {
-//	dependsOn('yarn_install')
-//	inputs.files fileTree("${project.projectDir}/client")
-//}
-//
-//processResources {
-//	dependsOn('yarn_build')
-//	from("${project.buildDir}/generated/static") {into('static') }
-//}
+yarn_build {
+	dependsOn('yarn_install')
+	inputs.files fileTree("${project.projectDir}/client")
+}
+
+processResources {
+	dependsOn('yarn_build')
+	from("${project.buildDir}/generated/static") {into('static') }
+}
 
 jib.to {
 	image = 'cnfldemos/data-mesh-demo'
