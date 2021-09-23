@@ -26,6 +26,7 @@ dependencies {
 	implementation 'com.google.code.gson:gson:2.8.1'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.webjars:webjars-locator-core'
 	implementation 'org.webjars:stomp-websocket:2.3.4'
 	implementation 'org.webjars:bootstrap:3.3.7'
