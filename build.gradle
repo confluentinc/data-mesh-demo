@@ -26,6 +26,7 @@ dependencies {
 	implementation 'com.google.code.gson:gson:2.8.1'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.webjars:webjars-locator-core'
 	implementation 'org.webjars:stomp-websocket:2.3.4'
 	implementation 'org.webjars:bootstrap:3.3.7'
@@ -43,15 +44,15 @@ node {
 	nodeProjectDir = file("${project.projectDir}/client")
 }
 
-yarn_build {
-	dependsOn('yarn_install')
-	inputs.files fileTree("${project.projectDir}/client")
-}
-
-processResources {
-	dependsOn('yarn_build')
-	from("${project.buildDir}/generated/static") {into('static') }
-}
+//yarn_build {
+//	dependsOn('yarn_install')
+//	inputs.files fileTree("${project.projectDir}/client")
+//}
+//
+//processResources {
+//	dependsOn('yarn_build')
+//	from("${project.buildDir}/generated/static") {into('static') }
+//}
 
 jib.to {
 	image = 'cnfldemos/data-mesh-demo'
