@@ -27,7 +27,11 @@ public class DataProductsController {
     public List<DataProduct> getDataProducts() {
         Pair<List<DataProduct>, Optional<AuditLogEntry>> response = dataProductService.getDataProducts();
         response.getValue1().ifPresent(auditLogService::sendAuditLogEntry);
-        return new ArrayList<>(dataProductService.getDataProducts().getValue0());
+        return new ArrayList<>(
+                dataProductService.getDataProducts().getValue0()
+                    .stream()
+                    .filter(dp -> !dp.getName().startsWith("_"))
+                    .collect(Collectors.toList()));
     }
 
     @RequestMapping("/{qualifiedName}")
