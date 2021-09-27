@@ -100,7 +100,7 @@ publishButton stream =
                 , UIKit.buttonDanger
                 , onClick (DeleteDataProduct dataProduct.qualifiedName)
                 ]
-                [ text "Unpublish" ]
+                [ text "Remove from Mesh" ]
 
         StreamTopic topic ->
             button
@@ -108,7 +108,7 @@ publishButton stream =
                 , UIKit.buttonPrimary
                 , onClick (StartPublishDialog topic.qualifiedName)
                 ]
-                [ text "Publish" ]
+                [ text "Add to Mesh" ]
 
 
 publishDialog : WebData PublishFormResult -> PublishForm -> Dialog.Config Msg
