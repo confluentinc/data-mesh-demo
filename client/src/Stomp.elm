@@ -8,7 +8,7 @@ port module Stomp exposing
     , update
     )
 
-import Json.Decode as Decode exposing (Decoder, field, string)
+import Json.Decode as Decode exposing (Decoder, field, list, string)
 import Json.Encode as Encode
 import Stomp.Client as Client exposing (Session)
 import Stomp.Message
@@ -117,10 +117,13 @@ connect session =
 
 
 type alias AuditLogMsg =
-    { message : String }
+    { message : String
+    , commands : List String
+    }
 
 
 decodeAuditLogMsg : Decoder AuditLogMsg
 decodeAuditLogMsg =
-    Decode.map AuditLogMsg
+    Decode.map2 AuditLogMsg
         (field "message" string)
+        (field "commands" (list string))

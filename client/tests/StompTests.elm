@@ -26,7 +26,8 @@ suite =
                 \_ ->
                     decodesTo decodeAuditLogMsg
                         auditLogMessage1
-                        { message = "GET: https://psrc-knmwm.us-east-2.aws.confluent.cloud/catalog/v1/search/basic?types=sr_subject_version&attrs=version"
+                        { message = "Search Confluent Cloud Data Catalog"
+                        , commands = [ "GET /search/basic?types=sr_subject_version&attrs=version&tag=DataProduct" ]
                         }
             ]
         ]
@@ -35,5 +36,5 @@ suite =
 auditLogMessage1 : String
 auditLogMessage1 =
     """
-{"message":"GET: https://psrc-knmwm.us-east-2.aws.confluent.cloud/catalog/v1/search/basic?types=sr_subject_version&attrs=version"}
+{"message":"Search Confluent Cloud Data Catalog","commands":["GET /search/basic?types=sr_subject_version&attrs=version&tag=DataProduct"]}
 """
