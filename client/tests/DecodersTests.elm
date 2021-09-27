@@ -304,7 +304,7 @@ dataProductsResponse1 =
     "description": "website pageviews",
     "owner": "@edge-team",
     "domain": "edge",
-    "sla": "tier1",
+    "sla": "tier-1",
     "quality": "authoritative",
     "urls": {
       "schemaUrl": "https://confluent.cloud/environments/env-qyjxp/schema-registry/schemas/pageviews-value",
