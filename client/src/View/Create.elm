@@ -6,7 +6,6 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 import Route exposing (routeToString)
-import Table exposing (defaultCustomizations)
 import Types exposing (..)
 import UIKit
 import Url exposing (..)
