@@ -51,8 +51,8 @@ mainView model =
             [ ul
                 [ UIKit.tab ]
                 (List.map (tabView model.activeView)
-                    [ ( Discover Nothing, "Discover & Export" )
-                    , ( Create Nothing, "Create" )
+                    [ ( Discover Nothing, "Explore Data Mesh" )
+                    , ( Create Nothing, "Derive Data Products" )
                     , ( Manage, "Manage & Publish" )
                     ]
                 )
