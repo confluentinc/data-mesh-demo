@@ -144,7 +144,7 @@ streamDetailView mStream =
                     [ linkButton "Topic" dataProduct.urls.portUrl
                     , linkButton "Schema" dataProduct.urls.schemaUrl
                     , linkButton "Lineage" dataProduct.urls.lineageUrl
-                    , linkButton "Export" dataProduct.urls.exportUrl
+                    , linkButton "Self-Serve" dataProduct.urls.exportUrl
                     ]
                 ]
 
