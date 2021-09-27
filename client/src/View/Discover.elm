@@ -128,6 +128,7 @@ streamDetailView mStream =
                         , div [ UIKit.formControls ]
                             [ textarea
                                 [ UIKit.textarea
+                                , class "schema"
                                 , value (Json.prettyPrintIfPossible dataProduct.schema.schema)
                                 , disabled True
                                 , rows 10
