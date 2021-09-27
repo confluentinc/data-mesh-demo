@@ -7,12 +7,14 @@ module Decoders exposing
 
 import Json.Decode as Decode exposing (..)
 import Json.Decode.Extra exposing (url, when)
+import Json.Decode.Pipeline exposing (hardcoded, optional, required)
 import RemoteData exposing (RemoteData(..))
 import Types exposing (..)
 import Url as Url exposing (Url)
 
 
-whenTypeIs tag =
+ensureTypeIs : String -> Decoder (a -> b) -> Decoder (a -> b)
+ensureTypeIs tag =
     when (field "@type" string) ((==) tag)
 
 
@@ -31,22 +33,25 @@ decodeStream =
 
 decodeTopic : Decoder Topic
 decodeTopic =
-    whenTypeIs "Topic" <|
-        Decode.map2 Topic
-            (field "qualifiedName" qualifiedName)
-            (field "name" string)
+    succeed Topic
+        |> ensureTypeIs "Topic"
+        |> required "qualifiedName" qualifiedName
+        |> required "name" string
 
 
 decodeDataProduct : Decoder DataProduct
 decodeDataProduct =
-    whenTypeIs "DataProduct" <|
-        Decode.map6 DataProduct
-            (field "qualifiedName" qualifiedName)
-            (field "name" string)
-            (field "description" string)
-            (field "owner" string)
-            (field "urls" decodeDataProductUrls)
-            (field "schema" decodeKsqlSchema)
+    succeed DataProduct
+        |> ensureTypeIs "DataProduct"
+        |> required "qualifiedName" qualifiedName
+        |> required "name" string
+        |> required "domain" string
+        |> required "description" string
+        |> required "owner" string
+        |> required "urls" decodeDataProductUrls
+        |> required "schema" decodeKsqlSchema
+        |> required "quality" string
+        |> required "sla" string
 
 
 qualifiedName : Decoder QualifiedName
@@ -56,20 +61,20 @@ qualifiedName =
 
 decodeDataProductUrls : Decoder DataProductUrls
 decodeDataProductUrls =
-    Decode.map4 DataProductUrls
-        (field "schemaUrl" url)
-        (field "portUrl" url)
-        (field "lineageUrl" url)
-        (field "exportUrl" url)
+    succeed DataProductUrls
+        |> required "schemaUrl" url
+        |> required "portUrl" url
+        |> required "lineageUrl" url
+        |> required "exportUrl" url
 
 
 decodeKsqlSchema : Decoder KsqlSchema
 decodeKsqlSchema =
-    Decode.map4 KsqlSchema
-        (field "subject" string)
-        (field "version" int)
-        (field "id" int)
-        (field "schema" string)
+    succeed KsqlSchema
+        |> required "subject" string
+        |> required "version" int
+        |> required "id" int
+        |> required "schema" string
 
 
 decodeUseCases : Decoder (List UseCase)
@@ -79,9 +84,9 @@ decodeUseCases =
 
 decodeUseCase : Decoder UseCase
 decodeUseCase =
-    Decode.map5 UseCase
-        (field "description" string)
-        (field "name" string)
-        (field "inputs" string)
-        (field "ksqlDbCommand" string)
-        (field "outputTopic" string)
+    succeed UseCase
+        |> required "description" string
+        |> required "name" string
+        |> required "inputs" string
+        |> required "ksqlDbCommand" string
+        |> required "outputTopic" string

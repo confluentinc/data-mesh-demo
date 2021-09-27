@@ -6,6 +6,7 @@
     "elm-version": "0.19.1",
     "dependencies": {
         "direct": {
+            "NoRedInk/elm-json-decode-pipeline": "1.0.0",
             "NoRedInk/elm-sortable-table": "1.0.0",
             "arturopala/elm-monocle": "2.2.0",
             "edkv/elm-generic-dict": "1.0.0",

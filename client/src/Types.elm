@@ -102,10 +102,13 @@ type Stream
 type alias DataProduct =
     { qualifiedName : QualifiedName
     , name : String
+    , domain : String
     , description : String
     , owner : String
     , urls : DataProductUrls
     , schema : KsqlSchema
+    , quality : String
+    , sla : String
     }
 
 
