@@ -53,19 +53,20 @@ tableConfig =
                  { name = "Name"
                  , viewData =
                     \stream ->
-                        Table.HtmlDetails [ UIKit.width_2_5 ]
+                        Table.HtmlDetails [ UIKit.width_1_4 ]
                             [ text (toStr stream) ]
                  , sorter = Table.increasingOrDecreasingBy toStr
                  }
                 )
-            , Table.veryCustomColumn
-                { name = "Data Product"
-                , viewData =
-                    \dataProduct ->
-                        Table.HtmlDetails []
-                            [ publishButton dataProduct ]
-                , sorter = Table.unsortable
-                }
+            , Table.stringColumn "Domain"
+                (\stream ->
+                    case stream of
+                        StreamDataProduct dataProduct ->
+                            dataProduct.domain
+
+                        StreamTopic topic ->
+                            "-"
+                )
             , Table.stringColumn "Description"
                 (\stream ->
                     case stream of
@@ -84,7 +85,32 @@ tableConfig =
                         StreamTopic topic ->
                             "-"
                 )
-            , Table.stringColumn "Other Tags" (\_ -> "")
+            , Table.stringColumn "Quality"
+                (\stream ->
+                    case stream of
+                        StreamDataProduct dataProduct ->
+                            dataProduct.quality
+
+                        StreamTopic topic ->
+                            "-"
+                )
+            , Table.stringColumn "SLA"
+                (\stream ->
+                    case stream of
+                        StreamDataProduct dataProduct ->
+                            dataProduct.sla
+
+                        StreamTopic topic ->
+                            "-"
+                )
+            , Table.veryCustomColumn
+                { name = "Data Product"
+                , viewData =
+                    \dataProduct ->
+                        Table.HtmlDetails []
+                            [ publishButton dataProduct ]
+                , sorter = Table.unsortable
+                }
             ]
         , customizations =
             { defaultCustomizations

@@ -120,8 +120,11 @@ streamDetailView mStream =
             div []
                 [ form [ UIKit.formHorizontal ]
                     [ disabledFormInput "Name" dataProduct.name
-                    , disabledFormInput "Owner" dataProduct.owner
+                    , disabledFormInput "Domain" dataProduct.domain
                     , disabledFormInput "Description" dataProduct.description
+                    , disabledFormInput "Owner" dataProduct.owner
+                    , disabledFormInput "Quality" dataProduct.quality
+                    , disabledFormInput "SLA" dataProduct.sla
                     , div []
                         [ label [ UIKit.formLabel ] [ text "Schema" ]
                         , div [ UIKit.formControls ]

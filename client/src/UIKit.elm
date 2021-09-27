@@ -144,6 +144,16 @@ width_1_2 =
     class "uk-width-1-2"
 
 
+width_1_3 : Attribute msg
+width_1_3 =
+    class "uk-width-1-3"
+
+
+width_1_4 : Attribute msg
+width_1_4 =
+    class "uk-width-1-4"
+
+
 width_2_5 : Attribute msg
 width_2_5 =
     class "uk-width-2-5"
