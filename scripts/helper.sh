@@ -30,6 +30,10 @@ function preflight_checks() {
 function create_data_product () {
   dp=$1
   owner=$2
+  sla=$3
+  quality=$4
+  domain=$5
+  description=$6
 
   printf "\n";print_process_start "====== Create a new Data Product called $dp."
 
@@ -51,7 +55,7 @@ function create_data_product () {
   echo -e "\nAdd tag to ${dp}"
   curl -X POST -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} "${SCHEMA_REGISTRY_URL}/catalog/v1/entity/tags" \
     --header 'Content-Type: application/json' \
-    --data '[ { "entityType" : "sr_subject_version", "entityName" : "'"${QN}"'", "typeName" : "DataProduct", "attributes" : { "owner":"'"${owner}"'", "description":"website '"${dp}"'", "domain": "edge", "quality": "authoritative", "sla" : "tier-1" } }]'
+    --data '[ { "entityType" : "sr_subject_version", "entityName" : "'"${QN}"'", "typeName" : "DataProduct", "attributes" : { "owner":"'"${owner}"'", "description":"'"${description}"'", "domain": "'"${domain}"'", "quality": "'"${quality}"'", "sla" : "'"${sla}"'" } }]'
   echo -e "\nVerify tag is attached to ${dp}"
   curl -s -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} "${SCHEMA_REGISTRY_URL}/catalog/v1/search/basic?types=sr_subject_version" | jq -r --arg dp "${dp}-value" '.entities[] | select(.attributes.name==$dp) | .classificationNames[] '
   echo -e "\nView tag details"
