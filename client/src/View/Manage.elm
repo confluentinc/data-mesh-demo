@@ -12,7 +12,7 @@ import Table exposing (defaultCustomizations)
 import Types exposing (..)
 import UIKit
 import Url exposing (..)
-import View.Common exposing (webDataView,errorView)
+import View.Common exposing (errorView, webDataView)
 import View.Lorem as Lorem
 
 
