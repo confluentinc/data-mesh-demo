@@ -44,7 +44,16 @@ view activeStreamKey model =
             , streamDetailView activeStream
             ]
         , div [ class "discover-copy" ]
-            [ p [] [ text "Discover the data products that are relevant to your domain." ]
+            [ p []
+                [ a
+                    [ UIKit.button
+                    , UIKit.buttonPrimary
+                    , href "https://confluent.cloud/search"
+                    , target "_blank"
+                    ]
+                    [ text "Advanced Search" ]
+                ]
+            , p [] [ text "Discover the data products that are relevant to your domain." ]
             , p [] [ text "Data Product information contains all the relevant info about this product. You can view schemas, ownership, description, and lineage information." ]
             , p [] [ text "You can also export the data product to your own external data store for use by individual applications." ]
             ]
