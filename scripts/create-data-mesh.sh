@@ -43,8 +43,8 @@ echo -e "\n\nView the new tag definition:"
 curl -s -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} ${SCHEMA_REGISTRY_URL}/catalog/v1/types/tagdefs/DataProduct | jq .
 
 # Create Data Products
-create_data_product pageviews @edge-team || exit 1
-create_data_product users @edge-team || exit 1
+create_data_product pageviews @edge-team tier-2 curated edge "Website pageviews, from DB pageviews-db:1234/pageviews-tbl" || exit 1
+create_data_product users @edge-team tier-1 authoritative edge "Website users, from DB user-db:2222/users-tbl" || exit 1
 
 printf "\n";print_process_start "====== Prepare ksqlDB entities for new Data Products."
 create_ksqldb_app || exit 1
