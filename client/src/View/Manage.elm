@@ -40,14 +40,23 @@ tableConfig =
         { toId = streamQualifiedName >> unQualifiedName
         , toMsg = SetDataProductsTableState
         , columns =
-            [ Table.stringColumn "Name"
-                (\stream ->
-                    case stream of
-                        StreamDataProduct dataProduct ->
-                            dataProduct.name
+            [ Table.veryCustomColumn
+                (let
+                    toStr stream =
+                        case stream of
+                            StreamDataProduct dataProduct ->
+                                dataProduct.name
 
-                        StreamTopic topic ->
-                            topic.name
+                            StreamTopic topic ->
+                                topic.name
+                 in
+                 { name = "Name"
+                 , viewData =
+                    \stream ->
+                        Table.HtmlDetails [ UIKit.width_2_5 ]
+                            [ text (toStr stream) ]
+                 , sorter = Table.increasingOrDecreasingBy toStr
+                 }
                 )
             , Table.veryCustomColumn
                 { name = "Data Product"

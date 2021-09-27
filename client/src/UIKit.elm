@@ -132,3 +132,13 @@ modalTitle =
 modalClose : Attribute msg
 modalClose =
     class "uk-modal-close"
+
+
+width_1_2 : Attribute msg
+width_1_2 =
+    class "uk-width-1-2"
+
+
+width_2_5 : Attribute msg
+width_2_5 =
+    class "uk-width-2-5"
