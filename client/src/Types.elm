@@ -29,9 +29,42 @@ type alias Model =
 
 type alias PublishForm =
     { topic : Topic
+    , domain : String
     , owner : String
     , description : String
+    , quality : ProductQuality
+    , sla : ProductSla
     }
+
+
+type ProductQuality
+    = Authoritative
+    | Curated
+    | Raw
+    | OtherQuality String
+
+
+allProductQualities : List ProductQuality
+allProductQualities =
+    [ Authoritative
+    , Curated
+    , Raw
+    ]
+
+
+type ProductSla
+    = Tier1
+    | Tier2
+    | Tier3
+    | OtherSla String
+
+
+allProductSlas : List ProductSla
+allProductSlas =
+    [ Tier1
+    , Tier2
+    , Tier3
+    ]
 
 
 type alias Flags =
@@ -75,6 +108,9 @@ type Msg
 type PublishFormMsg
     = PublishFormSetOwner String
     | PublishFormSetDescription String
+    | PublishFormSetDomain String
+    | PublishFormSetQuality ProductQuality
+    | PublishFormSetSla ProductSla
 
 
 type alias PublishFormResult =
@@ -107,8 +143,8 @@ type alias DataProduct =
     , owner : String
     , urls : DataProductUrls
     , schema : KsqlSchema
-    , quality : String
-    , sla : String
+    , quality : ProductQuality
+    , sla : ProductSla
     }
 
 

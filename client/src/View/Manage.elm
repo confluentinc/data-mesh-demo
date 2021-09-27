@@ -4,7 +4,7 @@ import Browser exposing (..)
 import Dialog.Common as Dialog
 import GenericDict as Dict
 import Html exposing (..)
-import Html.Attributes exposing (autofocus, class, disabled, placeholder, type_, value)
+import Html.Attributes exposing (autofocus, checked, class, disabled, name, placeholder, type_, value)
 import Html.Events exposing (onClick, onInput)
 import RemoteData exposing (RemoteData(..), WebData)
 import Route exposing (routeToString)
@@ -12,7 +12,7 @@ import Table exposing (defaultCustomizations)
 import Types exposing (..)
 import UIKit
 import Url exposing (..)
-import View.Common exposing (errorView, webDataView)
+import View.Common exposing (..)
 
 
 view : Model -> Html Msg
@@ -89,7 +89,7 @@ tableConfig =
                 (\stream ->
                     case stream of
                         StreamDataProduct dataProduct ->
-                            dataProduct.quality
+                            showProductQuality dataProduct.quality
 
                         StreamTopic topic ->
                             "-"
@@ -98,7 +98,7 @@ tableConfig =
                 (\stream ->
                     case stream of
                         StreamDataProduct dataProduct ->
-                            dataProduct.sla
+                            showProductSla dataProduct.sla
 
                         StreamTopic topic ->
                             "-"
@@ -178,6 +178,21 @@ publishDialog result model =
                         text ""
                 , form [ UIKit.formHorizontal ]
                     [ div []
+                        [ label [ UIKit.formLabel ] [ text "Domain" ]
+                        , div [ UIKit.formControls ]
+                            [ input
+                                [ type_ "text"
+                                , UIKit.input
+                                , placeholder "Data Product Domain"
+                                , autofocus True
+                                , value model.domain
+                                , disabledAttribute
+                                , onInput (PublishFormMsg << PublishFormSetDomain)
+                                ]
+                                []
+                            ]
+                        ]
+                    , div []
                         [ label [ UIKit.formLabel ] [ text "Owner" ]
                         , div [ UIKit.formControls ]
                             [ input
@@ -206,6 +221,20 @@ publishDialog result model =
                                 []
                             ]
                         ]
+                    , radioButtonGroup
+                        "Quality"
+                        (PublishFormMsg << PublishFormSetQuality)
+                        showProductQuality
+                        disabledAttribute
+                        (Just model.quality)
+                        allProductQualities
+                    , radioButtonGroup
+                        "SLA"
+                        (PublishFormMsg << PublishFormSetSla)
+                        showProductSla
+                        disabledAttribute
+                        (Just model.sla)
+                        allProductSlas
                     ]
                 ]
             )
@@ -230,3 +259,40 @@ publishDialog result model =
                 ]
             )
     }
+
+
+radioButtonGroup : String -> (a -> msg) -> (a -> String) -> Attribute msg -> Maybe a -> List a -> Html msg
+radioButtonGroup radioName handler toStr disabledAttribute activeRadioValue radioValues =
+    div []
+        [ div [ UIKit.formLabel ] [ text radioName ]
+        , div [ UIKit.formControls, UIKit.formControlsText ]
+            (radioValues
+                |> List.map
+                    (radioButtonInput
+                        radioName
+                        handler
+                        toStr
+                        disabledAttribute
+                        activeRadioValue
+                    )
+                |> List.intersperse (text nbsp)
+            )
+        ]
+
+
+radioButtonInput : String -> (a -> msg) -> (a -> String) -> Attribute msg -> Maybe a -> a -> Html msg
+radioButtonInput radioName handler toStr disabledAttribute activeRadioValue radioValue =
+    label []
+        [ input
+            [ type_ "radio"
+            , name radioName
+            , UIKit.radio
+            , value (toStr radioValue)
+            , disabledAttribute
+            , onInput (always (handler radioValue))
+            , checked (activeRadioValue == Just radioValue)
+            ]
+            []
+        , text nbsp
+        , text (toStr radioValue)
+        ]

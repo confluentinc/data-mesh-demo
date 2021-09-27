@@ -27,14 +27,14 @@ suite =
                             , name = "users"
                             , owner = "@edge-team"
                             , qualifiedName = QualifiedName "lsrc-jj2vp:.:users-value:1"
-                            , quality = "authoritative"
+                            , quality = Authoritative
                             , schema =
                                 { id = 100002
                                 , schema = "{\"type\":\"record\",\"name\":\"users\",\"namespace\":\"ksql\",\"fields\":[{\"name\":\"registertime\",\"type\":\"long\"},{\"name\":\"userid\",\"type\":\"string\"},{\"name\":\"regionid\",\"type\":\"string\"},{\"name\":\"gender\",\"type\":\"string\"}],\"connect.name\":\"ksql.users\"}"
                                 , subject = "users-value"
                                 , version = 1
                                 }
-                            , sla = "14d"
+                            , sla = OtherSla "14d"
                             , urls =
                                 { exportUrl =
                                     { fragment = Nothing
@@ -76,14 +76,14 @@ suite =
                             , name = "pageviews"
                             , owner = "@edge-team"
                             , qualifiedName = QualifiedName "lsrc-jj2vp:.:pageviews-value:1"
-                            , quality = "authoritative"
+                            , quality = Authoritative
                             , schema =
                                 { id = 100001
                                 , schema = "{\"type\":\"record\",\"name\":\"pageviews\",\"namespace\":\"ksql\",\"fields\":[{\"name\":\"viewtime\",\"type\":\"long\"},{\"name\":\"userid\",\"type\":\"string\"},{\"name\":\"pageid\",\"type\":\"string\"}],\"connect.name\":\"ksql.pageviews\"}"
                                 , subject = "pageviews-value"
                                 , version = 1
                                 }
-                            , sla = "14d"
+                            , sla = Tier1
                             , urls =
                                 { exportUrl =
                                     { fragment = Nothing
@@ -125,14 +125,14 @@ suite =
                             , name = "pageviews_count_by_user"
                             , owner = "@edge-team"
                             , qualifiedName = QualifiedName "lsrc-jj2vp:.:pageviews_count_by_user-value:2"
-                            , quality = "n/a"
+                            , quality = OtherQuality "n/a"
                             , schema =
                                 { id = 100006
                                 , schema = "{\"type\":\"record\",\"name\":\"KsqlDataSourceSchema\",\"namespace\":\"io.confluent.ksql.avro_schemas\",\"fields\":[{\"name\":\"NUMUSERS\",\"type\":[\"null\",\"long\"],\"default\":null}]}"
                                 , subject = "pageviews_count_by_user-value"
                                 , version = 2
                                 }
-                            , sla = "n/a"
+                            , sla = OtherSla "n/a"
                             , urls =
                                 { exportUrl =
                                     { fragment = Nothing
@@ -181,9 +181,9 @@ suite =
                             , name = "pageviews"
                             , owner = "@edge-team"
                             , qualifiedName = QualifiedName "lsrc-jj2vp:.:pageviews-value:1"
-                            , quality = "n/a"
+                            , quality = OtherQuality "n/a"
                             , schema = { id = 100001, schema = "{\"type\":\"record\",\"name\":\"pageviews\",\"namespace\":\"ksql\",\"fields\":[{\"name\":\"viewtime\",\"type\":\"long\"},{\"name\":\"userid\",\"type\":\"string\"},{\"name\":\"pageid\",\"type\":\"string\"}],\"connect.name\":\"ksql.pageviews\"}", subject = "pageviews-value", version = 1 }
-                            , sla = "n/a"
+                            , sla = OtherSla "n/a"
                             , urls =
                                 { exportUrl =
                                     { fragment = Nothing
@@ -304,7 +304,7 @@ dataProductsResponse1 =
     "description": "website pageviews",
     "owner": "@edge-team",
     "domain": "edge",
-    "sla": "14d",
+    "sla": "tier1",
     "quality": "authoritative",
     "urls": {
       "schemaUrl": "https://confluent.cloud/environments/env-qyjxp/schema-registry/schemas/pageviews-value",

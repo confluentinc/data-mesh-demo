@@ -13,7 +13,7 @@ import Table exposing (defaultCustomizations)
 import Types exposing (..)
 import UIKit
 import Url exposing (Url)
-import View.Common exposing (webDataView)
+import View.Common exposing (..)
 
 
 view : Maybe QualifiedName -> Model -> Html Msg
@@ -123,8 +123,8 @@ streamDetailView mStream =
                     , disabledFormInput "Domain" dataProduct.domain
                     , disabledFormInput "Description" dataProduct.description
                     , disabledFormInput "Owner" dataProduct.owner
-                    , disabledFormInput "Quality" dataProduct.quality
-                    , disabledFormInput "SLA" dataProduct.sla
+                    , disabledFormInput "Quality" (showProductQuality dataProduct.quality)
+                    , disabledFormInput "SLA" (showProductSla dataProduct.sla)
                     , div []
                         [ label [ UIKit.formLabel ] [ text "Schema" ]
                         , div [ UIKit.formControls ]

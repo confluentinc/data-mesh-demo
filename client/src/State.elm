@@ -131,8 +131,11 @@ update msg model =
                         Just t ->
                             Just
                                 { topic = t
+                                , domain = ""
                                 , owner = ""
                                 , description = ""
+                                , quality = Raw
+                                , sla = Tier3
                                 }
 
                         Nothing ->
@@ -237,5 +240,14 @@ updatePublishForm msg model =
         PublishFormSetOwner newOwner ->
             ( { model | owner = newOwner }, Cmd.none )
 
+        PublishFormSetDomain newDomain ->
+            ( { model | domain = newDomain }, Cmd.none )
+
         PublishFormSetDescription newDescription ->
             ( { model | description = newDescription }, Cmd.none )
+
+        PublishFormSetQuality newQuality ->
+            ( { model | quality = newQuality }, Cmd.none )
+
+        PublishFormSetSla newSla ->
+            ( { model | sla = newSla }, Cmd.none )

@@ -54,6 +54,11 @@ input =
     class "uk-input"
 
 
+radio : Attribute msg
+radio =
+    class "uk-radio"
+
+
 textarea : Attribute msg
 textarea =
     class "uk-textarea"
@@ -64,14 +69,14 @@ formControls =
     class "uk-form-controls"
 
 
-formInput : Attribute msg
-formInput =
-    class "uk-input"
-
-
 formControlsText : Attribute msg
 formControlsText =
     class "uk-form-controls-text"
+
+
+formInput : Attribute msg
+formInput =
+    class "uk-input"
 
 
 button : Attribute msg

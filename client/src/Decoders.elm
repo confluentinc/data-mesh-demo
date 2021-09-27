@@ -50,8 +50,48 @@ decodeDataProduct =
         |> required "owner" string
         |> required "urls" decodeDataProductUrls
         |> required "schema" decodeKsqlSchema
-        |> required "quality" string
-        |> required "sla" string
+        |> required "quality" decodeProductQuality
+        |> required "sla" decodeProductSla
+
+
+decodeProductQuality : Decoder ProductQuality
+decodeProductQuality =
+    string
+        |> Decode.andThen
+            (\s ->
+                case s of
+                    "authoritative" ->
+                        succeed Authoritative
+
+                    "curated" ->
+                        succeed Curated
+
+                    "raw" ->
+                        succeed Raw
+
+                    _ ->
+                        succeed (OtherQuality s)
+            )
+
+
+decodeProductSla : Decoder ProductSla
+decodeProductSla =
+    string
+        |> Decode.andThen
+            (\s ->
+                case s of
+                    "tier-1" ->
+                        succeed Tier1
+
+                    "tier-2" ->
+                        succeed Tier2
+
+                    "tier-3" ->
+                        succeed Tier3
+
+                    _ ->
+                        succeed (OtherSla s)
+            )
 
 
 qualifiedName : Decoder QualifiedName
