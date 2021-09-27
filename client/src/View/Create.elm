@@ -133,13 +133,3 @@ publishView =
             ]
             [ text "Publish as data product" ]
         ]
-
-
-enrichQuery : String
-enrichQuery =
-    """CREATE TABLE PAGEVIEWS_ENRICHED AS
-SELECT U.USERID, U.REGISTERTIME, V.VIEWTIME, V.PAGEID
-FROM USERS U
-INNER JOIN PAGEVIEWS V
-ON U.USERID = V.USERID
-EMIT CHANGES;"""

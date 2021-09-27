@@ -13,7 +13,6 @@ import Types exposing (..)
 import UIKit
 import Url exposing (..)
 import View.Common exposing (errorView, webDataView)
-import View.Lorem as Lorem
 
 
 view : Model -> Html Msg

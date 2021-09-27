@@ -14,7 +14,6 @@ import Types exposing (..)
 import UIKit
 import Url exposing (Url)
 import View.Common exposing (webDataView)
-import View.Lorem as Lorem
 
 
 view : Maybe QualifiedName -> Model -> Html Msg
