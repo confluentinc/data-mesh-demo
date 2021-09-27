@@ -67,7 +67,7 @@ useCasesView activeUseCaseKey useCases =
                                  else
                                     [ onClick (ChangeView (Create (Just useCase.name))) ]
                                 )
-                                [ td []
+                                [ td [ UIKit.button, UIKit.buttonLink ]
                                     [ text (String.fromInt (index + 1) ++ ": " ++ useCase.description) ]
                                 ]
                         )

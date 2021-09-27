@@ -99,6 +99,11 @@ buttonDanger =
     class "uk-button-danger"
 
 
+buttonLink : Attribute msg
+buttonLink =
+    class "uk-button-link"
+
+
 margin : Attribute msg
 margin =
     class "uk-margin"
