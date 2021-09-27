@@ -139,6 +139,7 @@ type alias UseCase =
     , name : String
     , inputs : String
     , ksqlDbCommand : String
+    , ksqlDbLaunchUrl : Url
     , outputTopic : String
     }
 

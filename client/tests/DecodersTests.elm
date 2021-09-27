@@ -175,13 +175,99 @@ suite =
                 \_ ->
                     decodesTo decodeStream
                         publishDataProductResponse1
-                        (StreamDataProduct { description = "Pageviews", domain = "n/a", name = "pageviews", owner = "@edge-team", qualifiedName = QualifiedName "lsrc-jj2vp:.:pageviews-value:1", quality = "n/a", schema = { id = 100001, schema = "{\"type\":\"record\",\"name\":\"pageviews\",\"namespace\":\"ksql\",\"fields\":[{\"name\":\"viewtime\",\"type\":\"long\"},{\"name\":\"userid\",\"type\":\"string\"},{\"name\":\"pageid\",\"type\":\"string\"}],\"connect.name\":\"ksql.pageviews\"}", subject = "pageviews-value", version = 1 }, sla = "n/a", urls = { exportUrl = { fragment = Nothing, host = "confluent.cloud", path = "/environments/env-qyjxp/clusters/lkc-9mozm/connectors/browse", port_ = Nothing, protocol = Https, query = Nothing }, lineageUrl = { fragment = Nothing, host = "confluent.cloud", path = "/environments/env-qyjxp/clusters/lkc-9mozm/stream-lineage/stream/topic-pageviews/n/topic-pageviews/overview", port_ = Nothing, protocol = Https, query = Nothing }, portUrl = { fragment = Nothing, host = "confluent.cloud", path = "/environments/env-qyjxp/clusters/lkc-9mozm/topics/pageviews", port_ = Nothing, protocol = Https, query = Nothing }, schemaUrl = { fragment = Nothing, host = "confluent.cloud", path = "/environments/env-qyjxp/schema-registry/schemas/pageviews-value", port_ = Nothing, protocol = Https, query = Nothing } } })
+                        (StreamDataProduct
+                            { description = "Pageviews"
+                            , domain = "n/a"
+                            , name = "pageviews"
+                            , owner = "@edge-team"
+                            , qualifiedName = QualifiedName "lsrc-jj2vp:.:pageviews-value:1"
+                            , quality = "n/a"
+                            , schema = { id = 100001, schema = "{\"type\":\"record\",\"name\":\"pageviews\",\"namespace\":\"ksql\",\"fields\":[{\"name\":\"viewtime\",\"type\":\"long\"},{\"name\":\"userid\",\"type\":\"string\"},{\"name\":\"pageid\",\"type\":\"string\"}],\"connect.name\":\"ksql.pageviews\"}", subject = "pageviews-value", version = 1 }
+                            , sla = "n/a"
+                            , urls =
+                                { exportUrl =
+                                    { fragment = Nothing
+                                    , host = "confluent.cloud"
+                                    , path = "/environments/env-qyjxp/clusters/lkc-9mozm/connectors/browse"
+                                    , port_ = Nothing
+                                    , protocol = Https
+                                    , query = Nothing
+                                    }
+                                , lineageUrl =
+                                    { fragment = Nothing
+                                    , host = "confluent.cloud"
+                                    , path = "/environments/env-qyjxp/clusters/lkc-9mozm/stream-lineage/stream/topic-pageviews/n/topic-pageviews/overview"
+                                    , port_ = Nothing
+                                    , protocol = Https
+                                    , query = Nothing
+                                    }
+                                , portUrl =
+                                    { fragment = Nothing
+                                    , host = "confluent.cloud"
+                                    , path = "/environments/env-qyjxp/clusters/lkc-9mozm/topics/pageviews"
+                                    , port_ = Nothing
+                                    , protocol = Https
+                                    , query = Nothing
+                                    }
+                                , schemaUrl =
+                                    { fragment = Nothing
+                                    , host = "confluent.cloud"
+                                    , path = "/environments/env-qyjxp/schema-registry/schemas/pageviews-value"
+                                    , port_ = Nothing
+                                    , protocol = Https
+                                    , query = Nothing
+                                    }
+                                }
+                            }
+                        )
             ]
         , test "use-cases response - correct result" <|
             \_ ->
                 decodesTo decodeUseCases
                     useCasesResponse1
-                    [ { description = "Enrich an event stream", inputs = "pageviews,users", ksqlDbCommand = "CREATE STREAM PAGEVIEWS_ENRICHED\n    with (kafka_topic='pageviews_enriched')\n    AS SELECT U.ID AS USERID, U.REGIONID AS REGION,\n        U.GENDER AS GENDER, V.PAGEID AS PAGE\n    FROM PAGEVIEWS V INNER JOIN USERS U \n    ON V.USERID = U.ID;", name = "pageviews_enriched", outputTopic = "pageviews_enriched" }, { description = "Filter an event stream", inputs = "pageviews", ksqlDbCommand = "CREATE STREAM PAGEVIEWS_FILTERED_USER_1\n    with (kafka_topic='pageviews_filtered_user_1')\n    AS SELECT * FROM PAGEVIEWS WHERE USERID = 'User_1';", name = "pageviews_filtered_user_1", outputTopic = "pageviews_filtered_user_1" }, { description = "Aggregate an event stream", inputs = "pageviews", ksqlDbCommand = "CREATE TABLE PAGEVIEWS_COUNT_BY_USER\n    with (kafka_topic='pageviews_count_by_user')\n    AS SELECT USERID, COUNT(*) AS numusers\n    FROM PAGEVIEWS WINDOW TUMBLING (size 30 second)\n    GROUP BY USERID HAVING COUNT(*) > 1;", name = "pageviews_count_by_user", outputTopic = "pageviews_count_by_user" } ]
+                    [ { description = "Enrich an event stream"
+                      , inputs = "pageviews,users"
+                      , ksqlDbCommand = "CREATE STREAM PAGEVIEWS_ENRICHED\n    with (kafka_topic='pageviews_enriched')\n    AS SELECT U.ID AS USERID, U.REGIONID AS REGION,\n        U.GENDER AS GENDER, V.PAGEID AS PAGE\n    FROM PAGEVIEWS V INNER JOIN USERS U \n    ON V.USERID = U.ID;"
+                      , ksqlDbLaunchUrl =
+                            { fragment = Nothing
+                            , host = "confluent.cloud"
+                            , path = "/environments/env-qyjxp/clusters/lkc-9mozm/ksql/lksqlc-rng0p/editor"
+                            , port_ = Nothing
+                            , protocol = Https
+                            , query = Just "command=CREATE%20STREAM%20PAGEVIEWS_ENRICHED%0A%20%20%20%20with%20%28kafka_topic%3D%27pageviews_enriched%27%29%0A%20%20%20%20AS%20SELECT%20U.ID%20AS%20USERID%2C%20U.REGIONID%20AS%20REGION%2C%0A%20%20%20%20%20%20%20%20U.GENDER%20AS%20GENDER%2C%20V.PAGEID%20AS%20PAGE%0A%20%20%20%20FROM%20PAGEVIEWS%20V%20INNER%20JOIN%20USERS%20U%20%0A%20%20%20%20ON%20V.USERID%20%3D%20U.ID%3B&ksqlClusterId=lksqlc-rng0p&properties=%7B%22auto.offset.reset%22%3A%22latest%22%7D"
+                            }
+                      , name = "pageviews_enriched"
+                      , outputTopic = "pageviews_enriched"
+                      }
+                    , { description = "Filter an event stream"
+                      , inputs = "pageviews"
+                      , ksqlDbCommand = "CREATE STREAM PAGEVIEWS_FILTERED_USER_1\n    with (kafka_topic='pageviews_filtered_user_1')\n    AS SELECT * FROM PAGEVIEWS WHERE USERID = 'User_1';"
+                      , ksqlDbLaunchUrl =
+                            { fragment = Nothing
+                            , host = "confluent.cloud"
+                            , path = "/environments/env-qyjxp/clusters/lkc-9mozm/ksql/lksqlc-rng0p/editor"
+                            , port_ = Nothing
+                            , protocol = Https
+                            , query = Just "command=CREATE%20STREAM%20PAGEVIEWS_FILTERED_USER_1%0A%20%20%20%20with%20%28kafka_topic%3D%27pageviews_filtered_user_1%27%29%0A%20%20%20%20AS%20SELECT%20%2A%20FROM%20PAGEVIEWS%20WHERE%20USERID%20%3D%20%27User_1%27%3B&ksqlClusterId=lksqlc-rng0p&properties=%7B%22auto.offset.reset%22%3A%22latest%22%7D"
+                            }
+                      , name = "pageviews_filtered_user_1"
+                      , outputTopic = "pageviews_filtered_user_1"
+                      }
+                    , { description = "Aggregate an event stream"
+                      , inputs = "pageviews"
+                      , ksqlDbCommand = "CREATE TABLE PAGEVIEWS_COUNT_BY_USER\n    with (kafka_topic='pageviews_count_by_user')\n    AS SELECT USERID, COUNT(*) AS numusers\n    FROM PAGEVIEWS WINDOW TUMBLING (size 30 second)\n    GROUP BY USERID HAVING COUNT(*) > 1;"
+                      , ksqlDbLaunchUrl =
+                            { fragment = Nothing
+                            , host = "confluent.cloud"
+                            , path = "/environments/env-qyjxp/clusters/lkc-9mozm/ksql/lksqlc-rng0p/editor"
+                            , port_ = Nothing
+                            , protocol = Https
+                            , query = Just "command=CREATE%20TABLE%20PAGEVIEWS_COUNT_BY_USER%0A%20%20%20%20with%20%28kafka_topic%3D%27pageviews_count_by_user%27%29%0A%20%20%20%20AS%20SELECT%20USERID%2C%20COUNT%28%2A%29%20AS%20numusers%0A%20%20%20%20FROM%20PAGEVIEWS%20WINDOW%20TUMBLING%20%28size%2030%20second%29%0A%20%20%20%20GROUP%20BY%20USERID%20HAVING%20COUNT%28%2A%29%20%3E%201%3B&ksqlClusterId=lksqlc-rng0p&properties=%7B%22auto.offset.reset%22%3A%22latest%22%7D"
+                            }
+                      , name = "pageviews_count_by_user"
+                      , outputTopic = "pageviews_count_by_user"
+                      }
+                    ]
         ]
 
 

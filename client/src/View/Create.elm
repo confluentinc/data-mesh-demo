@@ -111,12 +111,14 @@ useCasesDetail mUseCase =
                                   )
                                 ]
                             )
-                        , a
-                            [ UIKit.button
-                            , UIKit.buttonPrimary
-                            ]
-                            [ text "Run this ksqlDB app" ]
                         ]
+                    , a
+                        [ UIKit.button
+                        , UIKit.buttonPrimary
+                        , target "_blank"
+                        , href (Url.toString useCase.ksqlDbLaunchUrl)
+                        ]
+                        [ text "Run this ksqlDB app" ]
                     ]
         ]
 

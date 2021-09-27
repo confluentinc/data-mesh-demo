@@ -89,4 +89,5 @@ decodeUseCase =
         |> required "name" string
         |> required "inputs" string
         |> required "ksqlDbCommand" string
+        |> required "ksqlDbLaunchUrl" url
         |> required "outputTopic" string
