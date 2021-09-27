@@ -70,8 +70,7 @@ allProductSlas =
 type alias Flags =
     { hostedMode : Bool
     , images :
-        { logo :
-            String
+        { logo : String
         }
     }
 
