@@ -21,7 +21,10 @@ view model =
     div [ class "manage-pane" ]
         [ p [] [ text "This page allows you to manage the properties of your Data Products." ]
         , p [] [ text "Data Products can be published provided they meet the minimum established criteria. In this case, they must have both a Description and an owner." ]
-        , h2 [] [ text "Kafka Topics" ]
+        , h2 []
+            [ text "Kafka Topics"
+            , p [] [ small [] [ text "To publish as data products" ] ]
+            ]
         , webDataView
             (Dict.values
                 >> Table.view
