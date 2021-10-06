@@ -29,7 +29,7 @@ view activeStreamKey model =
     in
     div [ class "discover-pane" ]
         [ div [ class "discover-main" ]
-            [ h2 [] [ text "Data Products" ]
+            [ h2 [] [ text "Data Products in the Mesh" ]
             , webDataView
                 (Table.view
                     (tableConfig activeStreamKey)
@@ -41,7 +41,7 @@ view activeStreamKey model =
                 )
             ]
         , div [ class "discover-detail" ]
-            [ h2 [] [ text "Data Products Information" ]
+            [ h2 [] [ text "Data Products Detail" ]
             , streamDetailView activeStream
             ]
         , div [ class "discover-copy" ]
