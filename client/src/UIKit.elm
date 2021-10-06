@@ -84,6 +84,11 @@ button =
     class "uk-button"
 
 
+buttonSmall : Attribute msg
+buttonSmall =
+    class "uk-button-small"
+
+
 buttonGroup : Attribute msg
 buttonGroup =
     class "uk-button-group"
@@ -142,6 +147,11 @@ modalTitle =
 modalClose : Attribute msg
 modalClose =
     class "uk-modal-close"
+
+
+width_1_1 : Attribute msg
+width_1_1 =
+    class "uk-width-1-1"
 
 
 width_1_2 : Attribute msg

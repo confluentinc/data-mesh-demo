@@ -132,6 +132,7 @@ publishButton stream =
         StreamDataProduct dataProduct ->
             button
                 [ UIKit.button
+                , UIKit.width_1_1
                 , UIKit.buttonDanger
                 , onClick (DeleteDataProduct dataProduct.qualifiedName)
                 ]
@@ -140,6 +141,7 @@ publishButton stream =
         StreamTopic topic ->
             button
                 [ UIKit.button
+                , UIKit.width_1_1
                 , UIKit.buttonPrimary
                 , onClick (StartPublishDialog topic.qualifiedName)
                 ]

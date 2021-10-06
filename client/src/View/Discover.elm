@@ -14,6 +14,7 @@ import Types exposing (..)
 import UIKit
 import Url exposing (Url)
 import View.Common exposing (..)
+import View.Icons exposing (Icon(..), icon)
 
 
 view : Maybe QualifiedName -> Model -> Html Msg
@@ -51,7 +52,9 @@ view activeStreamKey model =
                     , href "https://confluent.cloud/search"
                     , target "_blank"
                     ]
-                    [ text "Advanced Search" ]
+                    [ text "Advanced Search"
+                    , icon ExternalLink
+                    ]
                 ]
             , p [] [ text "Discover the data products that are relevant to your domain." ]
             , p [] [ text "Data Product information contains all the relevant info about this product. You can view schemas, ownership, description, and lineage information." ]
@@ -149,11 +152,11 @@ streamDetailView mStream =
                             ]
                         ]
                     ]
-                , div [ UIKit.margin, UIKit.buttonGroup, class "uk-width-1-1" ]
-                    [ linkButton "Topic" dataProduct.urls.portUrl
-                    , linkButton "Schema" dataProduct.urls.schemaUrl
-                    , linkButton "Lineage" dataProduct.urls.lineageUrl
-                    , linkButton "Self-Serve" dataProduct.urls.exportUrl
+                , div [ UIKit.margin, UIKit.buttonGroup, UIKit.width_1_1 ]
+                    [ linkButton "Topic Detail" dataProduct.urls.portUrl
+                    , linkButton "Schema Detail" dataProduct.urls.schemaUrl
+                    , linkButton "Data Lineage" dataProduct.urls.lineageUrl
+                    , linkButton "Export" dataProduct.urls.exportUrl
                     ]
                 ]
 
@@ -170,11 +173,14 @@ linkButton description url =
     a
         [ UIKit.button
         , UIKit.buttonPrimary
+        , UIKit.buttonSmall
+        , UIKit.width_1_4
         , href (Url.toString url)
         , target "_blank"
-        , class "uk-width-1-4"
         ]
-        [ text description ]
+        [ text description
+        , icon ExternalLink
+        ]
 
 
 disabledFormInput : String -> String -> Html msg
