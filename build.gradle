@@ -55,9 +55,12 @@ processResources {
 	from("${project.buildDir}/generated/static") {into('static') }
 }
 
-jib.to {
-	image = 'cnfldemos/data-mesh-demo'
-	tags = ["${version}"]
+jib {
+  container.mainClass = "io.confluent.demo.datamesh.DataMeshDemo"
+  to {
+	  image = 'cnfldemos/data-mesh-demo'
+	  tags = ["${version}"]
+  }
 }
 
 test {
