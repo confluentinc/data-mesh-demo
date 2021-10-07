@@ -10,6 +10,7 @@ import Types exposing (..)
 import UIKit
 import Url exposing (..)
 import View.Common exposing (webDataView)
+import View.Icons exposing (Icon(..), icon)
 
 
 view : Maybe String -> Model -> Html Msg
@@ -118,7 +119,9 @@ useCasesDetail mUseCase =
                         , target "_blank"
                         , href (Url.toString useCase.ksqlDbLaunchUrl)
                         ]
-                        [ text "Run this ksqlDB app" ]
+                        [ text "Run this ksqlDB app"
+                        , icon ExternalLink
+                        ]
                     ]
         ]
 
