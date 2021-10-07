@@ -15,6 +15,7 @@ import Url as Url exposing (Url)
 type alias Model =
     { navKey : Nav.Key
     , flags : Flags
+    , actuatorInfo : WebData ActuatorInfo
     , activeView : View
     , activeScreenshot : Maybe ScreenshotTarget
     , stompSession : Stomp.Session Stomp.Msg
@@ -76,8 +77,7 @@ allProductSlas =
 
 
 type alias Flags =
-    { hostedMode : Bool
-    , staticImages : StaticImages
+    { staticImages : StaticImages
     }
 
 
@@ -111,6 +111,7 @@ type Msg
       --
     | GotStreams (WebData (Dict QualifiedName Stream))
     | GotUseCases (WebData (Dict String UseCase))
+    | GotActuatorInfo (WebData ActuatorInfo)
       --
     | StartPublishDialog QualifiedName
     | PublishFormMsg PublishFormMsg
@@ -195,6 +196,17 @@ type alias UseCase =
     , ksqlDbLaunchUrl : Url
     , outputTopic : String
     }
+
+
+type alias ActuatorInfo =
+    { hostedMode : HostedMode
+    , commitId : String
+    }
+
+
+type HostedMode
+    = Hosted
+    | Local
 
 
 streamQualifiedName : Stream -> QualifiedName

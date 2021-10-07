@@ -19,7 +19,6 @@ socket.onopen = function() {
   var app = Elm.Main.init({
     node: document.getElementById("app"),
     flags: {
-      hostedMode: true,
       staticImages: {
         logoPath: logoPath,
         exportScreenshotPath: exportScreenshotPath,

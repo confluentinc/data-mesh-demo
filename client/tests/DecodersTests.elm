@@ -1,6 +1,6 @@
 module DecodersTests exposing (suite)
 
-import Decoders exposing (decodeStream, decodeStreams, decodeUseCases)
+import Decoders exposing (decodeActuatorInfo, decodeStream, decodeStreams, decodeUseCases)
 import Expect exposing (Expectation, fail, pass)
 import Fuzz exposing (Fuzzer, int, list, string)
 import Json.Decode as Decode exposing (Decoder, decodeString, errorToString)
@@ -221,53 +221,71 @@ suite =
                             }
                         )
             ]
-        , test "use-cases response - correct result" <|
-            \_ ->
-                decodesTo decodeUseCases
-                    useCasesResponse1
-                    [ { description = "Enrich an event stream"
-                      , inputs = "pageviews,users"
-                      , ksqlDbCommand = "CREATE STREAM PAGEVIEWS_ENRICHED\n    with (kafka_topic='pageviews_enriched')\n    AS SELECT U.ID AS USERID, U.REGIONID AS REGION,\n        U.GENDER AS GENDER, V.PAGEID AS PAGE\n    FROM PAGEVIEWS V INNER JOIN USERS U \n    ON V.USERID = U.ID;"
-                      , ksqlDbLaunchUrl =
-                            { fragment = Nothing
-                            , host = "confluent.cloud"
-                            , path = "/environments/env-qyjxp/clusters/lkc-9mozm/ksql/lksqlc-rng0p/editor"
-                            , port_ = Nothing
-                            , protocol = Https
-                            , query = Just "command=CREATE%20STREAM%20PAGEVIEWS_ENRICHED%0A%20%20%20%20with%20%28kafka_topic%3D%27pageviews_enriched%27%29%0A%20%20%20%20AS%20SELECT%20U.ID%20AS%20USERID%2C%20U.REGIONID%20AS%20REGION%2C%0A%20%20%20%20%20%20%20%20U.GENDER%20AS%20GENDER%2C%20V.PAGEID%20AS%20PAGE%0A%20%20%20%20FROM%20PAGEVIEWS%20V%20INNER%20JOIN%20USERS%20U%20%0A%20%20%20%20ON%20V.USERID%20%3D%20U.ID%3B&ksqlClusterId=lksqlc-rng0p&properties=%7B%22auto.offset.reset%22%3A%22latest%22%7D"
-                            }
-                      , name = "pageviews_enriched"
-                      , outputTopic = "pageviews_enriched"
-                      }
-                    , { description = "Filter an event stream"
-                      , inputs = "pageviews"
-                      , ksqlDbCommand = "CREATE STREAM PAGEVIEWS_FILTERED_USER_1\n    with (kafka_topic='pageviews_filtered_user_1')\n    AS SELECT * FROM PAGEVIEWS WHERE USERID = 'User_1';"
-                      , ksqlDbLaunchUrl =
-                            { fragment = Nothing
-                            , host = "confluent.cloud"
-                            , path = "/environments/env-qyjxp/clusters/lkc-9mozm/ksql/lksqlc-rng0p/editor"
-                            , port_ = Nothing
-                            , protocol = Https
-                            , query = Just "command=CREATE%20STREAM%20PAGEVIEWS_FILTERED_USER_1%0A%20%20%20%20with%20%28kafka_topic%3D%27pageviews_filtered_user_1%27%29%0A%20%20%20%20AS%20SELECT%20%2A%20FROM%20PAGEVIEWS%20WHERE%20USERID%20%3D%20%27User_1%27%3B&ksqlClusterId=lksqlc-rng0p&properties=%7B%22auto.offset.reset%22%3A%22latest%22%7D"
-                            }
-                      , name = "pageviews_filtered_user_1"
-                      , outputTopic = "pageviews_filtered_user_1"
-                      }
-                    , { description = "Aggregate an event stream"
-                      , inputs = "pageviews"
-                      , ksqlDbCommand = "CREATE TABLE PAGEVIEWS_COUNT_BY_USER\n    with (kafka_topic='pageviews_count_by_user')\n    AS SELECT USERID, COUNT(*) AS numusers\n    FROM PAGEVIEWS WINDOW TUMBLING (size 30 second)\n    GROUP BY USERID HAVING COUNT(*) > 1;"
-                      , ksqlDbLaunchUrl =
-                            { fragment = Nothing
-                            , host = "confluent.cloud"
-                            , path = "/environments/env-qyjxp/clusters/lkc-9mozm/ksql/lksqlc-rng0p/editor"
-                            , port_ = Nothing
-                            , protocol = Https
-                            , query = Just "command=CREATE%20TABLE%20PAGEVIEWS_COUNT_BY_USER%0A%20%20%20%20with%20%28kafka_topic%3D%27pageviews_count_by_user%27%29%0A%20%20%20%20AS%20SELECT%20USERID%2C%20COUNT%28%2A%29%20AS%20numusers%0A%20%20%20%20FROM%20PAGEVIEWS%20WINDOW%20TUMBLING%20%28size%2030%20second%29%0A%20%20%20%20GROUP%20BY%20USERID%20HAVING%20COUNT%28%2A%29%20%3E%201%3B&ksqlClusterId=lksqlc-rng0p&properties=%7B%22auto.offset.reset%22%3A%22latest%22%7D"
-                            }
-                      , name = "pageviews_count_by_user"
-                      , outputTopic = "pageviews_count_by_user"
-                      }
-                    ]
+        , describe "Decode UseCases"
+            [ test "response - correct result" <|
+                \_ ->
+                    decodesTo decodeUseCases
+                        useCasesResponse1
+                        [ { description = "Enrich an event stream"
+                          , inputs = "pageviews,users"
+                          , ksqlDbCommand = "CREATE STREAM PAGEVIEWS_ENRICHED\n    with (kafka_topic='pageviews_enriched')\n    AS SELECT U.ID AS USERID, U.REGIONID AS REGION,\n        U.GENDER AS GENDER, V.PAGEID AS PAGE\n    FROM PAGEVIEWS V INNER JOIN USERS U \n    ON V.USERID = U.ID;"
+                          , ksqlDbLaunchUrl =
+                                { fragment = Nothing
+                                , host = "confluent.cloud"
+                                , path = "/environments/env-qyjxp/clusters/lkc-9mozm/ksql/lksqlc-rng0p/editor"
+                                , port_ = Nothing
+                                , protocol = Https
+                                , query = Just "command=CREATE%20STREAM%20PAGEVIEWS_ENRICHED%0A%20%20%20%20with%20%28kafka_topic%3D%27pageviews_enriched%27%29%0A%20%20%20%20AS%20SELECT%20U.ID%20AS%20USERID%2C%20U.REGIONID%20AS%20REGION%2C%0A%20%20%20%20%20%20%20%20U.GENDER%20AS%20GENDER%2C%20V.PAGEID%20AS%20PAGE%0A%20%20%20%20FROM%20PAGEVIEWS%20V%20INNER%20JOIN%20USERS%20U%20%0A%20%20%20%20ON%20V.USERID%20%3D%20U.ID%3B&ksqlClusterId=lksqlc-rng0p&properties=%7B%22auto.offset.reset%22%3A%22latest%22%7D"
+                                }
+                          , name = "pageviews_enriched"
+                          , outputTopic = "pageviews_enriched"
+                          }
+                        , { description = "Filter an event stream"
+                          , inputs = "pageviews"
+                          , ksqlDbCommand = "CREATE STREAM PAGEVIEWS_FILTERED_USER_1\n    with (kafka_topic='pageviews_filtered_user_1')\n    AS SELECT * FROM PAGEVIEWS WHERE USERID = 'User_1';"
+                          , ksqlDbLaunchUrl =
+                                { fragment = Nothing
+                                , host = "confluent.cloud"
+                                , path = "/environments/env-qyjxp/clusters/lkc-9mozm/ksql/lksqlc-rng0p/editor"
+                                , port_ = Nothing
+                                , protocol = Https
+                                , query = Just "command=CREATE%20STREAM%20PAGEVIEWS_FILTERED_USER_1%0A%20%20%20%20with%20%28kafka_topic%3D%27pageviews_filtered_user_1%27%29%0A%20%20%20%20AS%20SELECT%20%2A%20FROM%20PAGEVIEWS%20WHERE%20USERID%20%3D%20%27User_1%27%3B&ksqlClusterId=lksqlc-rng0p&properties=%7B%22auto.offset.reset%22%3A%22latest%22%7D"
+                                }
+                          , name = "pageviews_filtered_user_1"
+                          , outputTopic = "pageviews_filtered_user_1"
+                          }
+                        , { description = "Aggregate an event stream"
+                          , inputs = "pageviews"
+                          , ksqlDbCommand = "CREATE TABLE PAGEVIEWS_COUNT_BY_USER\n    with (kafka_topic='pageviews_count_by_user')\n    AS SELECT USERID, COUNT(*) AS numusers\n    FROM PAGEVIEWS WINDOW TUMBLING (size 30 second)\n    GROUP BY USERID HAVING COUNT(*) > 1;"
+                          , ksqlDbLaunchUrl =
+                                { fragment = Nothing
+                                , host = "confluent.cloud"
+                                , path = "/environments/env-qyjxp/clusters/lkc-9mozm/ksql/lksqlc-rng0p/editor"
+                                , port_ = Nothing
+                                , protocol = Https
+                                , query = Just "command=CREATE%20TABLE%20PAGEVIEWS_COUNT_BY_USER%0A%20%20%20%20with%20%28kafka_topic%3D%27pageviews_count_by_user%27%29%0A%20%20%20%20AS%20SELECT%20USERID%2C%20COUNT%28%2A%29%20AS%20numusers%0A%20%20%20%20FROM%20PAGEVIEWS%20WINDOW%20TUMBLING%20%28size%2030%20second%29%0A%20%20%20%20GROUP%20BY%20USERID%20HAVING%20COUNT%28%2A%29%20%3E%201%3B&ksqlClusterId=lksqlc-rng0p&properties=%7B%22auto.offset.reset%22%3A%22latest%22%7D"
+                                }
+                          , name = "pageviews_count_by_user"
+                          , outputTopic = "pageviews_count_by_user"
+                          }
+                        ]
+            ]
+        , describe "Decode ActuatorInfo"
+            [ test "response 1 - correct result" <|
+                \_ ->
+                    decodesTo decodeActuatorInfo
+                        actuatorInfoResponse1
+                        { hostedMode = Hosted
+                        , commitId = "dc680f1"
+                        }
+            , test "response 2 - correct result" <|
+                \_ ->
+                    decodesTo decodeActuatorInfo
+                        actuatorInfoResponse2
+                        { hostedMode = Local
+                        , commitId = "f9ec4ca"
+                        }
+            ]
         ]
 
 
@@ -402,4 +420,36 @@ useCasesResponse1 =
     "ksqlDbLaunchUrl": "https://confluent.cloud/environments/env-qyjxp/clusters/lkc-9mozm/ksql/lksqlc-rng0p/editor?command=CREATE%20TABLE%20PAGEVIEWS_COUNT_BY_USER%0A%20%20%20%20with%20%28kafka_topic%3D%27pageviews_count_by_user%27%29%0A%20%20%20%20AS%20SELECT%20USERID%2C%20COUNT%28%2A%29%20AS%20numusers%0A%20%20%20%20FROM%20PAGEVIEWS%20WINDOW%20TUMBLING%20%28size%2030%20second%29%0A%20%20%20%20GROUP%20BY%20USERID%20HAVING%20COUNT%28%2A%29%20%3E%201%3B&ksqlClusterId=lksqlc-rng0p&properties=%7B%22auto.offset.reset%22%3A%22latest%22%7D"
   }
 ]
+"""
+
+
+actuatorInfoResponse1 : String
+actuatorInfoResponse1 =
+    """
+{
+  "mode": "hosted",
+  "git": {
+    "branch": "debian-0.19.0-1",
+    "commit": {
+      "id": "dc680f1",
+      "time": "2021-07-20T18:15:39Z"
+    }
+  }
+}
+"""
+
+
+actuatorInfoResponse2 : String
+actuatorInfoResponse2 =
+    """
+{
+  "mode": "local",
+  "git": {
+    "branch": "debian-0.19.0-1",
+    "commit": {
+      "id": "f9ec4ca",
+      "time": "2021-07-20T18:15:39Z"
+    }
+  }
+}
 """

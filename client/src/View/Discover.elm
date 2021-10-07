@@ -42,7 +42,9 @@ view activeStreamKey model =
             ]
         , div [ class "discover-detail" ]
             [ h2 [] [ text "Data Products Detail" ]
-            , streamDetailView model.flags activeStream
+            , streamDetailView
+                (RemoteData.toMaybe model.actuatorInfo)
+                activeStream
             ]
         , div [ class "discover-copy" ]
             [ p []
@@ -122,8 +124,8 @@ tableConfig activeStreamKey =
         }
 
 
-streamDetailView : Flags -> Maybe Stream -> Html Msg
-streamDetailView flags mStream =
+streamDetailView : Maybe ActuatorInfo -> Maybe Stream -> Html Msg
+streamDetailView mActuatorInfo mStream =
     case mStream of
         Nothing ->
             i [] [ text "Select a product from the table on the left." ]
@@ -152,14 +154,19 @@ streamDetailView flags mStream =
                             ]
                         ]
                     ]
-                , div [ UIKit.margin, UIKit.buttonGroup, UIKit.width_1_1 ]
-                    (List.map (linkButton flags.hostedMode)
-                        [ ( "Topic Detail", dataProduct.urls.portUrl, TopicScreenshot )
-                        , ( "Schema Detail", dataProduct.urls.schemaUrl, SchemaScreenshot )
-                        , ( "Data Lineage", dataProduct.urls.lineageUrl, LineageScreenshot )
-                        , ( "Export", dataProduct.urls.exportUrl, ExportScreenshot )
-                        ]
-                    )
+                , case mActuatorInfo of
+                    Just actuatorInfo ->
+                        div [ UIKit.margin, UIKit.buttonGroup, UIKit.width_1_1 ]
+                            (List.map (linkButton actuatorInfo.hostedMode)
+                                [ ( "Topic Detail", dataProduct.urls.portUrl, TopicScreenshot )
+                                , ( "Schema Detail", dataProduct.urls.schemaUrl, SchemaScreenshot )
+                                , ( "Data Lineage", dataProduct.urls.lineageUrl, LineageScreenshot )
+                                , ( "Export", dataProduct.urls.exportUrl, ExportScreenshot )
+                                ]
+                            )
+
+                    Nothing ->
+                        span [] []
                 ]
 
         Just (StreamTopic topic) ->
@@ -170,7 +177,7 @@ streamDetailView flags mStream =
                 ]
 
 
-linkButton : Bool -> ( String, Url, ScreenshotTarget ) -> Html Msg
+linkButton : HostedMode -> ( String, Url, ScreenshotTarget ) -> Html Msg
 linkButton hostedMode ( description, url, screenshotTarget ) =
     let
         sharedAttributes =
@@ -182,23 +189,24 @@ linkButton hostedMode ( description, url, screenshotTarget ) =
             , target "_blank"
             ]
     in
-    if hostedMode then
-        button
-            (sharedAttributes
-                ++ [ onClick (ShowScreenshot screenshotTarget) ]
-            )
-            [ text description ]
+    case hostedMode of
+        Hosted ->
+            button
+                (sharedAttributes
+                    ++ [ onClick (ShowScreenshot screenshotTarget) ]
+                )
+                [ text description ]
 
-    else
-        a
-            (sharedAttributes
-                ++ [ href (Url.toString url)
-                   , target "_blank"
-                   ]
-            )
-            [ text description
-            , icon ExternalLink
-            ]
+        Local ->
+            a
+                (sharedAttributes
+                    ++ [ href (Url.toString url)
+                       , target "_blank"
+                       ]
+                )
+                [ text description
+                , icon ExternalLink
+                ]
 
 
 disabledFormInput : String -> String -> Html msg

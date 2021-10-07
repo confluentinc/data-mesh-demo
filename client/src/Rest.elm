@@ -1,11 +1,12 @@
 module Rest exposing
     ( deleteDataProduct
+    , getActuatorInfo
     , getStreams
     , getUseCases
     , publishDataProduct
     )
 
-import Decoders exposing (decodeDataProduct, decodeStreams, decodeUseCases)
+import Decoders exposing (decodeActuatorInfo, decodeDataProduct, decodeStreams, decodeUseCases)
 import Encoders exposing (encodePublishForm)
 import GenericDict as Dict
 import GenericDict.Extra as Dict
@@ -66,6 +67,17 @@ getUseCases =
                     >> GotUseCases
                 )
                 decodeUseCases
+        }
+
+
+getActuatorInfo : Cmd Msg
+getActuatorInfo =
+    get
+        { url = absolute [ "actuator", "info" ] []
+        , expect =
+            expectRemoteData
+                GotActuatorInfo
+                decodeActuatorInfo
         }
 
 

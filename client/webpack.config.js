@@ -29,6 +29,9 @@ module.exports = {
       },
       '/priv': {
         target: 'http://localhost:8080'
+      },
+      '/actuator/info': {
+        target: 'http://localhost:8080'
       }
     }
   },

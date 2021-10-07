@@ -29,6 +29,7 @@ init flags url navKey =
       , stompSession = stompSession
       , auditLogMsgs = Array.empty
       , flags = flags
+      , actuatorInfo = Loading
       , activeView = routeParser url
       , activeScreenshot = Nothing
       , dataProductsTableState = Table.initialSort "name"
@@ -41,6 +42,7 @@ init flags url navKey =
     , Cmd.batch
         [ Rest.getStreams
         , Rest.getUseCases
+        , Rest.getActuatorInfo
         , Cmd.map StompMsg stompCmds
         ]
     )
@@ -127,6 +129,11 @@ update msg model =
 
         GotUseCases newUseCases ->
             ( { model | useCases = newUseCases }
+            , Cmd.none
+            )
+
+        GotActuatorInfo newActuatorInfo ->
+            ( { model | actuatorInfo = newActuatorInfo }
             , Cmd.none
             )
 

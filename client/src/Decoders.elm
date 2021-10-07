@@ -1,5 +1,6 @@
 module Decoders exposing
-    ( decodeDataProduct
+    ( decodeActuatorInfo
+    , decodeDataProduct
     , decodeStream
     , decodeStreams
     , decodeUseCases
@@ -7,7 +8,7 @@ module Decoders exposing
 
 import Json.Decode as Decode exposing (..)
 import Json.Decode.Extra exposing (url, when)
-import Json.Decode.Pipeline exposing (hardcoded, optional, required)
+import Json.Decode.Pipeline exposing (hardcoded, optional, required, requiredAt)
 import RemoteData exposing (RemoteData(..))
 import Types exposing (..)
 import Url as Url exposing (Url)
@@ -131,3 +132,27 @@ decodeUseCase =
         |> required "ksqlDbCommand" string
         |> required "ksqlDbLaunchUrl" url
         |> required "outputTopic" string
+
+
+decodeActuatorInfo : Decoder ActuatorInfo
+decodeActuatorInfo =
+    succeed ActuatorInfo
+        |> required "mode" hostedMode
+        |> requiredAt [ "git", "commit", "id" ] string
+
+
+hostedMode : Decoder HostedMode
+hostedMode =
+    string
+        |> andThen
+            (\s ->
+                case s of
+                    "hosted" ->
+                        succeed Hosted
+
+                    "local" ->
+                        succeed Local
+
+                    _ ->
+                        fail ("Expected a hosted mode value, got: " ++ s)
+            )
