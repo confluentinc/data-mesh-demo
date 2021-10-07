@@ -56,7 +56,7 @@ mainView model =
                 (List.map (tabView model.activeView)
                     [ ( Discover Nothing, "Explore Data Mesh" )
                     , ( Create Nothing, "Derive Data Products" )
-                    , ( Manage, "Manage & Publish" )
+                    , ( Manage, "Manage Data Products" )
                     ]
                 )
             , case model.activeView of
