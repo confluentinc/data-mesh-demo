@@ -156,13 +156,15 @@ streamDetailView mActuatorInfo mStream =
                     ]
                 , case mActuatorInfo of
                     Just actuatorInfo ->
-                        div [ UIKit.margin, UIKit.buttonGroup, UIKit.width_1_1 ]
-                            (List.map (linkButton actuatorInfo.hostedMode)
-                                [ ( "Topic Detail", dataProduct.urls.portUrl, TopicScreenshot )
-                                , ( "Schema Detail", dataProduct.urls.schemaUrl, SchemaScreenshot )
-                                , ( "Data Lineage", dataProduct.urls.lineageUrl, LineageScreenshot )
-                                , ( "Export", dataProduct.urls.exportUrl, ExportScreenshot )
-                                ]
+                        div [ UIKit.margin, UIKit.width_1_1 ]
+                            (List.intersperse (text " ")
+                                (List.map (linkButton actuatorInfo.hostedMode)
+                                    [ ( "Topic Detail", dataProduct.urls.portUrl, TopicScreenshot )
+                                    , ( "Schema Detail", dataProduct.urls.schemaUrl, SchemaScreenshot )
+                                    , ( "Data Lineage", dataProduct.urls.lineageUrl, LineageScreenshot )
+                                    , ( "Export", dataProduct.urls.exportUrl, ExportScreenshot )
+                                    ]
+                                )
                             )
 
                     Nothing ->
@@ -184,7 +186,6 @@ linkButton hostedMode ( description, url, screenshotTarget ) =
             [ UIKit.button
             , UIKit.buttonPrimary
             , UIKit.buttonSmall
-            , UIKit.width_1_4
             , href (Url.toString url)
             , target "_blank"
             ]
