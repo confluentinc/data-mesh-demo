@@ -103,6 +103,25 @@ type View
     | NotFound
 
 
+isSameTab : View -> View -> Bool
+isSameTab a b =
+    case ( a, b ) of
+        ( Discover _, Discover _ ) ->
+            True
+
+        ( Create _, Create _ ) ->
+            True
+
+        ( Manage, Manage ) ->
+            True
+
+        ( NotFound, NotFound ) ->
+            True
+
+        _ ->
+            False
+
+
 type Msg
     = NoOp
     | ChangeUrl UrlRequest

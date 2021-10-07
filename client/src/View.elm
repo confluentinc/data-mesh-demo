@@ -77,8 +77,9 @@ mainView model =
 
 tabView : View -> ( View, String ) -> Html Msg
 tabView activeView ( tab, label ) =
-    li [ classList [ ( "uk-active", activeView == tab ) ] ]
+    li [ classList [ ( "uk-active", isSameTab activeView tab ) ] ]
         [ a [ href (routeToString tab) ] [ text label ] ]
+
 
 
 notFoundView : Model -> Html msg
