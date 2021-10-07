@@ -24,7 +24,7 @@ view model =
     , body =
         [ headerView model.flags.staticImages.logoPath
         , mainView model
-        , footerView model.auditLogMsgs
+        , footerView model.auditLogModel
         , Dialog.view
             (Maybe.map (View.Manage.publishDialog model.publishFormResult) model.publishForm)
         , Dialog.view
@@ -86,15 +86,32 @@ notFoundView model =
     h2 [] [ text "Not Found" ]
 
 
-footerView auditLogMsgs =
-    footer []
-        [ auditLogMsgsView auditLogMsgs ]
+footerView : AuditLogModel -> Html Msg
+footerView auditLogModel =
+    footer
+        ([ class "audit-log" ]
+            ++ (if auditLogModel.minimised then
+                    [ class "audit-log-minimised" ]
+
+                else
+                    []
+               )
+        )
+        [ button
+            [ UIKit.button
+            , UIKit.buttonSecondary
+            , class "audit-log-switch"
+            , onClick ToggleAuditMinimised
+            ]
+            [ text "Audit Log" ]
+        , auditLogMsgsView auditLogModel.messages
+        ]
 
 
 auditLogMsgsView : Array (Result String AuditLogMsg) -> Html msg
-auditLogMsgsView msgs =
+auditLogMsgsView messages =
     ul []
-        (msgs
+        (messages
             |> Array.toList
             |> List.map auditLogMsgView
         )

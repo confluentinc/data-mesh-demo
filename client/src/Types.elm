@@ -19,13 +19,19 @@ type alias Model =
     , activeView : View
     , activeScreenshot : Maybe ScreenshotTarget
     , stompSession : Stomp.Session Stomp.Msg
-    , auditLogMsgs : Array (Result String AuditLogMsg)
+    , auditLogModel : AuditLogModel
     , dataProductsTableState : Table.State
     , streams : WebData (Dict QualifiedName Stream)
     , useCases : WebData (Dict String UseCase)
     , publishForm : Maybe PublishForm
     , publishFormResult : WebData DataProduct
     , deleteResult : WebData QualifiedName
+    }
+
+
+type alias AuditLogModel =
+    { minimised : Bool
+    , messages : Array (Result String AuditLogMsg)
     }
 
 
@@ -101,6 +107,7 @@ type Msg
     = NoOp
     | ChangeUrl UrlRequest
     | ChangeView View
+    | ToggleAuditMinimised
       --
     | StompMsg Stomp.Msg
       --

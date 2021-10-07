@@ -40,18 +40,59 @@ header {
 }
 
 footer {
-  border-top: solid 1px @heading-color;
-  grid-area: footer;
-  overflow-y: scroll;
-  max-height: 300px;
-  padding: 30px;
-  margin-top: 60px;
+  @animation-duration: 600ms;
+
+  position: fixed;
+  bottom: 0;
+
+  width: 100%;
+  max-height: 400px;
+  height: 400px;
+  transition: height @animation-duration ease-in-out;
+
+  button.audit-log-switch {
+    &:after {
+      display: inline-block;
+      content: " ⌃";
+      margin-left: 10px;
+      transition: transform @animation-duration ease-in-out;
+    }
+  }
+
+  ul {
+    border-top: solid 1px @heading-color;
+    overflow-y: scroll;
+    padding: 15px 30px 0 30px;
+    margin: 0;
+    transition: height @animation-duration ease-in-out;
+    height: 350px;
+    background-color: white;
+  }
+
+  button.audit-log-switch, ul {
+    filter: drop-shadow(0 0 4px grey);
+  }
+
+  &.audit-log-minimised {
+    height: 50px;
+    button:after {
+      transform: rotate(180deg);
+    }
+  }
 }
 
 body {
   h1, h2, h3, h4, h5, h6 {
     font-family: 'MainFont';
     text-transform: capitalize;
+  }
+
+  .uk-button-secondary {
+    background-color:  @heading-color;
+
+    &:hover, &:active, &:focus {
+      background-color:  lighten(@heading-color, 10%);
+    }
   }
 
   height: 100vh;

@@ -27,7 +27,10 @@ init flags url navKey =
     in
     ( { navKey = navKey
       , stompSession = stompSession
-      , auditLogMsgs = Array.empty
+      , auditLogModel =
+            { minimised = True
+            , messages = Array.empty
+            }
       , flags = flags
       , actuatorInfo = Loading
       , activeView = routeParser url
@@ -85,6 +88,18 @@ update msg model =
             , Nav.pushUrl model.navKey (Route.routeToString view)
             )
 
+        ToggleAuditMinimised ->
+            ( { model
+                | auditLogModel =
+                    let
+                        oldAuditLogModel =
+                            model.auditLogModel
+                    in
+                    { oldAuditLogModel | minimised = not oldAuditLogModel.minimised }
+              }
+            , Cmd.none
+            )
+
         ShowScreenshot image ->
             ( { model | activeScreenshot = Just image }
             , Cmd.none
@@ -102,17 +117,27 @@ update msg model =
             in
             ( { model
                 | stompSession = subModel
-                , auditLogMsgs =
-                    case output of
-                        Nothing ->
-                            model.auditLogMsgs
+                , auditLogModel =
+                    let
+                        oldAuditLogModel =
+                            model.auditLogModel
 
-                        Just (Stomp.TransportError err) ->
-                            -- Despite having the option, We won't give transport error messages special treatment.
-                            Array.push (Err err) model.auditLogMsgs
+                        oldMessages =
+                            oldAuditLogModel.messages
 
-                        Just (Stomp.GotMessage auditLogMsg) ->
-                            Array.push auditLogMsg model.auditLogMsgs
+                        newMessages =
+                            case output of
+                                Nothing ->
+                                    oldMessages
+
+                                Just (Stomp.TransportError err) ->
+                                    -- Despite having the option, We won't give transport error messages special treatment.
+                                    Array.push (Err err) oldMessages
+
+                                Just (Stomp.GotMessage auditLogMsg) ->
+                                    Array.push auditLogMsg oldMessages
+                    in
+                    { oldAuditLogModel | messages = newMessages }
               }
             , Cmd.map StompMsg subCmd
             )

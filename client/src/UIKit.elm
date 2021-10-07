@@ -99,6 +99,11 @@ buttonPrimary =
     class "uk-button-primary"
 
 
+buttonSecondary : Attribute msg
+buttonSecondary =
+    class "uk-button-secondary"
+
+
 buttonDefault : Attribute msg
 buttonDefault =
     class "uk-button-default"
