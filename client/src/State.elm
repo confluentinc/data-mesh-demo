@@ -30,6 +30,7 @@ init flags url navKey =
       , auditLogMsgs = Array.empty
       , flags = flags
       , activeView = routeParser url
+      , activeScreenshot = Nothing
       , dataProductsTableState = Table.initialSort "name"
       , streams = Loading
       , useCases = Loading
@@ -80,6 +81,16 @@ update msg model =
         ChangeView view ->
             ( { model | activeView = view }
             , Nav.pushUrl model.navKey (Route.routeToString view)
+            )
+
+        ShowScreenshot image ->
+            ( { model | activeScreenshot = Just image }
+            , Cmd.none
+            )
+
+        ClearScreenshot ->
+            ( { model | activeScreenshot = Nothing }
+            , Cmd.none
             )
 
         StompMsg subMsg ->

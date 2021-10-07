@@ -2,6 +2,7 @@ module View exposing (view)
 
 import Array exposing (Array)
 import Browser exposing (..)
+import Dialog.Common as Dialog
 import Dialog.UIKit as Dialog
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -21,11 +22,13 @@ view : Model -> Document Msg
 view model =
     { title = "Data Mesh"
     , body =
-        [ headerView model.flags.images.logo
+        [ headerView model.flags.staticImages.logoPath
         , mainView model
         , footerView model.auditLogMsgs
         , Dialog.view
             (Maybe.map (View.Manage.publishDialog model.publishFormResult) model.publishForm)
+        , Dialog.view
+            (Maybe.map (screenshotDialog model.flags.staticImages) model.activeScreenshot)
         ]
     }
 
@@ -112,3 +115,42 @@ auditLogMsgView auditLogMsg =
                         (List.map text result.commands)
                     )
                 ]
+
+
+screenshotDialog : StaticImages -> ScreenshotTarget -> Dialog.Config Msg
+screenshotDialog staticImages screenshotTarget =
+    let
+        ( title, imagePath ) =
+            case screenshotTarget of
+                ExportScreenshot ->
+                    ( "Export - Preview", staticImages.exportScreenshotPath )
+
+                SchemaScreenshot ->
+                    ( "Schema Detail - Preview", staticImages.schemaScreenshotPath )
+
+                TopicScreenshot ->
+                    ( "Topic Detail - Preview", staticImages.topicScreenshotPath )
+
+                LineageScreenshot ->
+                    ( "Data Lineage - Preview", staticImages.lineageScreenshotPath )
+    in
+    { closeMessage = Just ClearScreenshot
+    , containerClass = Just "screenshot-dialog"
+    , header = Just (h2 [] [ text title ])
+    , body =
+        Just
+            (div []
+                [ img [ src imagePath ]
+                    []
+                ]
+            )
+    , footer =
+        Just
+            (button
+                [ UIKit.button
+                , UIKit.buttonPrimary
+                , onClick ClearScreenshot
+                ]
+                [ text "Close" ]
+            )
+    }

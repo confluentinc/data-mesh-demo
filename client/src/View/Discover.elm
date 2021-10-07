@@ -42,7 +42,7 @@ view activeStreamKey model =
             ]
         , div [ class "discover-detail" ]
             [ h2 [] [ text "Data Products Detail" ]
-            , streamDetailView activeStream
+            , streamDetailView model.flags activeStream
             ]
         , div [ class "discover-copy" ]
             [ p []
@@ -122,8 +122,8 @@ tableConfig activeStreamKey =
         }
 
 
-streamDetailView : Maybe Stream -> Html Msg
-streamDetailView mStream =
+streamDetailView : Flags -> Maybe Stream -> Html Msg
+streamDetailView flags mStream =
     case mStream of
         Nothing ->
             i [] [ text "Select a product from the table on the left." ]
@@ -153,11 +153,13 @@ streamDetailView mStream =
                         ]
                     ]
                 , div [ UIKit.margin, UIKit.buttonGroup, UIKit.width_1_1 ]
-                    [ linkButton "Topic Detail" dataProduct.urls.portUrl
-                    , linkButton "Schema Detail" dataProduct.urls.schemaUrl
-                    , linkButton "Data Lineage" dataProduct.urls.lineageUrl
-                    , linkButton "Export" dataProduct.urls.exportUrl
-                    ]
+                    (List.map (linkButton flags.hostedMode)
+                        [ ( "Topic Detail", dataProduct.urls.portUrl, TopicScreenshot )
+                        , ( "Schema Detail", dataProduct.urls.schemaUrl, SchemaScreenshot )
+                        , ( "Data Lineage", dataProduct.urls.lineageUrl, LineageScreenshot )
+                        , ( "Export", dataProduct.urls.exportUrl, ExportScreenshot )
+                        ]
+                    )
                 ]
 
         Just (StreamTopic topic) ->
@@ -168,19 +170,35 @@ streamDetailView mStream =
                 ]
 
 
-linkButton : String -> Url -> Html msg
-linkButton description url =
-    a
-        [ UIKit.button
-        , UIKit.buttonPrimary
-        , UIKit.buttonSmall
-        , UIKit.width_1_4
-        , href (Url.toString url)
-        , target "_blank"
-        ]
-        [ text description
-        , icon ExternalLink
-        ]
+linkButton : Bool -> ( String, Url, ScreenshotTarget ) -> Html Msg
+linkButton hostedMode ( description, url, screenshotTarget ) =
+    let
+        sharedAttributes =
+            [ UIKit.button
+            , UIKit.buttonPrimary
+            , UIKit.buttonSmall
+            , UIKit.width_1_4
+            , href (Url.toString url)
+            , target "_blank"
+            ]
+    in
+    if hostedMode then
+        button
+            (sharedAttributes
+                ++ [ onClick (ShowScreenshot screenshotTarget) ]
+            )
+            [ text description ]
+
+    else
+        a
+            (sharedAttributes
+                ++ [ href (Url.toString url)
+                   , target "_blank"
+                   ]
+            )
+            [ text description
+            , icon ExternalLink
+            ]
 
 
 disabledFormInput : String -> String -> Html msg

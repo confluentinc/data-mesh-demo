@@ -2,7 +2,12 @@
 
 import './static/main.less';
 import logoPath from './static/images/logo.png';
-import {Elm} from './src/Main.elm';
+import exportScreenshotPath from './static/images/export.png';
+import schemaScreenshotPath from './static/images/schema.png';
+import topicScreenshotPath from './static/images/topic.png';
+import lineageScreenshotPath from './static/images/lineage.png';
+
+import { Elm } from './src/Main.elm';
 import "uikit/dist/css/uikit.min.css";
 import "uikit/dist/js/uikit.min.js";
 import "uikit/dist/js/uikit-icons.js";
@@ -14,9 +19,13 @@ socket.onopen = function() {
   var app = Elm.Main.init({
     node: document.getElementById("app"),
     flags: {
-      hostedMode: false,
-      images: {
-        logo: logoPath
+      hostedMode: true,
+      staticImages: {
+        logoPath: logoPath,
+        exportScreenshotPath: exportScreenshotPath,
+        schemaScreenshotPath: schemaScreenshotPath,
+        topicScreenshotPath: topicScreenshotPath,
+        lineageScreenshotPath: lineageScreenshotPath
       }
     }
   });

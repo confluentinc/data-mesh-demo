@@ -16,6 +16,7 @@ type alias Model =
     { navKey : Nav.Key
     , flags : Flags
     , activeView : View
+    , activeScreenshot : Maybe ScreenshotTarget
     , stompSession : Stomp.Session Stomp.Msg
     , auditLogMsgs : Array (Result String AuditLogMsg)
     , dataProductsTableState : Table.State
@@ -25,6 +26,13 @@ type alias Model =
     , publishFormResult : WebData DataProduct
     , deleteResult : WebData QualifiedName
     }
+
+
+type ScreenshotTarget
+    = ExportScreenshot
+    | SchemaScreenshot
+    | TopicScreenshot
+    | LineageScreenshot
 
 
 type alias PublishForm =
@@ -69,9 +77,16 @@ allProductSlas =
 
 type alias Flags =
     { hostedMode : Bool
-    , images :
-        { logo : String
-        }
+    , staticImages : StaticImages
+    }
+
+
+type alias StaticImages =
+    { logoPath : String
+    , exportScreenshotPath : String
+    , schemaScreenshotPath : String
+    , topicScreenshotPath : String
+    , lineageScreenshotPath : String
     }
 
 
@@ -88,6 +103,9 @@ type Msg
     | ChangeView View
       --
     | StompMsg Stomp.Msg
+      --
+    | ShowScreenshot ScreenshotTarget
+    | ClearScreenshot
       --
     | SetDataProductsTableState Table.State
       --
