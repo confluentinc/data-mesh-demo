@@ -34,7 +34,6 @@
     "minimist": "^0.2.1",
     "nth-check": "^2.0.1",
     "ansi-regex": "^5.0.1",
-    "url-regex": "^5.0.0",
-    "uuid": "^8.0.0"
+    "url-regex": "^5.0.0"
   }
 }
