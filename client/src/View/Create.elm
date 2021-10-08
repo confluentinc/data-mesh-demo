@@ -125,7 +125,7 @@ useCasesDetail mUseCase =
                         , target "_blank"
                         , href (Url.toString useCase.ksqlDbLaunchUrl)
                         ]
-                        [ text "Run this ksqlDB app"
+                        [ text "Run this ksqlDB statement"
                         , icon ExternalLink
                         ]
                     ]
