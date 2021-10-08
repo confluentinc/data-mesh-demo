@@ -60,9 +60,7 @@ useCasesView activeUseCaseKey useCases =
             , UIKit.tableStriped
             , UIKit.tableSmall
             ]
-            [ thead []
-                [ tr [] [ th [] [ text "Options" ] ] ]
-            , tbody []
+            [ tbody []
                 (useCases
                     |> Dict.values
                     |> List.indexedMap
