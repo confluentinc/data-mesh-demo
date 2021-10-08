@@ -6,6 +6,7 @@ import GenericDict as Dict
 import Html exposing (..)
 import Html.Attributes exposing (autofocus, checked, class, disabled, name, placeholder, type_, value)
 import Html.Events exposing (onClick, onInput)
+import Maybe exposing (withDefault)
 import RemoteData exposing (RemoteData(..), WebData)
 import Route exposing (routeToString)
 import Table exposing (defaultCustomizations)
@@ -40,69 +41,12 @@ tableConfig =
         { toId = streamQualifiedName >> unQualifiedName
         , toMsg = SetDataProductsTableState
         , columns =
-            [ Table.veryCustomColumn
-                (let
-                    toStr stream =
-                        case stream of
-                            StreamDataProduct dataProduct ->
-                                dataProduct.name
-
-                            StreamTopic topic ->
-                                topic.name
-                 in
-                 { name = "Name"
-                 , viewData =
-                    \stream ->
-                        Table.HtmlDetails [ UIKit.width_1_4 ]
-                            [ text (toStr stream) ]
-                 , sorter = Table.increasingOrDecreasingBy toStr
-                 }
-                )
-            , Table.stringColumn "Domain"
-                (\stream ->
-                    case stream of
-                        StreamDataProduct dataProduct ->
-                            dataProduct.domain
-
-                        StreamTopic topic ->
-                            "-"
-                )
-            , Table.stringColumn "Description"
-                (\stream ->
-                    case stream of
-                        StreamDataProduct dataProduct ->
-                            dataProduct.description
-
-                        StreamTopic topic ->
-                            "-"
-                )
-            , Table.stringColumn "Owner"
-                (\stream ->
-                    case stream of
-                        StreamDataProduct dataProduct ->
-                            dataProduct.owner
-
-                        StreamTopic topic ->
-                            "-"
-                )
-            , Table.stringColumn "Quality"
-                (\stream ->
-                    case stream of
-                        StreamDataProduct dataProduct ->
-                            showProductQuality dataProduct.quality
-
-                        StreamTopic topic ->
-                            "-"
-                )
-            , Table.stringColumn "SLA"
-                (\stream ->
-                    case stream of
-                        StreamDataProduct dataProduct ->
-                            showProductSla dataProduct.sla
-
-                        StreamTopic topic ->
-                            "-"
-                )
+            [ Table.stringColumn "Name" getStreamName
+            , Table.stringColumn "Domain" (getStreamDomain >> withDefault "-")
+            , Table.stringColumn "Description" (getStreamDescription >> withDefault "-")
+            , Table.stringColumn "Owner" (getStreamOwner >> withDefault "-")
+            , Table.stringColumn "Quality" (getStreamQuality >> maybe "-" showProductQuality)
+            , Table.stringColumn "SLA" (getStreamSLA >> maybe "-" showProductSla)
             , Table.veryCustomColumn
                 { name = "Data Product"
                 , viewData =
@@ -298,3 +242,53 @@ radioButtonInput radioName handler toStr disabledAttribute activeRadioValue radi
         , text nbsp
         , text (toStr radioValue)
         ]
+
+
+getStreamName : Stream -> String
+getStreamName stream =
+    case stream of
+        StreamDataProduct dataProduct ->
+            dataProduct.name
+
+        StreamTopic topic ->
+            topic.name
+
+
+getStreamDomain : Stream -> Maybe String
+getStreamDomain =
+    getDataProduct >> Maybe.map .domain
+
+
+getStreamDescription : Stream -> Maybe String
+getStreamDescription =
+    getDataProduct >> Maybe.map .description
+
+
+getStreamOwner : Stream -> Maybe String
+getStreamOwner =
+    getDataProduct >> Maybe.map .owner
+
+
+getStreamQuality : Stream -> Maybe ProductQuality
+getStreamQuality =
+    getDataProduct >> Maybe.map .quality
+
+
+getStreamSLA : Stream -> Maybe ProductSla
+getStreamSLA =
+    getDataProduct >> Maybe.map .sla
+
+
+maybe : b -> (a -> b) -> Maybe a -> b
+maybe default fn =
+    Maybe.map fn >> Maybe.withDefault default
+
+
+getDataProduct : Stream -> Maybe DataProduct
+getDataProduct stream =
+    case stream of
+        StreamDataProduct dataProduct ->
+            Just dataProduct
+
+        StreamTopic topic ->
+            Nothing
