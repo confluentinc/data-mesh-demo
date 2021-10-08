@@ -1,24 +1,32 @@
 package io.confluent.demo.datamesh.cc.ksqldb.api;
 
-import io.confluent.demo.datamesh.cc.ksqldb.model.ExecuteRequest;
+import io.confluent.demo.datamesh.UseCasesController;
+import io.confluent.demo.datamesh.model.UseCase;
 import io.confluent.ksql.api.client.Client;
 import io.confluent.ksql.api.client.ClientOptions;
-import io.confluent.ksql.api.client.ExecuteStatementResult;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URL;
-import java.util.concurrent.CompletableFuture;
 
 @Service
 @RestController
 public class KsqlDbService {
     private final Client ksqlClient;
+
+    @ResponseStatus(value= HttpStatus.BAD_REQUEST)
+    public static class RestrictedStatement extends RuntimeException {
+        public RestrictedStatement(String msg) {
+            super(msg);
+        }
+    }
+
+        @Autowired
+    private UseCasesController useCasesController;
 
     public KsqlDbService(
             RestTemplateBuilder builder,
@@ -36,31 +44,14 @@ public class KsqlDbService {
         this.ksqlClient = Client.create(options);
     }
 
-    /**
-     *
-     *
-     * Example return value from ksqlDB API (if needed or sdk handles)
-     * {
-     *   "@type": "currentStatus",
-     *   "statementText": "CREATE STREAM PAGEVIEWS_USER3 WITH (KAFKA_TOPIC='pksqlc-w5q3gPAGEVIEWS_USER3', PARTITIONS=6, REPLICAS=3) AS SELECT *\nFROM PAGEVIEWS PAGEVIEWS\nWHERE (PAGEVIEWS.USERID = 'User_3')\nEMIT CHANGES;",
-     *   "commandId": "stream/`PAGEVIEWS_USER3`/create",
-     *   "commandStatus": {
-     *     "status": "SUCCESS",
-     *     "message": "Created query with ID CSAS_PAGEVIEWS_USER3_5",
-     *     "queryId": "CSAS_PAGEVIEWS_USER3_5"
-     *   },
-     *   "commandSequenceNumber": 6,
-     *   "warnings": []
-     * }
-     * @param request
-     * @return
-     * @throws Exception
-     */
-    @PostMapping(value = "/ksqldb/execute",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public void execute(@RequestBody ExecuteRequest request) throws Exception {
-        CompletableFuture<ExecuteStatementResult> result = ksqlClient.executeStatement(request.getSql());
-        ExecuteStatementResult rv = result.get();
+    @PostMapping(value = "/ksqldb/execute-use-case/{useCaseName}")
+    public void execute(@PathVariable String useCaseName) throws Exception {
+        UseCase foundUseCase = useCasesController.getUseCases()
+            .stream()
+            .filter( uc -> uc.getName().equals(useCaseName))
+            .findFirst()
+            .orElseThrow(() -> new RestrictedStatement("not allowed"));
+
+        ksqlClient.executeStatement(foundUseCase.getKsqlDbCommand()).get();
     }
 }
