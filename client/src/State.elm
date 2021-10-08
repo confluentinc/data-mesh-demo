@@ -14,11 +14,13 @@ import RemoteData exposing (RemoteData(..), WebData)
 import RemoteData.Extra exposing (mapOnSuccess)
 import Rest
 import Route exposing (routeParser)
+import Scrolling exposing (scrollToBottom)
 import Stomp
 import Stomp.Client
 import Table
 import Types exposing (..)
 import Url exposing (..)
+import View
 
 
 init : Flags -> Url -> Nav.Key -> ( Model, Cmd Msg )
@@ -129,7 +131,10 @@ update msg model =
             ( model
                 |> Optics.stompSession.set subModel
                 |> modify (lensWithLens Optics.messages Optics.auditLogModel) updateMessages
-            , Cmd.map StompMsg subCmd
+            , Cmd.batch
+                [ Cmd.map StompMsg subCmd
+                , scrollToBottom View.auditLogMsgsId
+                ]
             )
 
         SetDataProductsTableState newTableState ->

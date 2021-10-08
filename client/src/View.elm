@@ -1,4 +1,4 @@
-module View exposing (view)
+module View exposing (auditLogMsgsId, view)
 
 import Array exposing (Array)
 import Browser exposing (..)
@@ -81,7 +81,6 @@ tabView activeView ( tab, label ) =
         [ a [ href (routeToString tab) ] [ text label ] ]
 
 
-
 notFoundView : Model -> Html msg
 notFoundView model =
     h2 [] [ text "Not Found" ]
@@ -109,9 +108,14 @@ footerView auditLogModel =
         ]
 
 
+auditLogMsgsId : String
+auditLogMsgsId =
+    "audit-log-messages"
+
+
 auditLogMsgsView : Array (Result String AuditLogMsg) -> Html msg
 auditLogMsgsView messages =
-    ul []
+    ul [ id auditLogMsgsId ]
         (messages
             |> Array.toList
             |> List.map auditLogMsgView
