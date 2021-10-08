@@ -126,3 +126,23 @@ topic =
 streamTopic : QualifiedName -> Optional Model Topic
 streamTopic =
     stream >> optionalWithOptional topic
+
+
+auditLogModel : Lens { s | auditLogModel : a } a
+auditLogModel =
+    Lens .auditLogModel (\a s -> { s | auditLogModel = a })
+
+
+messages : Lens { s | messages : a } a
+messages =
+    Lens .messages (\a s -> { s | messages = a })
+
+
+minimised : Lens { s | minimised : a } a
+minimised =
+    Lens .minimised (\a s -> { s | minimised = a })
+
+
+stompSession : Lens { s | stompSession : a } a
+stompSession =
+    Lens .stompSession (\a s -> { s | stompSession = a })

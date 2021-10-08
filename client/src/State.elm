@@ -6,6 +6,8 @@ import Browser.Navigation as Nav
 import Dialog.Common as Dialog
 import GenericDict as Dict exposing (Dict)
 import Html exposing (..)
+import Monocle.Compose exposing (lensWithLens)
+import Monocle.Lens exposing (modify)
 import Monocle.Optional as Optional
 import Optics
 import RemoteData exposing (RemoteData(..), WebData)
@@ -89,14 +91,11 @@ update msg model =
             )
 
         ToggleAuditMinimised ->
-            ( { model
-                | auditLogModel =
-                    let
-                        oldAuditLogModel =
-                            model.auditLogModel
-                    in
-                    { oldAuditLogModel | minimised = not oldAuditLogModel.minimised }
-              }
+            let
+                target =
+                    lensWithLens Optics.minimised Optics.auditLogModel
+            in
+            ( modify target not model
             , Cmd.none
             )
 
@@ -114,31 +113,22 @@ update msg model =
             let
                 ( output, ( subModel, subCmd ) ) =
                     Stomp.update subMsg model.stompSession
+
+                updateMessages =
+                    case output of
+                        Nothing ->
+                            identity
+
+                        Just (Stomp.TransportError err) ->
+                            -- Despite having the option, We won't give transport error messages special treatment.
+                            Array.push (Err err)
+
+                        Just (Stomp.GotMessage auditLogMsg) ->
+                            Array.push auditLogMsg
             in
-            ( { model
-                | stompSession = subModel
-                , auditLogModel =
-                    let
-                        oldAuditLogModel =
-                            model.auditLogModel
-
-                        oldMessages =
-                            oldAuditLogModel.messages
-
-                        newMessages =
-                            case output of
-                                Nothing ->
-                                    oldMessages
-
-                                Just (Stomp.TransportError err) ->
-                                    -- Despite having the option, We won't give transport error messages special treatment.
-                                    Array.push (Err err) oldMessages
-
-                                Just (Stomp.GotMessage auditLogMsg) ->
-                                    Array.push auditLogMsg oldMessages
-                    in
-                    { oldAuditLogModel | messages = newMessages }
-              }
+            ( model
+                |> Optics.stompSession.set subModel
+                |> modify (lensWithLens Optics.messages Optics.auditLogModel) updateMessages
             , Cmd.map StompMsg subCmd
             )
 
