@@ -1,16 +1,22 @@
 package io.confluent.demo.datamesh.cc.ksqldb.api;
 
+import io.confluent.demo.datamesh.cc.ksqldb.model.ExecuteRequest;
 import io.confluent.ksql.api.client.Client;
 import io.confluent.ksql.api.client.ClientOptions;
 import io.confluent.ksql.api.client.ExecuteStatementResult;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URL;
 import java.util.concurrent.CompletableFuture;
 
 @Service
+@RestController
 public class KsqlDbService {
     private final Client ksqlClient;
 
@@ -50,7 +56,11 @@ public class KsqlDbService {
      * @return
      * @throws Exception
      */
-    public CompletableFuture<ExecuteStatementResult> execute(String request) throws Exception {
-        return ksqlClient.executeStatement(request);
+    @PostMapping(value = "/ksqldb/execute",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public void execute(@RequestBody ExecuteRequest request) throws Exception {
+        CompletableFuture<ExecuteStatementResult> result = ksqlClient.executeStatement(request.getSql());
+        ExecuteStatementResult rv = result.get();
     }
 }
