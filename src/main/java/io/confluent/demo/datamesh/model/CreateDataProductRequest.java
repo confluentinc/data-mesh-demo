@@ -19,6 +19,8 @@ public abstract class CreateDataProductRequest {
     }
 
     public void setDataProductTag(DataProductTag tag) { this.dataProductTag = dataProductTag;}
+    public DataProductTag getDataProductTag() {return this.dataProductTag;}
+
     public String getDescription() { return this.dataProductTag.getDescription(); }
     public String getOwner() { return this.dataProductTag.getOwner(); }
 }

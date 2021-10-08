@@ -5,6 +5,7 @@ import io.confluent.demo.datamesh.cc.datacatalog.model.SubjectVersionServiceResu
 import io.confluent.demo.datamesh.model.*;
 import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,6 +23,14 @@ public class DataProductsController {
     private SubjectVersionService subjectVersionService;
     @Autowired
     private AuditLogService auditLogService;
+
+    @ResponseStatus(value= HttpStatus.UNAUTHORIZED)
+    public static class RestrictedDataProductException extends RuntimeException {
+        public RestrictedDataProductException(String dpName) {
+            super(String.format("Cannot delete %s Data Product", dpName));
+        }
+    }
+    private final List<String> protectedOwners = List.of("@edge-team");
 
     @GetMapping
     public List<DataProduct> getDataProducts() {
@@ -43,13 +52,25 @@ public class DataProductsController {
 
     @PostMapping
     public DataProduct postDataProduct(@RequestBody CreateDataProductRequest request) throws Exception {
-        Pair<DataProduct, Optional<AuditLogEntry>> response = dataProductService.createDataProduct(request);
-        response.getValue1().ifPresent(auditLogService::sendAuditLogEntry);
-        return response.getValue0();
+        if (protectedOwners.contains(request.getDataProductTag().getOwner())) {
+           throw new RestrictedDataProductException(
+                   String.format("Unauthorized Data Product owner: %s", request.getDataProductTag().getOwner()));
+        } else {
+            Pair<DataProduct, Optional<AuditLogEntry>> response = dataProductService.createDataProduct(request);
+            response.getValue1().ifPresent(auditLogService::sendAuditLogEntry);
+            return response.getValue0();
+        }
     }
     @DeleteMapping("/{qualifiedName}")
     public void deleteDataProduct(@PathVariable("qualifiedName") String qualifiedName) {
-        dataProductService.deleteDataProduct(qualifiedName).ifPresent(auditLogService::sendAuditLogEntry);
+        DataProduct dp = getDataProduct(qualifiedName);
+        if (protectedOwners.contains(dp.getOwner())) {
+            throw new RestrictedDataProductException(qualifiedName);
+        } else {
+            dataProductService
+                .deleteDataProduct(qualifiedName)
+                .ifPresent(auditLogService::sendAuditLogEntry);
+        }
     }
 
     @GetMapping(path = "/manage")
