@@ -6,6 +6,7 @@ import Html exposing (..)
 import Html.Attributes exposing (class, disabled, href, rows, target, type_, value, wrap)
 import Html.Events exposing (onClick)
 import Json.Extras as Json
+import Markdown
 import RemoteData exposing (RemoteData(..))
 import Rest
 import Route exposing (routeToString)
@@ -58,11 +59,23 @@ view activeStreamKey model =
                     , icon ExternalLink
                     ]
                 ]
-            , p [] [ text "Discover the data products that are relevant to your domain." ]
-            , p [] [ text "Data Product information contains all the relevant info about this product. You can view schemas, ownership, description, and lineage information." ]
-            , p [] [ text "You can also export the data product to your own external data store for use by individual applications." ]
+            , Markdown.toHtml [] discoverCopy
             ]
         ]
+
+
+discoverCopy : String
+discoverCopy =
+    """
+Discover the data products that are relevant to your domain.
+
+Data Product information contains all the relevant info about this
+product. You can view schemas, ownership, description, and lineage
+information.
+
+You can also export the data product to your own external data store
+for use by individual applications.
+"""
 
 
 filterDataProducts : List Stream -> List DataProduct

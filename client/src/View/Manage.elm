@@ -6,6 +6,7 @@ import GenericDict as Dict
 import Html exposing (..)
 import Html.Attributes exposing (autofocus, checked, class, disabled, name, placeholder, type_, value)
 import Html.Events exposing (onClick, onInput)
+import Markdown
 import Maybe exposing (withDefault)
 import RemoteData exposing (RemoteData(..), WebData)
 import Route exposing (routeToString)
@@ -19,8 +20,7 @@ import View.Common exposing (..)
 view : Model -> Html Msg
 view model =
     div [ class "manage-pane" ]
-        [ p [] [ text "This page allows you to manage the properties of your Data Products." ]
-        , p [] [ text "Data Products can be published provided they meet the minimum established criteria. In this case, they must have both a Description and an owner." ]
+        [ Markdown.toHtml [] manageCopy
         , h2 []
             [ text "Kafka Topics"
             , p [] [ small [] [ text "To publish as data products" ] ]
@@ -33,6 +33,17 @@ view model =
             )
             model.streams
         ]
+
+
+manageCopy : String
+manageCopy =
+    """
+This page allows you to manage the properties of your Data Products.
+
+Data Products can be published provided they meet the minimum
+established criteria. In this case, they must have both a Description
+and an owner.
+"""
 
 
 tableConfig : Table.Config Stream Msg
