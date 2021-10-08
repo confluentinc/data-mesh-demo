@@ -1,16 +1,21 @@
+"use strict";
 /*global WebSocket*/
 
 import './static/main.less';
+import "uikit/dist/css/uikit.min.css";
+import "uikit/dist/js/uikit.min.js";
+import "uikit/dist/js/uikit-icons.js";
+
+
 import logoPath from './static/images/logo.png';
 import exportScreenshotPath from './static/images/export.png';
 import schemaScreenshotPath from './static/images/schema.png';
 import topicScreenshotPath from './static/images/topic.png';
 import lineageScreenshotPath from './static/images/lineage.png';
 
+import * as Stomp from './src/Stomp';
+import * as Scrolling from './src/Scrolling';
 import { Elm } from './src/Main.elm';
-import "uikit/dist/css/uikit.min.css";
-import "uikit/dist/js/uikit.min.js";
-import "uikit/dist/js/uikit-icons.js";
 
 var protocol = window.location.protocol == "https:" ? "wss:" : "ws:";
 var socket = new WebSocket(protocol + "//" + window.location.host + "/priv/socket", ["v12.stomp"]);
@@ -29,20 +34,6 @@ socket.onopen = function() {
     }
   });
 
-  app.ports.socket.subscribe(function(data) {
-    socket.send(data);
-  });
-  socket.onmessage = function(event) {
-    app.ports.onMessage.send(event.data);
-  };
-
-  app.ports.scrollToBottom.subscribe(function(elementId) {
-    var element = document.getElementById(elementId);
-
-    if (element) {
-      element.scrollTo({ top: element.scrollHeight, behavior: 'smooth' });
-    } else {
-      console.error("Cannot scroll to elementId - it does not exist.", elementId);
-    }
-  });
+  Stomp.registerPorts(app, socket);
+  Scrolling.registerPorts(app);
 };
