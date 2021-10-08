@@ -8,6 +8,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 import Json.Encode as Encode
+import Markdown
 import Route exposing (routeToString)
 import Stomp exposing (AuditLogMsg)
 import Types exposing (..)
@@ -145,24 +146,29 @@ screenshotDialog staticImages screenshotTarget =
         ( title, imagePath ) =
             case screenshotTarget of
                 ExportScreenshot ->
-                    ( "Export - Preview", staticImages.exportScreenshotPath )
+                    ( "Export", staticImages.exportScreenshotPath )
 
                 SchemaScreenshot ->
-                    ( "Schema Detail - Preview", staticImages.schemaScreenshotPath )
+                    ( "Schema Detail", staticImages.schemaScreenshotPath )
 
                 TopicScreenshot ->
-                    ( "Topic Detail - Preview", staticImages.topicScreenshotPath )
+                    ( "Topic Detail", staticImages.topicScreenshotPath )
 
                 LineageScreenshot ->
-                    ( "Data Lineage - Preview", staticImages.lineageScreenshotPath )
+                    ( "Data Lineage", staticImages.lineageScreenshotPath )
     in
     { closeMessage = Just ClearScreenshot
     , containerClass = Just "screenshot-dialog"
-    , header = Just (h2 [] [ text title ])
+    , header = Just (h2 [ class "uk-modal-title" ] [ text title ])
     , body =
         Just
-            (div []
-                [ img [ src imagePath ]
+            (div [ UIKit.grid ]
+                [ Markdown.toHtml [ UIKit.width_1_3 ]
+                    previewCopy
+                , img
+                    [ UIKit.width_2_3
+                    , src imagePath
+                    ]
                     []
                 ]
             )
@@ -176,3 +182,14 @@ screenshotDialog staticImages screenshotTarget =
                 [ text "Close" ]
             )
     }
+
+
+previewCopy : String
+previewCopy =
+    """
+### Preview
+
+This is a preview. To get the interactive version you'll can set up
+your own local datamesh by following the instructions
+[here](https://github.com/confluentinc/data-mesh-demo).
+"""

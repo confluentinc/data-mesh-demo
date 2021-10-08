@@ -154,6 +154,11 @@ modalClose =
     class "uk-modal-close"
 
 
+grid : Attribute msg
+grid =
+    class "uk-grid"
+
+
 width_1_1 : Attribute msg
 width_1_1 =
     class "uk-width-1-1"
@@ -172,6 +177,11 @@ width_1_3 =
 width_1_4 : Attribute msg
 width_1_4 =
     class "uk-width-1-4"
+
+
+width_2_3 : Attribute msg
+width_2_3 =
+    class "uk-width-2-3"
 
 
 width_2_5 : Attribute msg
