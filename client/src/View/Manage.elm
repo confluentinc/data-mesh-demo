@@ -53,7 +53,16 @@ tableConfig =
                     \dataProduct ->
                         Table.HtmlDetails []
                             [ publishButton dataProduct ]
-                , sorter = Table.unsortable
+                , sorter =
+                    Table.increasingOrDecreasingBy
+                        (\stream ->
+                            case stream of
+                                StreamDataProduct _ ->
+                                    0
+
+                                StreamTopic _ ->
+                                    1
+                        )
                 }
             ]
         , customizations =
