@@ -3,8 +3,6 @@
 
 import './static/main.less';
 import "uikit/dist/css/uikit.min.css";
-import "uikit/dist/js/uikit.min.js";
-import "uikit/dist/js/uikit-icons.js";
 
 
 import logoPath from './static/images/logo.png';
