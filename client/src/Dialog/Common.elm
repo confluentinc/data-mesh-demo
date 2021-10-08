@@ -100,13 +100,8 @@ mapMaybe =
 
 
 maybe : b -> (a -> b) -> Maybe a -> b
-maybe default fn m =
-    case m of
-        Just x ->
-            fn x
-
-        Nothing ->
-            default
+maybe default fn =
+    Maybe.map fn >> Maybe.withDefault default
 
 
 isJust : Maybe a -> Bool
