@@ -2,8 +2,10 @@ module Dialog.UIKit exposing (..)
 
 import Dialog.Common exposing (Config, empty, isJust, maybe)
 import Html exposing (..)
-import Html.Attributes exposing (..)
+import Html.Attributes exposing (class, classList, style)
 import Html.Events exposing (..)
+import Svg exposing (line, svg)
+import Svg.Attributes exposing (fill, height, stroke, strokeWidth, viewBox, width, x1, x2, y1, y2)
 
 
 view : Maybe (Config msg) -> Html msg
@@ -71,7 +73,33 @@ closeButton closeMessage =
         , class "uk-close"
         , onClick closeMessage
         ]
-        [ text "x" ]
+        [ svg
+            [ width "14"
+            , height "14"
+            , viewBox "0 0 14 14"
+            ]
+            [ line
+                [ fill "none"
+                , stroke "#000"
+                , strokeWidth "1.1"
+                , x1 "1"
+                , y1 "1"
+                , x2 "13"
+                , y2 "13"
+                ]
+                []
+            , line
+                [ fill "none"
+                , stroke "#000"
+                , strokeWidth "1.1"
+                , x1 "13"
+                , y1 "1"
+                , x2 "1"
+                , y2 "13"
+                ]
+                []
+            ]
+        ]
 
 
 wrapBody : Html msg -> Html msg
