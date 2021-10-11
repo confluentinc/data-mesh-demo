@@ -40,6 +40,7 @@ type ScreenshotTarget
     | SchemaScreenshot
     | TopicScreenshot
     | LineageScreenshot
+    | SearchScreenshot
 
 
 type alias PublishForm =
@@ -93,6 +94,7 @@ type alias StaticImages =
     , schemaScreenshotPath : String
     , topicScreenshotPath : String
     , lineageScreenshotPath : String
+    , searchScreenshotPath : String
     }
 
 

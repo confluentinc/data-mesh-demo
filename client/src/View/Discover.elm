@@ -49,16 +49,18 @@ view activeStreamKey model =
             ]
         , div [ class "discover-copy" ]
             [ p []
-                [ a
-                    [ UIKit.button
-                    , UIKit.buttonPrimary
-                    , href "https://confluent.cloud/search"
-                    , target "_blank"
-                    ]
-                    [ text "Advanced Search"
-                    , icon ExternalLink
-                    ]
-                ]
+                (case ( model.actuatorInfo, Url.fromString "https://confluent.cloud/search" ) of
+                    ( Success actuatorInfo, Just url ) ->
+                        [ linkButton actuatorInfo.hostedMode
+                            ( "Advanced Search"
+                            , url
+                            , SearchScreenshot
+                            )
+                        ]
+
+                    _ ->
+                        []
+                )
             , Markdown.toHtml [] discoverCopy
             ]
         ]

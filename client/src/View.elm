@@ -156,6 +156,9 @@ screenshotDialog staticImages screenshotTarget =
 
                 LineageScreenshot ->
                     ( "Data Lineage", staticImages.lineageScreenshotPath )
+
+                SearchScreenshot ->
+                    ( "Advanced Search", staticImages.searchScreenshotPath )
     in
     { closeMessage = Just ClearScreenshot
     , containerClass = Just "screenshot-dialog"

@@ -10,6 +10,7 @@ import exportScreenshotPath from './static/images/export.png';
 import schemaScreenshotPath from './static/images/schema.png';
 import topicScreenshotPath from './static/images/topic.png';
 import lineageScreenshotPath from './static/images/lineage.png';
+import searchScreenshotPath from './static/images/search.png';
 
 import * as Stomp from './src/Stomp';
 import * as Scrolling from './src/Scrolling';
@@ -27,7 +28,8 @@ socket.onopen = function() {
         exportScreenshotPath: exportScreenshotPath,
         schemaScreenshotPath: schemaScreenshotPath,
         topicScreenshotPath: topicScreenshotPath,
-        lineageScreenshotPath: lineageScreenshotPath
+        lineageScreenshotPath: lineageScreenshotPath,
+        searchScreenshotPath: searchScreenshotPath
       }
     }
   });
