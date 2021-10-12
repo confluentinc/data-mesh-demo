@@ -10,13 +10,13 @@ const isWebpackDevServer = process.argv.some(a => path.basename(a) === 'webpack-
 const isWatch = process.argv.some(a => a === '--watch');
 
 const plugins =
-      isWebpackDevServer || !isWatch ? [] : [
-        function() {
-          this.plugin('done', function(stats) {
-            process.stderr.write(stats.toString('errors-only'));
-          });
-        }
-      ];
+  isWebpackDevServer || !isWatch ? [] : [
+    function() {
+      this.plugin('done', function(stats) {
+        process.stderr.write(stats.toString('errors-only'));
+      });
+    }
+  ];
 
 module.exports = {
   devServer: {
