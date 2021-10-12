@@ -6,10 +6,12 @@ import Browser.Navigation as Nav
 import GenericDict exposing (Dict)
 import Json.Encode as Encode
 import RemoteData exposing (RemoteData, WebData)
+import Set exposing (Set)
 import Stomp exposing (AuditLogMsg)
 import Stomp.Client as Stomp
 import Table
 import Url as Url exposing (Url)
+import Validate exposing (Validator, ifTrue)
 
 
 type alias Model =
@@ -51,6 +53,22 @@ type alias PublishForm =
     , quality : ProductQuality
     , sla : ProductSla
     }
+
+
+type PublishFormError
+    = RestrictedOwner
+
+
+restrictedOwners : Set String
+restrictedOwners =
+    Set.fromList [ "@edge-team" ]
+
+
+publishFormValidator : Validator PublishFormError PublishForm
+publishFormValidator =
+    Validate.all
+        [ ifTrue (\form -> Set.member form.owner restrictedOwners) RestrictedOwner
+        ]
 
 
 type ProductQuality

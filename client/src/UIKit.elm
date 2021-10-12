@@ -49,6 +49,16 @@ formLabel =
     class "uk-form-label"
 
 
+formDanger : Attribute msg
+formDanger =
+    class "uk-form-danger"
+
+
+fieldset : Attribute msg
+fieldset =
+    class "uk-fieldset"
+
+
 input : Attribute msg
 input =
     class "uk-input"

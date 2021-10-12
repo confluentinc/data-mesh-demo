@@ -9,12 +9,14 @@ import Html.Events exposing (onClick, onInput)
 import Markdown
 import Maybe exposing (withDefault)
 import RemoteData exposing (RemoteData(..), WebData)
+import Result.Extras as Result
 import Route exposing (routeToString)
 import Table exposing (defaultCustomizations)
 import Table.Extras as Table
 import Types exposing (..)
 import UIKit
 import Url exposing (..)
+import Validate exposing (validate)
 import View.Common exposing (..)
 
 
@@ -26,6 +28,12 @@ view model =
             [ text "Kafka Topics"
             , p [] [ small [] [ text "To publish as data products" ] ]
             ]
+        , case model.deleteResult of
+            Failure err ->
+                errorView err
+
+            _ ->
+                span [] []
         , webDataView
             (Dict.values
                 >> Table.view
@@ -119,8 +127,16 @@ publishButton stream =
 publishDialog : WebData PublishFormResult -> PublishForm -> Dialog.Config Msg
 publishDialog result model =
     let
-        disabledAttribute =
-            disabled (RemoteData.isLoading result)
+        validationResult =
+            validate publishFormValidator model
+
+        hasOwnerValidationErrors =
+            case validationResult of
+                Ok _ ->
+                    False
+
+                Err errs ->
+                    List.member RestrictedOwner errs
     in
     { closeMessage = Just AbandonPublishDialog
     , containerClass = Nothing
@@ -147,65 +163,79 @@ publishDialog result model =
                     NotAsked ->
                         text ""
                 , form [ UIKit.formHorizontal ]
-                    [ div []
-                        [ label [ UIKit.formLabel ] [ text "Domain" ]
-                        , div [ UIKit.formControls ]
-                            [ input
-                                [ type_ "text"
-                                , UIKit.input
-                                , placeholder "Data Product Domain"
-                                , autofocus True
-                                , value model.domain
-                                , disabledAttribute
-                                , onInput (PublishFormMsg << PublishFormSetDomain)
-                                ]
-                                []
-                            ]
+                    [ fieldset
+                        [ UIKit.fieldset
+                        , disabled (RemoteData.isLoading result)
                         ]
-                    , div []
-                        [ label [ UIKit.formLabel ] [ text "Owner" ]
-                        , div [ UIKit.formControls ]
-                            [ input
-                                [ type_ "text"
-                                , UIKit.input
-                                , placeholder "Data Product Owner"
-                                , autofocus True
-                                , value model.owner
-                                , disabledAttribute
-                                , onInput (PublishFormMsg << PublishFormSetOwner)
+                        [ div []
+                            [ label [ UIKit.formLabel ] [ text "Domain" ]
+                            , div [ UIKit.formControls ]
+                                [ input
+                                    [ type_ "text"
+                                    , UIKit.input
+                                    , placeholder "Data Product Domain"
+                                    , autofocus True
+                                    , value model.domain
+                                    , onInput (PublishFormMsg << PublishFormSetDomain)
+                                    ]
+                                    []
                                 ]
-                                []
                             ]
-                        ]
-                    , div []
-                        [ label [ UIKit.formLabel ] [ text "Description" ]
-                        , div [ UIKit.formControls ]
-                            [ input
-                                [ type_ "text"
-                                , UIKit.input
-                                , placeholder "Data Product Description"
-                                , value model.description
-                                , disabledAttribute
-                                , onInput (PublishFormMsg << PublishFormSetDescription)
+                        , div []
+                            [ label [ UIKit.formLabel ] [ text "Owner" ]
+                            , div [ UIKit.formControls ]
+                                [ input
+                                    ([ type_ "text"
+                                     , UIKit.input
+                                     , placeholder "Data Product Owner"
+                                     , autofocus True
+                                     , value model.owner
+                                     , onInput (PublishFormMsg << PublishFormSetOwner)
+                                     ]
+                                        ++ (if hasOwnerValidationErrors then
+                                                [ UIKit.formDanger ]
+
+                                            else
+                                                []
+                                           )
+                                    )
+                                    []
                                 ]
-                                []
                             ]
+                        , div []
+                            [ label [ UIKit.formLabel ] [ text "Description" ]
+                            , div [ UIKit.formControls ]
+                                [ input
+                                    [ type_ "text"
+                                    , UIKit.input
+                                    , placeholder "Data Product Description"
+                                    , value model.description
+                                    , onInput (PublishFormMsg << PublishFormSetDescription)
+                                    ]
+                                    []
+                                ]
+                            ]
+                        , radioButtonGroup
+                            "Quality"
+                            (PublishFormMsg << PublishFormSetQuality)
+                            showProductQuality
+                            (Just model.quality)
+                            allProductQualities
+                        , radioButtonGroup
+                            "SLA"
+                            (PublishFormMsg << PublishFormSetSla)
+                            showProductSla
+                            (Just model.sla)
+                            allProductSlas
                         ]
-                    , radioButtonGroup
-                        "Quality"
-                        (PublishFormMsg << PublishFormSetQuality)
-                        showProductQuality
-                        disabledAttribute
-                        (Just model.quality)
-                        allProductQualities
-                    , radioButtonGroup
-                        "SLA"
-                        (PublishFormMsg << PublishFormSetSla)
-                        showProductSla
-                        disabledAttribute
-                        (Just model.sla)
-                        allProductSlas
                     ]
+                , case validationResult of
+                    Ok _ ->
+                        span [] []
+
+                    Err validationErrors ->
+                        div [ UIKit.alert, UIKit.alertDanger ]
+                            (List.map formatValidationError validationErrors)
                 ]
             )
     , footer =
@@ -215,14 +245,14 @@ publishDialog result model =
                     [ UIKit.button
                     , UIKit.buttonDefault
                     , UIKit.modalClose
-                    , disabledAttribute
+                    , disabled (RemoteData.isLoading result)
                     , onClick AbandonPublishDialog
                     ]
                     [ text "Cancel" ]
                 , button
                     [ UIKit.button
                     , UIKit.buttonPrimary
-                    , disabledAttribute
+                    , disabled (RemoteData.isLoading result || Result.isErr validationResult)
                     , onClick (PublishDataProduct model)
                     ]
                     [ text "Publish" ]
@@ -231,8 +261,8 @@ publishDialog result model =
     }
 
 
-radioButtonGroup : String -> (a -> msg) -> (a -> String) -> Attribute msg -> Maybe a -> List a -> Html msg
-radioButtonGroup radioName handler toStr disabledAttribute activeRadioValue radioValues =
+radioButtonGroup : String -> (a -> msg) -> (a -> String) -> Maybe a -> List a -> Html msg
+radioButtonGroup radioName handler toStr activeRadioValue radioValues =
     div []
         [ div [ UIKit.formLabel ] [ text radioName ]
         , div [ UIKit.formControls, UIKit.formControlsText ]
@@ -242,7 +272,6 @@ radioButtonGroup radioName handler toStr disabledAttribute activeRadioValue radi
                         radioName
                         handler
                         toStr
-                        disabledAttribute
                         activeRadioValue
                     )
                 |> List.intersperse (text nbsp)
@@ -250,15 +279,14 @@ radioButtonGroup radioName handler toStr disabledAttribute activeRadioValue radi
         ]
 
 
-radioButtonInput : String -> (a -> msg) -> (a -> String) -> Attribute msg -> Maybe a -> a -> Html msg
-radioButtonInput radioName handler toStr disabledAttribute activeRadioValue radioValue =
+radioButtonInput : String -> (a -> msg) -> (a -> String) -> Maybe a -> a -> Html msg
+radioButtonInput radioName handler toStr activeRadioValue radioValue =
     label []
         [ input
             [ type_ "radio"
             , name radioName
             , UIKit.radio
             , value (toStr radioValue)
-            , disabledAttribute
             , onInput (always (handler radioValue))
             , checked (activeRadioValue == Just radioValue)
             ]
@@ -316,3 +344,10 @@ getDataProduct stream =
 
         StreamTopic topic ->
             Nothing
+
+
+formatValidationError : PublishFormError -> Html msg
+formatValidationError error =
+    case error of
+        RestrictedOwner ->
+            text "That owner is reserved. Please choose another."

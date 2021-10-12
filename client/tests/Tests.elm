@@ -11,6 +11,7 @@ import Test exposing (..)
 import Types exposing (..)
 import Url as Url
 import Url.Parser as Url exposing (Parser, map, oneOf, s)
+import ValidationTests
 
 
 suite : Test
@@ -19,6 +20,7 @@ suite =
         [ RouteTests.suite
         , DecodersTests.suite
         , EncodersTests.suite
+        , ValidationTests.suite
         , StompTests.suite
         , Json.ExtrasTests.suite
         ]
