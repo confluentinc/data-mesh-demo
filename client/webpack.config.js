@@ -1,4 +1,5 @@
 'use strict';
+/* global require, process, module, __dirname */
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
