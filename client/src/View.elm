@@ -125,12 +125,13 @@ auditLogMsgsView messages =
 
 auditLogMsgView : Result String AuditLogMsg -> Html msg
 auditLogMsgView auditLogMsg =
-    li [] <|
-        case auditLogMsg of
-            Err err ->
+    case auditLogMsg of
+        Err err ->
+            li [ UIKit.textDanger ]
                 [ text err ]
 
-            Ok result ->
+        Ok result ->
+            li []
                 [ text result.message
                 , pre []
                     (List.intersperse

@@ -169,6 +169,11 @@ grid =
     class "uk-grid"
 
 
+textDanger : Attribute msg
+textDanger =
+    class "uk-text-danger"
+
+
 width_1_1 : Attribute msg
 width_1_1 =
     class "uk-width-1-1"
