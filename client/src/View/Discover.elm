@@ -11,6 +11,7 @@ import RemoteData exposing (RemoteData(..))
 import Rest
 import Route exposing (routeToString)
 import Table exposing (defaultCustomizations)
+import Table.Extras as Table
 import Types exposing (..)
 import UIKit
 import Url exposing (Url)
@@ -100,7 +101,10 @@ tableConfig activeStreamKey =
         , toMsg = SetDataProductsTableState
         , columns =
             [ Table.stringColumn "Name" .name
-            , Table.stringColumn "Description" .description
+            , Table.stringColumnWithAttributes
+                "Description"
+                [ class "description" ]
+                .description
             , Table.stringColumn "Owner" .owner
             ]
         , customizations =

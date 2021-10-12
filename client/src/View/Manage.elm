@@ -11,6 +11,7 @@ import Maybe exposing (withDefault)
 import RemoteData exposing (RemoteData(..), WebData)
 import Route exposing (routeToString)
 import Table exposing (defaultCustomizations)
+import Table.Extras as Table
 import Types exposing (..)
 import UIKit
 import Url exposing (..)
@@ -54,7 +55,10 @@ tableConfig =
         , columns =
             [ Table.stringColumn "Name" getStreamName
             , Table.stringColumn "Domain" (getStreamDomain >> withDefault "-")
-            , Table.stringColumn "Description" (getStreamDescription >> withDefault "-")
+            , Table.stringColumnWithAttributes
+                "Description"
+                [ class "description" ]
+                (getStreamDescription >> withDefault "-")
             , Table.stringColumn "Owner" (getStreamOwner >> withDefault "-")
             , Table.stringColumn "Quality" (getStreamQuality >> maybe "-" showProductQuality)
             , Table.stringColumn "SLA" (getStreamSLA >> maybe "-" showProductSla)
