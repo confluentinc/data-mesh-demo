@@ -1,5 +1,6 @@
 module Rest exposing
     ( deleteDataProduct
+    , executeUseCase
     , getActuatorInfo
     , getStreams
     , getUseCases
@@ -10,12 +11,12 @@ import Decoders exposing (decodeActuatorInfo, decodeDataProduct, decodeStreams, 
 import Encoders exposing (encodePublishForm)
 import GenericDict as Dict
 import GenericDict.Extra as Dict
-import Http exposing (Expect, expectJson, expectWhatever, get, jsonBody, post)
+import Http exposing (Expect, emptyBody, expectJson, expectWhatever, get, jsonBody, post)
 import Http.Extra exposing (delete)
 import Json.Decode exposing (Decoder)
 import RemoteData exposing (WebData)
 import Task
-import Types exposing (Msg(..), PublishForm, QualifiedName, streamQualifiedName, unQualifiedName)
+import Types exposing (Msg(..), PublishForm, QualifiedName, UseCaseName(..), streamQualifiedName, unQualifiedName, unUseCaseName)
 import Url.Builder exposing (absolute)
 
 
@@ -63,7 +64,7 @@ getUseCases =
         { url = absolute [ "priv", "use-cases" ] []
         , expect =
             expectRemoteData
-                (RemoteData.map (Dict.fromListBy .name identity)
+                (RemoteData.map (Dict.fromListBy .name unUseCaseName)
                     >> GotUseCases
                 )
                 decodeUseCases
@@ -87,3 +88,17 @@ expectRemoteData wrapper =
         (RemoteData.fromResult
             >> wrapper
         )
+
+
+executeUseCase : UseCaseName -> Cmd Msg
+executeUseCase useCaseName =
+    post
+        { url = absolute [ "ksqldb", "execute-use-case", unUseCaseName useCaseName ] []
+        , body = emptyBody
+        , expect =
+            expectWhatever
+                (RemoteData.fromResult
+                    >> RemoteData.map (always useCaseName)
+                    >> UseCaseExecuted
+                )
+        }

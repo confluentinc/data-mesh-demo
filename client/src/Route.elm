@@ -27,7 +27,7 @@ parser =
         , map (Discover Nothing) (s "discover")
         , map (Discover << Just << QualifiedName) (s "discover" </> string)
         , map (Create Nothing) (s "create")
-        , map (Create << Just) (s "create" </> string)
+        , map (Create << Just << UseCaseName) (s "create" </> string)
         , map Manage (s "manage")
         ]
 
@@ -56,7 +56,7 @@ routeToPieces view =
                         Nothing ->
                             []
 
-                        Just name ->
+                        Just (UseCaseName name) ->
                             [ name ]
                    )
 

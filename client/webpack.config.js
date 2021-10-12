@@ -23,18 +23,21 @@ module.exports = {
   devServer: {
     compress: true,
     port: 9000,
-    proxy: {
-      '/priv/socket': {
+    proxy: [
+      {
+        context: ['/priv/socket'],
         target: 'ws://localhost:8080',
         ws: true
       },
-      '/priv': {
-        target: 'http://localhost:8080'
-      },
-      '/actuator/info': {
+      {
+        context: [
+          '/priv',
+          '/ksqldb',
+          '/actuator/info'
+        ],
         target: 'http://localhost:8080'
       }
-    }
+    ]
   },
   entry: {
     index: './entry.js',

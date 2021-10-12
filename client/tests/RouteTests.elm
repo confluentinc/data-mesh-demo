@@ -23,7 +23,7 @@ suite =
             , test "create" <|
                 \_ -> parsesTo (Create Nothing) "http://localhost/#create"
             , test "create/<name>" <|
-                \_ -> parsesTo (Create (Just "enrich")) "http://localhost/#create/enrich"
+                \_ -> parsesTo (Create (Just (UseCaseName "enrich"))) "http://localhost/#create/enrich"
             , test "manage" <|
                 \_ -> parsesTo Manage "http://localhost/#manage"
             ]
@@ -40,7 +40,7 @@ suite =
                     Expect.equal "#/create" (routeToString (Create Nothing))
             , test "create/<name>" <|
                 \_ ->
-                    Expect.equal "#/create/aggregate" (routeToString (Create (Just "aggregate")))
+                    Expect.equal "#/create/aggregate" (routeToString (Create (Just (UseCaseName "aggregate"))))
             , test "manage" <|
                 \_ ->
                     Expect.equal "#/manage" (routeToString Manage)

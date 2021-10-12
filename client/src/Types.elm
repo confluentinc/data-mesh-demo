@@ -24,10 +24,11 @@ type alias Model =
     , auditLogModel : AuditLogModel
     , dataProductsTableState : Table.State
     , streams : WebData (Dict QualifiedName Stream)
-    , useCases : WebData (Dict String UseCase)
+    , useCases : WebData (Dict UseCaseName UseCase)
     , publishForm : Maybe PublishForm
     , publishFormResult : WebData DataProduct
     , deleteResult : WebData QualifiedName
+    , executeUseCaseResult : WebData UseCaseName
     }
 
 
@@ -118,7 +119,7 @@ type alias StaticImages =
 
 type View
     = Discover (Maybe QualifiedName)
-    | Create (Maybe String)
+    | Create (Maybe UseCaseName)
     | Manage
     | NotFound
 
@@ -156,7 +157,7 @@ type Msg
     | SetDataProductsTableState Table.State
       --
     | GotStreams (WebData (Dict QualifiedName Stream))
-    | GotUseCases (WebData (Dict String UseCase))
+    | GotUseCases (WebData (Dict UseCaseName UseCase))
     | GotActuatorInfo (WebData ActuatorInfo)
       --
     | StartPublishDialog QualifiedName
@@ -167,6 +168,9 @@ type Msg
       --
     | DeleteDataProduct QualifiedName
     | DataProductDeleted (WebData QualifiedName)
+      --
+    | ExecuteUseCase UseCaseName
+    | UseCaseExecuted (WebData UseCaseName)
 
 
 type PublishFormMsg
@@ -234,9 +238,18 @@ type alias KsqlSchema =
     }
 
 
+type UseCaseName
+    = UseCaseName String
+
+
+unUseCaseName : UseCaseName -> String
+unUseCaseName (UseCaseName str) =
+    str
+
+
 type alias UseCase =
-    { description : String
-    , name : String
+    { name : UseCaseName
+    , description : String
     , inputs : String
     , ksqlDbCommand : String
     , ksqlDbLaunchUrl : Url

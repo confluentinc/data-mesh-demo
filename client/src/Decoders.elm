@@ -4,6 +4,7 @@ module Decoders exposing
     , decodeStream
     , decodeStreams
     , decodeUseCases
+    , useCaseName
     )
 
 import Json.Decode as Decode exposing (..)
@@ -100,6 +101,11 @@ qualifiedName =
     Decode.map QualifiedName string
 
 
+useCaseName : Decoder UseCaseName
+useCaseName =
+    Decode.map UseCaseName string
+
+
 decodeDataProductUrls : Decoder DataProductUrls
 decodeDataProductUrls =
     succeed DataProductUrls
@@ -126,8 +132,8 @@ decodeUseCases =
 decodeUseCase : Decoder UseCase
 decodeUseCase =
     succeed UseCase
+        |> required "name" useCaseName
         |> required "description" string
-        |> required "name" string
         |> required "inputs" string
         |> required "ksqlDbCommand" string
         |> required "ksqlDbLaunchUrl" url

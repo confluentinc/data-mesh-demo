@@ -237,7 +237,7 @@ suite =
                                 , protocol = Https
                                 , query = Just "command=CREATE%20STREAM%20PAGEVIEWS_ENRICHED%0A%20%20%20%20with%20%28kafka_topic%3D%27pageviews_enriched%27%29%0A%20%20%20%20AS%20SELECT%20U.ID%20AS%20USERID%2C%20U.REGIONID%20AS%20REGION%2C%0A%20%20%20%20%20%20%20%20U.GENDER%20AS%20GENDER%2C%20V.PAGEID%20AS%20PAGE%0A%20%20%20%20FROM%20PAGEVIEWS%20V%20INNER%20JOIN%20USERS%20U%20%0A%20%20%20%20ON%20V.USERID%20%3D%20U.ID%3B&ksqlClusterId=lksqlc-rng0p&properties=%7B%22auto.offset.reset%22%3A%22latest%22%7D"
                                 }
-                          , name = "pageviews_enriched"
+                          , name = UseCaseName "pageviews_enriched"
                           , outputTopic = "pageviews_enriched"
                           }
                         , { description = "Filter an event stream"
@@ -251,7 +251,7 @@ suite =
                                 , protocol = Https
                                 , query = Just "command=CREATE%20STREAM%20PAGEVIEWS_FILTERED_USER_1%0A%20%20%20%20with%20%28kafka_topic%3D%27pageviews_filtered_user_1%27%29%0A%20%20%20%20AS%20SELECT%20%2A%20FROM%20PAGEVIEWS%20WHERE%20USERID%20%3D%20%27User_1%27%3B&ksqlClusterId=lksqlc-rng0p&properties=%7B%22auto.offset.reset%22%3A%22latest%22%7D"
                                 }
-                          , name = "pageviews_filtered_user_1"
+                          , name = UseCaseName "pageviews_filtered_user_1"
                           , outputTopic = "pageviews_filtered_user_1"
                           }
                         , { description = "Aggregate an event stream"
@@ -265,7 +265,7 @@ suite =
                                 , protocol = Https
                                 , query = Just "command=CREATE%20TABLE%20PAGEVIEWS_COUNT_BY_USER%0A%20%20%20%20with%20%28kafka_topic%3D%27pageviews_count_by_user%27%29%0A%20%20%20%20AS%20SELECT%20USERID%2C%20COUNT%28%2A%29%20AS%20numusers%0A%20%20%20%20FROM%20PAGEVIEWS%20WINDOW%20TUMBLING%20%28size%2030%20second%29%0A%20%20%20%20GROUP%20BY%20USERID%20HAVING%20COUNT%28%2A%29%20%3E%201%3B&ksqlClusterId=lksqlc-rng0p&properties=%7B%22auto.offset.reset%22%3A%22latest%22%7D"
                                 }
-                          , name = "pageviews_count_by_user"
+                          , name = UseCaseName "pageviews_count_by_user"
                           , outputTopic = "pageviews_count_by_user"
                           }
                         ]

@@ -45,6 +45,7 @@ init flags url navKey =
       , publishForm = Nothing
       , publishFormResult = NotAsked
       , deleteResult = NotAsked
+      , executeUseCaseResult = NotAsked
       }
     , Cmd.batch
         [ Rest.getStreams
@@ -88,7 +89,11 @@ update msg model =
                     )
 
         ChangeView view ->
-            ( { model | activeView = view }
+            ( { model
+                | activeView = view
+                , deleteResult = NotAsked
+                , executeUseCaseResult = NotAsked
+              }
             , Nav.pushUrl model.navKey (Route.routeToString view)
             )
 
@@ -256,6 +261,23 @@ update msg model =
                         model.streams
               }
             , Cmd.none
+            )
+
+        ExecuteUseCase useCaseName ->
+            ( { model | executeUseCaseResult = Loading }
+            , Rest.executeUseCase useCaseName
+            )
+
+        UseCaseExecuted result ->
+            ( { model
+                | executeUseCaseResult = result
+              }
+            , case result of
+                Success _ ->
+                    Rest.getStreams
+
+                _ ->
+                    Cmd.none
             )
 
 

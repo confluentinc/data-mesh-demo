@@ -6,15 +6,16 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 import Markdown
+import RemoteData exposing (RemoteData(..), WebData)
 import Route exposing (routeToString)
 import Types exposing (..)
 import UIKit
 import Url exposing (..)
-import View.Common exposing (webDataView)
+import View.Common exposing (errorView, loadingWheel, webDataView)
 import View.Icons exposing (Icon(..), icon)
 
 
-view : Maybe String -> Model -> Html Msg
+view : Maybe UseCaseName -> Model -> Html Msg
 view activeUseCaseKey model =
     div [ class "create-pane" ]
         [ div [ class "create-main" ]
@@ -26,12 +27,13 @@ view activeUseCaseKey model =
             (\useCases ->
                 let
                     activeUseCase =
-                        Maybe.andThen (\k -> Dict.get identity k useCases) activeUseCaseKey
+                        Maybe.andThen (\k -> Dict.get unUseCaseName k useCases) activeUseCaseKey
                 in
-                useCasesDetail activeUseCase
+                useCasesDetail
+                    activeUseCase
+                    model.executeUseCaseResult
             )
             model.useCases
-        , publishView
         ]
 
 
@@ -50,7 +52,7 @@ Click the button to go to Confluent Cloud, where this query will be pre-populate
 """
 
 
-useCasesView : Maybe String -> Dict String UseCase -> Html Msg
+useCasesView : Maybe UseCaseName -> Dict UseCaseName UseCase -> Html Msg
 useCasesView activeUseCaseKey useCases =
     div [ class "create-use-cases" ]
         [ h2 [] [ text "Sample Business Use-Cases" ]
@@ -81,8 +83,8 @@ useCasesView activeUseCaseKey useCases =
         ]
 
 
-useCasesDetail : Maybe UseCase -> Html msg
-useCasesDetail mUseCase =
+useCasesDetail : Maybe UseCase -> WebData UseCaseName -> Html Msg
+useCasesDetail mUseCase executeUseCaseResult =
     div [ class "create-use-detail" ]
         [ h2 [] [ text "Application Information" ]
         , case mUseCase of
@@ -106,7 +108,7 @@ useCasesDetail mUseCase =
                                         , td [] [ pre [] [ text content ] ]
                                         ]
                                 )
-                                [ ( "Name", useCase.name )
+                                [ ( "Name", unUseCaseName useCase.name )
                                 , ( "Data Product Inputs", useCase.inputs )
                                 , ( "Query"
                                   , useCase.ksqlDbCommand
@@ -117,27 +119,31 @@ useCasesDetail mUseCase =
                                 ]
                             )
                         ]
-                    , a
-                        [ UIKit.button
-                        , UIKit.buttonPrimary
-                        , target "_blank"
-                        , href (Url.toString useCase.ksqlDbLaunchUrl)
-                        ]
-                        [ text "Run this ksqlDB statement"
-                        , icon ExternalLink
-                        ]
                     ]
-        ]
+        , case ( mUseCase, executeUseCaseResult ) of
+            ( Nothing, _ ) ->
+                span [] []
 
+            ( Just _, Loading ) ->
+                loadingWheel
 
-publishView : Html msg
-publishView =
-    div [ class "create-publish" ]
-        [ p [] [ text "Now you can publish this as a data product!" ]
-        , a
-            [ UIKit.button
-            , UIKit.buttonPrimary
-            , href (routeToString Manage)
-            ]
-            [ text "Publish as data product" ]
+            ( Just _, Failure err ) ->
+                errorView err
+
+            ( Just _, Success _ ) ->
+                div []
+                    [ text "Your stream has been created."
+                    , text " "
+                    , a [ href (routeToString Manage) ] [ text "Go here" ]
+                    , text " to review and publish it as a data product."
+                    ]
+
+            ( Just useCase, _ ) ->
+                button
+                    [ UIKit.button
+                    , UIKit.buttonPrimary
+                    , onClick (ExecuteUseCase useCase.name)
+                    ]
+                    [ text "Execute this ksqlDB statement"
+                    ]
         ]
