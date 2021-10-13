@@ -11,6 +11,7 @@ import Maybe exposing (withDefault)
 import RemoteData exposing (RemoteData(..), WebData)
 import Result.Extras as Result
 import Route exposing (routeToString)
+import Set
 import Table exposing (defaultCustomizations)
 import Table.Extras as Table
 import Types exposing (..)
@@ -106,13 +107,17 @@ publishButton stream =
         stream
     of
         StreamDataProduct dataProduct ->
-            button
-                [ UIKit.button
-                , UIKit.width_1_1
-                , UIKit.buttonDanger
-                , onClick (DeleteDataProduct dataProduct.qualifiedName)
-                ]
-                [ text "Remove from Mesh" ]
+            if Set.member dataProduct.owner restrictedOwners then
+                span [] []
+
+            else
+                button
+                    [ UIKit.button
+                    , UIKit.width_1_1
+                    , UIKit.buttonDanger
+                    , onClick (DeleteDataProduct dataProduct.qualifiedName)
+                    ]
+                    [ text "Remove from Mesh" ]
 
         StreamTopic topic ->
             button
