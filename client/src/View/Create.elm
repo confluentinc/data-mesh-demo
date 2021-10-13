@@ -109,7 +109,7 @@ useCasesDetail mUseCase executeUseCaseResult =
                                         ]
                                 )
                                 [ ( "Name", unUseCaseName useCase.name )
-                                , ( "Data Product Inputs", useCase.inputs )
+                                , ( "Inputs", useCase.inputs )
                                 , ( "Query"
                                   , useCase.ksqlDbCommand
                                   )
