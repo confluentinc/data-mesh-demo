@@ -32,7 +32,7 @@ view activeStreamKey model =
                  (case (model.actuatorInfo) of
                      ( Success actuatorInfo) ->
                         [ text ("Data Products available in the " ++ actuatorInfo.domain ++ " domain") ]
-                     _ -> []
+                     _ -> [ text "Data Products available"]
                  )
             , webDataView
                 (Table.view
