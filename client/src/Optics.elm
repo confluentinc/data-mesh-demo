@@ -72,10 +72,10 @@ streamName =
 
 
 stream : QualifiedName -> Optional Model Stream
-stream q =
+stream name =
     streams
         |> lensWithPrism RemoteData.prism
-        |> optionalWithOptional (Dict.optional unQualifiedName q)
+        |> optionalWithOptional (Dict.optional unQualifiedName name)
 
 
 dataProduct : Optional Stream DataProduct
@@ -99,11 +99,6 @@ dataProduct =
         )
 
 
-streamDataProduct : QualifiedName -> Optional Model DataProduct
-streamDataProduct =
-    stream >> optionalWithOptional dataProduct
-
-
 topic : Optional Stream Topic
 topic =
     Optional
@@ -125,9 +120,18 @@ topic =
         )
 
 
+streamDataProduct : QualifiedName -> Optional Model DataProduct
+streamDataProduct name =
+    optionalWithOptional
+        dataProduct
+        (stream name)
+
+
 streamTopic : QualifiedName -> Optional Model Topic
-streamTopic =
-    stream >> optionalWithOptional topic
+streamTopic name =
+    optionalWithOptional
+        topic
+        (stream name)
 
 
 auditLogModel : Lens { s | auditLogModel : a } a
