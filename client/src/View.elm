@@ -163,7 +163,7 @@ screenshotDialog staticImages screenshotTarget =
     in
     { closeMessage = Just ClearScreenshot
     , containerClass = Just "screenshot-dialog"
-    , header = Just (h2 [ class "uk-modal-title" ] [ text title ])
+    , header = Just (h2 [ UIKit.modalTitle ] [ text title ])
     , body =
         Just
             (div [ UIKit.grid ]
