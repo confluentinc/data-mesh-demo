@@ -1,5 +1,6 @@
 package io.confluent.demo.datamesh.cc.ksqldb.api;
 
+import io.confluent.demo.datamesh.AuditLogService;
 import io.confluent.demo.datamesh.UseCasesController;
 import io.confluent.demo.datamesh.model.UseCase;
 import io.confluent.ksql.api.client.Client;
@@ -17,6 +18,9 @@ import java.net.URL;
 @RestController
 public class KsqlDbService {
     private final Client ksqlClient;
+
+    @Autowired
+    private AuditLogService auditLogService;
 
     @ResponseStatus(value= HttpStatus.BAD_REQUEST)
     public static class RestrictedStatement extends RuntimeException {
@@ -52,6 +56,9 @@ public class KsqlDbService {
             .findFirst()
             .orElseThrow(() -> new RestrictedStatement("not allowed"));
 
+        auditLogService.sendAuditLogEntry(
+            "Use ksqlDB SDK to execute statement",
+            String.format("ksqlClient.executeStatement(\"%s\")", foundUseCase.getKsqlDbCommand()));
         ksqlClient.executeStatement(foundUseCase.getKsqlDbCommand()).get();
     }
 }
