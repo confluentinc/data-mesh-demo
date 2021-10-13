@@ -81,7 +81,7 @@ module.exports = {
       template: 'static/index.html',
       chunks: ['index']
     }),
-    new FaviconsWebpackPlugin('static/images/logo.png')
+    new FaviconsWebpackPlugin('static/images/favicon.ico')
   ].concat(plugins),
 
   output: {
