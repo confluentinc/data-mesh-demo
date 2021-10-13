@@ -3,6 +3,7 @@ module Optics exposing (..)
 {-| Optics are composable getters and setters, for peeking into values and/or changing their values.
 -}
 
+import Array exposing (Array)
 import GenericDict as Dict exposing (Dict)
 import GenericDict.Extra as Dict
 import Monocle.Common
@@ -12,6 +13,7 @@ import Monocle.Optional exposing (..)
 import Monocle.Prism exposing (..)
 import Monocle.Traversal exposing (..)
 import RemoteData exposing (WebData)
+import Stomp exposing (AuditLogMsg)
 import Types exposing (..)
 
 
@@ -136,6 +138,13 @@ auditLogModel =
 messages : Lens { s | messages : a } a
 messages =
     Lens .messages (\a s -> { s | messages = a })
+
+
+auditLogMessages : Lens Model (Array (Result String AuditLogMsg))
+auditLogMessages =
+    lensWithLens
+        messages
+        auditLogModel
 
 
 minimised : Lens { s | minimised : a } a

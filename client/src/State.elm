@@ -135,7 +135,7 @@ update msg model =
             in
             ( model
                 |> Optics.stompSession.set subModel
-                |> modify (lensWithLens Optics.messages Optics.auditLogModel) updateMessages
+                |> modify Optics.auditLogMessages updateMessages
             , Cmd.batch
                 [ Cmd.map StompMsg subCmd
                 , scrollToBottom View.auditLogMsgsId
