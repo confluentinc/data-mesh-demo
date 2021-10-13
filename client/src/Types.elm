@@ -261,6 +261,7 @@ type alias UseCase =
 
 type alias ActuatorInfo =
     { hostedMode : HostedMode
+    , domain : String
     , commitId : String
     }
 
