@@ -44,6 +44,7 @@ init flags url navKey =
       , useCases = Loading
       , publishForm = Nothing
       , publishFormResult = NotAsked
+      , deleteConfirmation = Nothing
       , deleteResult = NotAsked
       , executeUseCaseResult = NotAsked
       }
@@ -243,7 +244,31 @@ update msg model =
             )
 
         DeleteDataProduct qualifiedName ->
-            ( { model | deleteResult = Loading }
+            case
+                (Optics.streamDataProduct qualifiedName).getOption model
+            of
+                Just dataProduct ->
+                    ( { model | deleteConfirmation = Just dataProduct }
+                    , Cmd.none
+                    )
+
+                Nothing ->
+                    ( model
+                    , Cmd.none
+                    )
+
+        AbandonDeleteDataProduct ->
+            ( { model
+                | deleteConfirmation = Nothing
+              }
+            , Cmd.none
+            )
+
+        ConfirmDeleteDataProduct qualifiedName ->
+            ( { model
+                | deleteConfirmation = Nothing
+                , deleteResult = Loading
+              }
             , Rest.deleteDataProduct qualifiedName
             )
 

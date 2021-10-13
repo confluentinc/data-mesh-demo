@@ -30,6 +30,8 @@ view model =
             (Maybe.map (View.Manage.publishDialog model.publishFormResult) model.publishForm)
         , Dialog.view
             (Maybe.map (screenshotDialog model.flags.staticImages) model.activeScreenshot)
+        , Dialog.view
+            (Maybe.map deleteConfirmationDialog model.deleteConfirmation)
         ]
     }
 
@@ -184,6 +186,47 @@ screenshotDialog staticImages screenshotTarget =
                 , onClick ClearScreenshot
                 ]
                 [ text "Close" ]
+            )
+    }
+
+
+deleteConfirmationDialog : DataProduct -> Dialog.Config Msg
+deleteConfirmationDialog dataProduct =
+    { closeMessage = Just AbandonDeleteDataProduct
+    , containerClass = Nothing
+    , header =
+        Just
+            (h2 [ UIKit.modalTitle ]
+                [ text "Are you sure?" ]
+            )
+    , body =
+        Just
+            (div []
+                [ p []
+                    [ text "Are you sure you want to remove "
+                    , code [] [ text dataProduct.name ]
+                    , text " from the data mesh?"
+                    ]
+                , p []
+                    [ text "I wouldn't advise it. This is a terrible idea. Planes will drop out of the sky. Children will weep." ]
+                ]
+            )
+    , footer =
+        Just
+            (div []
+                [ button
+                    [ UIKit.button
+                    , UIKit.buttonDefault
+                    , onClick AbandonDeleteDataProduct
+                    ]
+                    [ text "Cancel" ]
+                , button
+                    [ UIKit.button
+                    , UIKit.buttonDanger
+                    , onClick (ConfirmDeleteDataProduct dataProduct.qualifiedName)
+                    ]
+                    [ text "Confirm" ]
+                ]
             )
     }
 

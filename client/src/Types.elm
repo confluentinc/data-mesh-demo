@@ -27,6 +27,7 @@ type alias Model =
     , useCases : WebData (Dict UseCaseName UseCase)
     , publishForm : Maybe PublishForm
     , publishFormResult : WebData DataProduct
+    , deleteConfirmation : Maybe DataProduct
     , deleteResult : WebData QualifiedName
     , executeUseCaseResult : WebData UseCaseName
     }
@@ -167,6 +168,8 @@ type Msg
     | AbandonPublishDialog
       --
     | DeleteDataProduct QualifiedName
+    | AbandonDeleteDataProduct
+    | ConfirmDeleteDataProduct QualifiedName
     | DataProductDeleted (WebData QualifiedName)
       --
     | ExecuteUseCase UseCaseName
