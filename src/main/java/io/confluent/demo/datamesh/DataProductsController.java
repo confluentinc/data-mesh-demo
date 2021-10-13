@@ -5,6 +5,7 @@ import io.confluent.demo.datamesh.cc.datacatalog.model.SubjectVersionServiceResu
 import io.confluent.demo.datamesh.model.*;
 import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +24,8 @@ public class DataProductsController {
     private SubjectVersionService subjectVersionService;
     @Autowired
     private AuditLogService auditLogService;
+    @Value("${info.domain}")
+    private String domain;
 
     @ResponseStatus(value= HttpStatus.UNAUTHORIZED)
     public static class RestrictedDataProductException extends RuntimeException {
@@ -52,7 +55,11 @@ public class DataProductsController {
 
     @PostMapping
     public DataProduct postDataProduct(@RequestBody CreateDataProductRequest request) throws Exception {
-        if (protectedOwners.contains(request.getDataProductTag().getOwner())) {
+        if (request.getDataProductTag().getDomain() != domain) {
+            throw new RestrictedDataProductException(
+                    String.format("Unauthorized Data Product domain: %s", request.getDataProductTag().getDomain()));
+        }
+        else if (protectedOwners.contains(request.getDataProductTag().getOwner())) {
            throw new RestrictedDataProductException(
                    String.format("Unauthorized Data Product owner: %s", request.getDataProductTag().getOwner()));
         } else {
@@ -64,7 +71,10 @@ public class DataProductsController {
     @DeleteMapping("/{qualifiedName}")
     public void deleteDataProduct(@PathVariable("qualifiedName") String qualifiedName) {
         DataProduct dp = getDataProduct(qualifiedName);
-        if (protectedOwners.contains(dp.getOwner())) {
+        if (!dp.getDomain().equals(domain)) {
+            throw new RestrictedDataProductException(qualifiedName);
+        }
+        else if (protectedOwners.contains(dp.getOwner())) {
             throw new RestrictedDataProductException(qualifiedName);
         } else {
             dataProductService
