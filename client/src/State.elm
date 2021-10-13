@@ -294,7 +294,7 @@ unpublishStream old =
                 }
 
 
-updatePublishForm : PublishFormMsg -> PublishForm -> ( PublishForm, Cmd Msg )
+updatePublishForm : PublishFormMsg -> PublishForm -> ( PublishForm, Cmd msg )
 updatePublishForm msg model =
     case msg of
         PublishFormSetOwner newOwner ->
