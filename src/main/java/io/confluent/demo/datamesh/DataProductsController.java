@@ -1,6 +1,7 @@
 package io.confluent.demo.datamesh;
 
 import io.confluent.demo.datamesh.cc.datacatalog.api.SubjectVersionService;
+import io.confluent.demo.datamesh.cc.datacatalog.model.DataProductTag;
 import io.confluent.demo.datamesh.cc.datacatalog.model.SubjectVersionServiceResult;
 import io.confluent.demo.datamesh.model.*;
 import org.javatuples.Pair;
@@ -55,18 +56,23 @@ public class DataProductsController {
 
     @PostMapping
     public DataProduct postDataProduct(@RequestBody CreateDataProductRequest request) throws Exception {
-        if (request.getDataProductTag().getDomain() != domain) {
+        if (request.getDataProductTag().getDomain() == null || request.getDataProductTag().getDomain().isEmpty()) {
+            request.setDataProductTag(
+                request.getDataProductTag().builder().withDomain(this.domain).build());
+        }
+        else if (request.getDataProductTag().getDomain() != domain) {
             throw new RestrictedDataProductException(
-                    String.format("Unauthorized Data Product domain: %s", request.getDataProductTag().getDomain()));
+                String.format("Unauthorized Data Product domain: %s", request.getDataProductTag().getDomain()));
         }
-        else if (protectedOwners.contains(request.getDataProductTag().getOwner())) {
+
+        if (protectedOwners.contains(request.getDataProductTag().getOwner())) {
            throw new RestrictedDataProductException(
-                   String.format("Unauthorized Data Product owner: %s", request.getDataProductTag().getOwner()));
-        } else {
-            Pair<DataProduct, Optional<AuditLogEntry>> response = dataProductService.createDataProduct(request);
-            response.getValue1().ifPresent(auditLogService::sendAuditLogEntry);
-            return response.getValue0();
+                String.format("Unauthorized Data Product owner: %s", request.getDataProductTag().getOwner()));
         }
+
+        Pair<DataProduct, Optional<AuditLogEntry>> response = dataProductService.createDataProduct(request);
+        response.getValue1().ifPresent(auditLogService::sendAuditLogEntry);
+        return response.getValue0();
     }
     @DeleteMapping("/{qualifiedName}")
     public void deleteDataProduct(@PathVariable("qualifiedName") String qualifiedName) {
@@ -76,11 +82,11 @@ public class DataProductsController {
         }
         else if (protectedOwners.contains(dp.getOwner())) {
             throw new RestrictedDataProductException(qualifiedName);
-        } else {
-            dataProductService
-                .deleteDataProduct(qualifiedName)
-                .ifPresent(auditLogService::sendAuditLogEntry);
         }
+
+        dataProductService
+            .deleteDataProduct(qualifiedName)
+            .ifPresent(auditLogService::sendAuditLogEntry);
     }
 
     @GetMapping(path = "/manage")

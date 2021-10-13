@@ -97,7 +97,6 @@ unDomain (Domain str) =
 
 type alias PublishForm =
     { topic : Topic
-    , domain : Domain
     , owner : String
     , description : String
     , quality : ProductQuality
@@ -227,7 +226,6 @@ type Msg
 type PublishFormMsg
     = PublishFormSetOwner String
     | PublishFormSetDescription String
-    | PublishFormSetDomain String
     | PublishFormSetQuality ProductQuality
     | PublishFormSetSla ProductSla
 

@@ -21,7 +21,6 @@ suite =
                             , name = "pageviews"
                             }
                         , quality = Authoritative
-                        , domain = toDomain "Product Team"
                         , sla = Tier2
                         }
             ]
@@ -36,7 +35,6 @@ publishDataProductRequest1 =
   "qualifiedName": "lsrc-7xxv2:.:pksqlc-09g26PAGEVIEWS_USER2-value:2",
   "dataProductTag": {
     "owner": "ybyzek",
-    "domain": "Product Team",
     "description": "pageviews users 2",
     "quality": "authoritative",
     "sla": "tier-2"

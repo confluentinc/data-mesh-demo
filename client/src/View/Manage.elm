@@ -217,20 +217,6 @@ publishDialog result model =
                         , disabled (RemoteData.isLoading result)
                         ]
                         [ div []
-                            [ label [ UIKit.formLabel ] [ text "Domain" ]
-                            , div [ UIKit.formControls ]
-                                [ input
-                                    [ type_ "text"
-                                    , UIKit.input
-                                    , placeholder "Data Product Domain"
-                                    , autofocus True
-                                    , value (unDomain model.domain)
-                                    , onInput (PublishFormMsg << PublishFormSetDomain)
-                                    ]
-                                    []
-                                ]
-                            ]
-                        , div []
                             [ label [ UIKit.formLabel ] [ text "Owner" ]
                             , div [ UIKit.formControls ]
                                 [ input

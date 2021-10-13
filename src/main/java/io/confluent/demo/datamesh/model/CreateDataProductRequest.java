@@ -15,10 +15,13 @@ import io.confluent.demo.datamesh.cc.datacatalog.model.DataProductTag;
 public abstract class CreateDataProductRequest {
     private DataProductTag dataProductTag;
 
+    public CreateDataProductRequest(DataProductTag tag) {
+        this.setDataProductTag(tag);
+    }
     public CreateDataProductRequest() {
     }
 
-    public void setDataProductTag(DataProductTag tag) { this.dataProductTag = dataProductTag;}
+    public void setDataProductTag(DataProductTag tag) { this.dataProductTag = tag;}
     public DataProductTag getDataProductTag() {return this.dataProductTag;}
 
     public String getDescription() { return this.dataProductTag.getDescription(); }

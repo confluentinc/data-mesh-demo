@@ -172,7 +172,6 @@ update msg model =
                         Just t ->
                             Just
                                 { topic = t
-                                , domain = toDomain ""
                                 , owner = ""
                                 , description = ""
                                 , quality = Raw
@@ -308,9 +307,6 @@ updatePublishForm msg model =
     case msg of
         PublishFormSetOwner newOwner ->
             ( { model | owner = newOwner }, Cmd.none )
-
-        PublishFormSetDomain newDomain ->
-            ( { model | domain = toDomain newDomain }, Cmd.none )
 
         PublishFormSetDescription newDescription ->
             ( { model | description = newDescription }, Cmd.none )

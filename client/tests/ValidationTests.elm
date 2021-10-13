@@ -15,7 +15,6 @@ suite =
                 \_ ->
                     validateOk publishFormValidator
                         { description = "User "
-                        , domain = toDomain "Product Team"
                         , owner = "Rick"
                         , quality = Raw
                         , sla = Tier3
