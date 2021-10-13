@@ -14,6 +14,12 @@ public class AuditLogService {
     @Autowired
     private AuditLogController controller;
 
+    public void sendAuditLogEntry(String logMsg, String command) {
+        this.sendAuditLogEntry(new AuditLogEntry(logMsg, new String[] { command }));
+    }
+    public void sendAuditLogEntry(String logMsg, String[] commands) {
+        this.sendAuditLogEntry(new AuditLogEntry(logMsg, commands));
+    }
     public void sendAuditLogEntry(String logMsg) {
         this.sendAuditLogEntry(new AuditLogEntry(logMsg));
     }

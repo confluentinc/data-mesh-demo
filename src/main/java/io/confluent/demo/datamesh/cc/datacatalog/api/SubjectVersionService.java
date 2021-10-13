@@ -95,9 +95,20 @@ public class SubjectVersionService {
             @RequestParam Optional<String> includeTag,
             @RequestParam Optional<String> excludeTag) {
 
+        Optional<AuditLogEntry> auditLogEntry = Optional.empty();
+
         String searchUrl = "/search/basic?types=sr_subject_version&attrs=version";
-        if(!includeTag.isEmpty() && includeTag.get().trim().length() > 0)
+        if(!includeTag.isEmpty() && includeTag.get().trim().length() > 0) {
             searchUrl = searchUrl + "&tag=" + includeTag.get();
+            auditLogEntry = Optional.of(new AuditLogEntry(
+                    "Get all Subjects from Confluent Data Catalog with tag '" + includeTag.get() + "'",
+                    new String[]{ String.format("GET %s", searchUrl) }));
+        }
+        else {
+            auditLogEntry = Optional.of(new AuditLogEntry(
+                    "Get all Subjects from Confluent Data Catalog",
+                    new String[]{ String.format("GET %s", searchUrl) }));
+        }
 
         SearchResult result = restTemplate.getForObject(
                 searchUrl,
@@ -119,11 +130,8 @@ public class SubjectVersionService {
                         .collect(Collectors.toList());
         }
 
-        AuditLogEntry auditLogEntry = new AuditLogEntry(
-                "Search Confluent Cloud Data Catalog",
-                new String[]{ String.format("GET %s", searchUrl) });
 
-        return new SubjectVersionServiceResult(found, Optional.of(auditLogEntry));
+        return new SubjectVersionServiceResult(found, auditLogEntry);
     }
 
 

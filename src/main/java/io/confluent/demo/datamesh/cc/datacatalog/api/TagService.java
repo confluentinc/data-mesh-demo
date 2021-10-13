@@ -1,5 +1,8 @@
 package io.confluent.demo.datamesh.cc.datacatalog.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import io.confluent.demo.datamesh.cc.datacatalog.model.*;
 import io.confluent.demo.datamesh.model.AuditLogEntry;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,13 +52,13 @@ public class TagService {
         return new TagServiceResponse(
                 Optional.empty(),
                 Optional.of(new AuditLogEntry(
-                        "Delete DataProduct tag from entity",
-                        new String[]{ String.format("DELETE %s", url) })));
+                        String.format("Delete DataProduct tag from entity '%s'", entityQualifiedName),
+                        String.format("DELETE %s", url) )));
     }
 
     public TagServiceResponse tagSubjectVersionAsDataProduct(
             String entityQualifiedName,
-            DataProductTag tag)
+            DataProductTag tag) throws JsonProcessingException
     {
         String url = String.format("/entity/tags");
         List<DataProductTagEntityRequest> request = Arrays.asList(
@@ -69,8 +72,11 @@ public class TagService {
 
         return new TagServiceResponse(
                 Optional.of(response.getBody()),
-                Optional.of(new AuditLogEntry("Tag entity as DataProduct",
-                        new String[]{ String.format("POST %s", url) })));
+                Optional.of(new AuditLogEntry(
+                    String.format("Tag entity '%s' with 'DataProduct' tag", entityQualifiedName),
+                    String.format("POST %s\n%s",
+                            url,
+                            new ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(request)))));
     }
 
 }

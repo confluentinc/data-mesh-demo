@@ -4,16 +4,18 @@ import java.util.Optional;
 
 public class AuditLogEntry {
     private final String message;
-    private final Optional<String[]> commands;
+    private final String[] commands;
 
+    public AuditLogEntry(String message, String command) {
+        this(message, new String[]{command});
+    }
     public AuditLogEntry(String message) {
-        this.message = message;
-       this.commands = Optional.empty() ;
+        this(message, new String[0]);
     }
     public AuditLogEntry(String message, String[] commands) {
         this.message = message;
-        this.commands = Optional.of(commands);
+        this.commands = commands;
     }
     public String getMessage() { return this.message; }
-    public Optional<String[]> getCommands() { return this.commands; }
+    public String[] getCommands() { return this.commands; }
 }
