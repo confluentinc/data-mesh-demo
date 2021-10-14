@@ -4,15 +4,12 @@ module Decoders exposing
     , decodeStream
     , decodeStreams
     , decodeUseCases
-    , useCaseName
     )
 
 import Json.Decode as Decode exposing (..)
 import Json.Decode.Extra exposing (url, when)
-import Json.Decode.Pipeline exposing (hardcoded, optional, required, requiredAt)
-import RemoteData exposing (RemoteData(..))
+import Json.Decode.Pipeline exposing (required, requiredAt)
 import Types exposing (..)
-import Url as Url exposing (Url)
 
 
 ensureTypeIs : String -> Decoder (a -> b) -> Decoder (a -> b)

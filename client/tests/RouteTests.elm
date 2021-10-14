@@ -1,12 +1,10 @@
 module RouteTests exposing (..)
 
 import Expect exposing (Expectation)
-import Fuzz exposing (Fuzzer, int, list, string)
 import Route exposing (routeParser, routeToString)
 import Test exposing (..)
 import Types exposing (..)
-import Url as Url
-import Url.Parser as Url exposing (Parser, map, oneOf, s)
+import Url
 
 
 suite : Test

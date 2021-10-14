@@ -1,14 +1,9 @@
 module EncodersTests exposing (suite)
 
 import Encoders exposing (encodePublishForm)
-import Expect exposing (Expectation, fail, pass)
-import Fuzz exposing (Fuzzer, int, list, string)
-import Json.Encode exposing (Value, encode)
-import RemoteData exposing (RemoteData(..))
 import Test exposing (..)
 import TestUtils exposing (encodesTo)
 import Types exposing (..)
-import Url exposing (Protocol(..))
 
 
 suite : Test

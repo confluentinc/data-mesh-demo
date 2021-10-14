@@ -9,14 +9,12 @@ module Rest exposing
 
 import Decoders exposing (decodeActuatorInfo, decodeDataProduct, decodeStreams, decodeUseCases)
 import Encoders exposing (encodePublishForm)
-import GenericDict as Dict
 import GenericDict.Extra as Dict
 import Http exposing (Expect, emptyBody, expectJson, expectWhatever, get, jsonBody, post)
 import Http.Extra exposing (delete)
 import Json.Decode exposing (Decoder)
 import RemoteData exposing (WebData)
-import Task
-import Types exposing (Msg(..), PublishForm, QualifiedName, UseCaseName(..), streamQualifiedName, unQualifiedName, unUseCaseName)
+import Types exposing (Msg(..), PublishForm, QualifiedName, UseCaseName, streamQualifiedName, unQualifiedName, unUseCaseName)
 import Url.Builder exposing (absolute)
 
 

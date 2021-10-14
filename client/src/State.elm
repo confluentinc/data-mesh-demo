@@ -3,20 +3,17 @@ module State exposing (..)
 import Array
 import Browser exposing (..)
 import Browser.Navigation as Nav
-import Dialog.Common as Dialog
-import GenericDict as Dict exposing (Dict)
+import GenericDict as Dict
 import Html exposing (..)
 import Monocle.Compose exposing (lensWithLens)
 import Monocle.Lens exposing (modify)
-import Monocle.Optional as Optional
 import Optics
-import RemoteData exposing (RemoteData(..), WebData)
+import RemoteData exposing (RemoteData(..))
 import RemoteData.Extra exposing (mapOnSuccess)
 import Rest
 import Route exposing (routeParser)
 import Scrolling exposing (scrollToBottom)
 import Stomp
-import Stomp.Client
 import Table
 import Types exposing (..)
 import Url exposing (..)

@@ -1,6 +1,5 @@
 module View.Discover exposing (view)
 
-import Browser exposing (..)
 import GenericDict as Dict
 import Html exposing (..)
 import Html.Attributes exposing (class, disabled, href, rows, target, type_, value, wrap)
@@ -8,8 +7,6 @@ import Html.Events exposing (onClick)
 import Json.Extras as Json
 import Markdown
 import RemoteData exposing (RemoteData(..))
-import Rest
-import Route exposing (routeToString)
 import Table exposing (defaultCustomizations)
 import Table.Extras as Table
 import Types exposing (..)

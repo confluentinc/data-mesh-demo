@@ -7,13 +7,11 @@ import Dialog.UIKit as Dialog
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
-import Json.Encode as Encode
 import Markdown
 import Route exposing (routeToString)
 import Stomp exposing (AuditLogMsg)
 import Types exposing (..)
 import UIKit
-import Url exposing (..)
 import View.Create
 import View.Discover
 import View.Manage

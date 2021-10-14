@@ -4,15 +4,11 @@ module Optics exposing (..)
 -}
 
 import Array exposing (Array)
-import GenericDict as Dict exposing (Dict)
 import GenericDict.Extra as Dict
-import Monocle.Common
 import Monocle.Compose exposing (..)
 import Monocle.Lens exposing (..)
 import Monocle.Optional exposing (..)
-import Monocle.Prism exposing (..)
-import Monocle.Traversal exposing (..)
-import RemoteData exposing (WebData)
+import RemoteData
 import Stomp exposing (AuditLogMsg)
 import Types exposing (..)
 
@@ -86,7 +82,7 @@ dataProduct =
                 StreamDataProduct r ->
                     Just r
 
-                StreamTopic r ->
+                StreamTopic _ ->
                     Nothing
         )
         (\new s ->

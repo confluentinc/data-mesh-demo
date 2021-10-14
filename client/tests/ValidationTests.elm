@@ -1,14 +1,8 @@
 module ValidationTests exposing (suite)
 
-import Expect exposing (Expectation, fail, pass)
-import Fuzz exposing (Fuzzer, int, list, string)
-import Json.Decode as Decode exposing (Decoder, decodeString, errorToString)
-import Json.Encode as Encode exposing (encode)
-import RemoteData exposing (RemoteData(..))
+import Expect exposing (fail, pass)
 import Test exposing (..)
-import TestUtils exposing (decodesTo)
 import Types exposing (..)
-import Url exposing (Protocol(..))
 import Validate exposing (validate)
 
 

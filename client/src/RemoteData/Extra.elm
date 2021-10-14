@@ -12,6 +12,6 @@ mapOnSuccess fn webResult =
             Success result ->
                 fn result
 
-            other ->
+            _ ->
                 identity
         )

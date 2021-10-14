@@ -1,7 +1,7 @@
 module Table.Extras exposing (stringColumnWithAttributes)
 
 import Html exposing (Attribute, text)
-import Table exposing (Column, HtmlDetails, defaultCustomizations, increasingOrDecreasingBy, stringColumn, veryCustomColumn)
+import Table exposing (Column, HtmlDetails, increasingOrDecreasingBy, veryCustomColumn)
 
 
 stringColumnWithAttributes : String -> List (Attribute msg) -> (data -> String) -> Column data msg

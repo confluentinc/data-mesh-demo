@@ -3,9 +3,8 @@ module Route exposing
     , routeToString
     )
 
-import Dialog.Common exposing (maybe)
 import Types exposing (..)
-import Url as Url exposing (Url)
+import Url exposing (Url)
 import Url.Parser as Url exposing ((</>), Parser, map, oneOf, s, string, top)
 
 

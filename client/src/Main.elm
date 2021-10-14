@@ -1,10 +1,8 @@
 module Main exposing (main)
 
-import Browser exposing (..)
-import Html exposing (..)
+import Browser
 import State
 import Types exposing (..)
-import Url exposing (..)
 import View
 
 

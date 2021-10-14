@@ -1,6 +1,6 @@
 module Http.Extra exposing (delete)
 
-import Http exposing (Body, Expect, emptyBody, request)
+import Http exposing (Expect, emptyBody, request)
 
 
 delete :

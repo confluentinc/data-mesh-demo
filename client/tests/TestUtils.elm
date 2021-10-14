@@ -1,26 +1,11 @@
 module TestUtils exposing
-    ( decodesSuccessfully
-    , decodesTo
+    ( decodesTo
     , encodesTo
     )
 
-import Expect exposing (Expectation, fail, pass)
+import Expect exposing (Expectation, fail)
 import Json.Decode exposing (Decoder, decodeString, errorToString)
 import Json.Encode exposing (Value, encode)
-
-
-decodesSuccessfully : Decoder a -> String -> Expectation
-decodesSuccessfully decoder json =
-    let
-        decoded =
-            decodeString decoder json
-    in
-    case decoded of
-        Ok _ ->
-            pass
-
-        Err err ->
-            fail (errorToString err)
 
 
 decodesTo : Decoder a -> String -> a -> Expectation

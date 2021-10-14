@@ -1,6 +1,5 @@
 module View.Common exposing
-    ( elementModifying
-    , errorView
+    ( errorView
     , loadingWheel
     , nbsp
     , showProductQuality
@@ -65,11 +64,6 @@ loadingWheel =
     div [ class "loading-wheel" ]
         [ i [] [ text "Loading..." ]
         ]
-
-
-elementModifying : Attribute msg
-elementModifying =
-    class "element-modifying"
 
 
 nbsp : String

@@ -1,6 +1,5 @@
 module View.Manage exposing (publishDialog, view)
 
-import Browser exposing (..)
 import Dialog.Common as Dialog
 import GenericDict as Dict
 import Html exposing (..)
@@ -10,13 +9,11 @@ import Markdown
 import Maybe exposing (withDefault)
 import RemoteData exposing (RemoteData(..), WebData)
 import Result.Extras as Result
-import Route exposing (routeToString)
 import Set
 import Table exposing (defaultCustomizations)
 import Table.Extras as Table
 import Types exposing (..)
 import UIKit
-import Url exposing (..)
 import Validate exposing (validate)
 import View.Common exposing (..)
 
@@ -347,7 +344,7 @@ getDataProduct stream =
         StreamDataProduct dataProduct ->
             Just dataProduct
 
-        StreamTopic topic ->
+        StreamTopic _ ->
             Nothing
 
 

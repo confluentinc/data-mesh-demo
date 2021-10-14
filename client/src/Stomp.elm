@@ -9,10 +9,7 @@ port module Stomp exposing
     )
 
 import Json.Decode as Decode exposing (Decoder, field, list, string)
-import Json.Encode as Encode
 import Stomp.Client as Client exposing (Session)
-import Stomp.Message
-import Stomp.Proc as Proc
 import Stomp.Subscription as Subscription
 
 

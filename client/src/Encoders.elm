@@ -1,9 +1,7 @@
 module Encoders exposing (encodePublishForm)
 
-import Json.Encode as Encode exposing (..)
-import RemoteData exposing (RemoteData(..))
+import Json.Encode exposing (..)
 import Types exposing (..)
-import Url as Url exposing (Url)
 
 
 encodePublishForm : PublishForm -> Value

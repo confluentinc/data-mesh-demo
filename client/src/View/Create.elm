@@ -1,6 +1,5 @@
 module View.Create exposing (view)
 
-import Browser exposing (..)
 import GenericDict as Dict exposing (Dict)
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -10,9 +9,7 @@ import RemoteData exposing (RemoteData(..), WebData)
 import Route exposing (routeToString)
 import Types exposing (..)
 import UIKit
-import Url exposing (..)
 import View.Common exposing (errorView, loadingWheel, webDataView)
-import View.Icons exposing (Icon(..), icon)
 
 
 view : Maybe UseCaseName -> Model -> Html Msg
