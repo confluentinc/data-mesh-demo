@@ -1,4 +1,4 @@
-module RouteTests exposing (..)
+module RouteTests exposing (suite)
 
 import Expect exposing (Expectation)
 import Route exposing (routeParser, routeToString)

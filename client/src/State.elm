@@ -1,4 +1,4 @@
-module State exposing (..)
+module State exposing (init, onUrlChange, onUrlRequest, subscriptions, update)
 
 import Array
 import Browser exposing (..)

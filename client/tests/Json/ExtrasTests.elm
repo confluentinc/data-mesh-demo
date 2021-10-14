@@ -1,4 +1,4 @@
-module Json.ExtrasTests exposing (..)
+module Json.ExtrasTests exposing (suite)
 
 import Expect
 import Json.Extras exposing (prettyPrint)
