@@ -8,7 +8,7 @@
   "private": true,
   "scripts": {
     "dev": "webpack serve --mode development",
-    "build": "webpack --mode production",
+    "build": "elm-test ; webpack --mode production",
     "test": "elm-test",
     "testw": "elm-test --watch",
     "format": "elm-format --yes src tests"
