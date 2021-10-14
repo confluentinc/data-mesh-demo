@@ -71,7 +71,7 @@ mainView model =
                     View.Manage.view model
 
                 NotFound ->
-                    notFoundView model
+                    notFoundView
             ]
         ]
 
@@ -82,8 +82,8 @@ tabView activeView ( tab, label ) =
         [ a [ href (routeToString tab) ] [ text label ] ]
 
 
-notFoundView : Model -> Html msg
-notFoundView model =
+notFoundView : Html msg
+notFoundView =
     h2 [] [ text "Not Found" ]
 
 
