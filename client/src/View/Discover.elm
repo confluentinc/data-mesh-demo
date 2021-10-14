@@ -1,4 +1,4 @@
-module View.Discover exposing (view)
+module View.Discover exposing (deleteConfirmationDialog, view)
 
 import GenericDict as Dict
 import Html exposing (..)
@@ -247,3 +247,44 @@ disabledFormInput inputLabel inputValue =
                 []
             ]
         ]
+
+
+deleteConfirmationDialog : DataProduct -> Dialog.Config Msg
+deleteConfirmationDialog dataProduct =
+    { closeMessage = Just AbandonDeleteDataProduct
+    , containerClass = Nothing
+    , header =
+        Just
+            (h2 [ UIKit.modalTitle ]
+                [ text "Are you sure?" ]
+            )
+    , body =
+        Just
+            (div []
+                [ p []
+                    [ text "Are you sure you want to remove "
+                    , code [] [ text dataProduct.name ]
+                    , text " from the data mesh?"
+                    ]
+                , p []
+                    [ text "Ensure that all consumers have been informed of the removal and have migrated accordingly." ]
+                ]
+            )
+    , footer =
+        Just
+            (div []
+                [ button
+                    [ UIKit.button
+                    , UIKit.buttonDefault
+                    , onClick AbandonDeleteDataProduct
+                    ]
+                    [ text "Cancel" ]
+                , button
+                    [ UIKit.button
+                    , UIKit.buttonDanger
+                    , onClick (ConfirmDeleteDataProduct dataProduct.qualifiedName)
+                    ]
+                    [ text "Confirm" ]
+                ]
+            )
+    }
