@@ -188,7 +188,6 @@ screenshotDialog staticImages screenshotTarget =
     }
 
 
-
 previewCopy : String
 previewCopy =
     """
