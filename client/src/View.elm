@@ -206,7 +206,7 @@ deleteConfirmationDialog dataProduct =
                     , text " from the data mesh?"
                     ]
                 , p []
-                    [ text "I wouldn't advise it. This is a terrible idea. Planes will drop out of the sky. Children will weep." ]
+                    [ text "Ensure that all consumers have been informed of the removal and have migrated accordingly." ]
                 ]
             )
     , footer =
