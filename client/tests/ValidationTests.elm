@@ -1,9 +1,9 @@
 module ValidationTests exposing (suite)
 
-import Expect exposing (fail, pass)
+import Expect exposing (Expectation, fail, pass)
 import Test exposing (..)
 import Types exposing (..)
-import Validate exposing (validate)
+import Validate exposing (Validator, validate)
 
 
 suite : Test
@@ -36,6 +36,7 @@ suite =
         ]
 
 
+validateOk : Validator e a -> a -> Expectation
 validateOk validator input =
     case validate validator input of
         Ok _ ->
@@ -45,6 +46,7 @@ validateOk validator input =
             fail ("Expected validation to pass. Got: " ++ Debug.toString err)
 
 
+validateErr : Validator e a -> List e -> a -> Expectation
 validateErr validator expected input =
     case validate validator input of
         Ok _ ->

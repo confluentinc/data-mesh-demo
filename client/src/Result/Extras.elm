@@ -1,6 +1,7 @@
 module Result.Extras exposing (isErr)
 
 
+isErr : Result e a -> Bool
 isErr x =
     case x of
         Ok _ ->
