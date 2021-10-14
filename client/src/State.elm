@@ -303,19 +303,6 @@ update msg model =
             )
 
 
-unpublishStream : Stream -> Stream
-unpublishStream old =
-    case old of
-        StreamTopic t ->
-            StreamTopic t
-
-        StreamDataProduct d ->
-            StreamTopic
-                { qualifiedName = d.qualifiedName
-                , name = d.name
-                }
-
-
 updatePublishForm : PublishFormMsg -> PublishForm -> ( PublishForm, Cmd msg )
 updatePublishForm msg model =
     case msg of

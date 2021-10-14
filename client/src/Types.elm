@@ -278,3 +278,16 @@ streamQualifiedName stream =
 
         StreamDataProduct p ->
             p.qualifiedName
+
+
+unpublishStream : Stream -> Stream
+unpublishStream old =
+    case old of
+        StreamTopic t ->
+            StreamTopic t
+
+        StreamDataProduct d ->
+            StreamTopic
+                { qualifiedName = d.qualifiedName
+                , name = d.name
+                }
