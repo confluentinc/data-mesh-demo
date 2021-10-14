@@ -29,7 +29,7 @@ view model =
         , Dialog.view
             (Maybe.map (screenshotDialog model.flags.staticImages) model.activeScreenshot)
         , Dialog.view
-            (Maybe.map View.manage.deleteConfirmationDialog model.deleteConfirmation)
+            (Maybe.map View.Discover.deleteConfirmationDialog model.deleteConfirmation)
         ]
     }
 

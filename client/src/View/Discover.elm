@@ -1,5 +1,6 @@
 module View.Discover exposing (deleteConfirmationDialog, view)
 
+import Dialog.Common as Dialog
 import GenericDict as Dict
 import Html exposing (..)
 import Html.Attributes exposing (class, disabled, href, rows, target, type_, value, wrap)
