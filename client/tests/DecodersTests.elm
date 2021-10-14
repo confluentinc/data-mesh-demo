@@ -271,6 +271,7 @@ suite =
                     decodesTo decodeActuatorInfo
                         actuatorInfoResponse1
                         { hostedMode = Hosted
+                        , domain = "product"
                         , commitId = "dc680f1"
                         }
             , test "response 2 - correct result" <|
@@ -278,6 +279,7 @@ suite =
                     decodesTo decodeActuatorInfo
                         actuatorInfoResponse2
                         { hostedMode = Local
+                        , domain = "product"
                         , commitId = "f9ec4ca"
                         }
             ]
@@ -423,6 +425,7 @@ actuatorInfoResponse1 =
     """
 {
   "mode": "hosted",
+  "domain": "product",
   "git": {
     "branch": "debian-0.19.0-1",
     "commit": {
@@ -439,6 +442,7 @@ actuatorInfoResponse2 =
     """
 {
   "mode": "local",
+  "domain": "product",
   "git": {
     "branch": "debian-0.19.0-1",
     "commit": {

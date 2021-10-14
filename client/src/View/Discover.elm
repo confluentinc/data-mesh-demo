@@ -28,7 +28,14 @@ view activeStreamKey model =
     in
     div [ class "discover-pane" ]
         [ div [ class "discover-main" ]
-            [ h2 [] [ text "Data Products in the Mesh" ]
+            [ h2 []
+                (case model.actuatorInfo of
+                    Success actuatorInfo ->
+                        [ text ("Data Products available in the " ++ actuatorInfo.domain ++ " domain") ]
+
+                    _ ->
+                        [ text "Data Products available" ]
+                )
             , webDataView
                 (Table.view
                     (tableConfig activeStreamKey)

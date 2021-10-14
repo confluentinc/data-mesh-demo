@@ -141,6 +141,7 @@ decodeActuatorInfo : Decoder ActuatorInfo
 decodeActuatorInfo =
     succeed ActuatorInfo
         |> required "mode" hostedMode
+        |> required "domain" string
         |> requiredAt [ "git", "commit", "id" ] string
 
 
