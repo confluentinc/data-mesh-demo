@@ -1,0 +1,12 @@
+{
+    "name" : "datagen_stocktrades",
+    "connector.class": "DatagenSource",
+    "kafka.api.key": "$CLOUD_KEY",
+    "kafka.api.secret" : "$CLOUD_SECRET",
+    "kafka.topic" : "stocktrades",
+    "output.data.format" : "AVRO",
+    "quickstart" : "STOCK_TRADES",
+    "max.interval": "500",
+    "iterations": "1000000000",
+    "tasks.max" : "1"
+}
