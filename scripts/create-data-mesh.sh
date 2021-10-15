@@ -31,8 +31,8 @@ source "delta_configs/env.delta"
 augment_config_file $CONFIG_FILE
 
 echo
-echo "Sleep an additional 90s to wait for all Confluent Cloud metadata to propagate"
-sleep 90
+echo "Sleep an additional 2 minutes to wait for all Confluent Cloud metadata to propagate"
+sleep 120
 
 printf "\n";print_process_start "====== Add new tag definition to the Data Catalog."
 echo -e "\nDefine a new tag in the Data Catalog called DataProduct:"
@@ -43,8 +43,9 @@ echo -e "\n\nView the new tag definition:"
 curl -s -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} ${SCHEMA_REGISTRY_URL}/catalog/v1/types/tagdefs/DataProduct | jq .
 
 # Create Data Products
-create_data_product pageviews @edge-team tier-2 curated edge "Website pageviews, from DB pageviews-db:1234/pageviews-tbl" || exit 1
-create_data_product users @edge-team tier-1 authoritative edge "Website users, from DB user-db:2222/users-tbl" || exit 1
+create_data_product stocktrades @execution-team tier-1 authoritative execution "Production stock trades event stream data product" || exit 1
+create_data_product pageviews @edge-team tier-2 curated edge "Production website pageviews event stream data product" || exit 1
+create_data_product users @membership-team tier-1 authoritative membership "Users sourced from production Site-Users DB" || exit 1
 
 printf "\n";print_process_start "====== Prepare ksqlDB entities for new Data Products."
 create_ksqldb_app || exit 1

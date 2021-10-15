@@ -72,7 +72,7 @@ function create_ksqldb_app() {
   ksqlDBAppId=$(eval $CMD) \
     && print_pass "Retrieved ksqlDB application ID: $ksqlDBAppId" \
     || exit_with_error -c $? -n "$NAME" -m "$CMD" -l $(($LINENO -3))
-  CMD="ccloud ksql app configure-acls $ksqlDBAppId pageviews users"
+  CMD="ccloud ksql app configure-acls $ksqlDBAppId stocktrades pageviews users"
   $CMD \
     && print_pass "$CMD" \
     || exit_with_error -c $? -n "$NAME" -m "$CMD" -l $(($LINENO -3))
