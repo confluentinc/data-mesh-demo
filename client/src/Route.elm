@@ -40,8 +40,8 @@ routeToPieces : View -> List String
 routeToPieces view =
     case view of
         Discover mQualifiedName ->
-            [ "discover" ]
-                ++ (case mQualifiedName of
+            "discover"
+                :: (case mQualifiedName of
                         Nothing ->
                             []
 
@@ -50,8 +50,8 @@ routeToPieces view =
                    )
 
         Create mName ->
-            [ "create" ]
-                ++ (case mName of
+            "create"
+                :: (case mName of
                         Nothing ->
                             []
 

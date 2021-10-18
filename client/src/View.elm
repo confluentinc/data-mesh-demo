@@ -90,8 +90,8 @@ notFoundView =
 footerView : AuditLogModel -> Html Msg
 footerView auditLogModel =
     footer
-        ([ class "audit-log" ]
-            ++ (if auditLogModel.minimised then
+        (class "audit-log"
+            :: (if auditLogModel.minimised then
                     [ class "audit-log-minimised" ]
 
                 else
