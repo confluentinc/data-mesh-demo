@@ -68,12 +68,57 @@ public class UseCasesController {
                         UriUtils.encode("{\"auto.offset.reset\":\"latest\"}", StandardCharsets.UTF_8.name())),
                 "title");
     }
+    private UseCase getStocksSoldUseCase() throws UnsupportedEncodingException {
+        String cmd = "CREATE TABLE IF NOT EXISTS MOST_POPULAR_STOCK_SOLD\n    with (kafka_topic='most_popular_stock_sold')\n    AS SELECT SYMBOL, TOPK(COUNT(*), 1) AS numsold\n    FROM STOCKTRADES\n    WHERE SIDE = 'SELL'\n    WINDOW TUMBLING (size 60 second)\n    GROUP BY USERID HAVING COUNT(*) > 1;";
+        return new UseCase(
+                "Compute the most-sold stock in the last minute. This consumes data from the `stocktrades` topic, and emits results that can be published as their own data product.",
+                "most_popular_stock_sold",
+                "stocktrades",
+                cmd,
+                "most_popular_stock_sold",
+                String.format("%s/editor?command=%s&ksqlClusterId=%s&properties=%s",
+                        urlService.getKsqlDbUrl(), // &ksqlClusterId=lksqlc-1v2p6&properties=%7B%22auto.offset.reset%22%3A%22latest%22%7D
+                        UriUtils.encode(cmd, StandardCharsets.UTF_8.name()),
+                        UriUtils.encode(urlService.getKsqlDbId(), StandardCharsets.UTF_8.name()),
+                        UriUtils.encode("{\"auto.offset.reset\":\"latest\"}", StandardCharsets.UTF_8.name())),
+                "Most sold stock per minute");
+    }
+    private UseCase getHighValueStockTradesUseCase() throws UnsupportedEncodingException {
+        String cmd = "CREATE STREAM IF NOT EXISTS HIGH_VALUE_STOCK_TRADES\n    WITH (KAFKA_TOPIC='high_value_stock_trades') AS SELECT\n    U.ID USERID, U.REGIONID REGION,\n    T.SIDE SIDE, T.QUANTITY QUANTITY, T.SYMBOL SYMBOL, T.PRICE PRICE, T.ACCOUNT ACCOUNT\n    FROM STOCKTRADES T\n    INNER JOIN USERS U ON ((T.USERID = U.ID))\n    WHERE ((T.PRICE > 500) AND (T.QUANTITY > 2500))\n    EMIT CHANGES;";
+        return new UseCase(
+                "Join the Users Data Product on the domain-internal Stock Trades topic. Find the largest trades, and emit the enriched trade for further review.",
+                "high_value_stock_trades",
+                "stocktrades, users",
+                cmd,
+                "high_value_stock_trades",
+                String.format("%s/editor?command=%s&ksqlClusterId=%s&properties=%s",
+                        urlService.getKsqlDbUrl(), // &ksqlClusterId=lksqlc-1v2p6&properties=%7B%22auto.offset.reset%22%3A%22latest%22%7D
+                        UriUtils.encode(cmd, StandardCharsets.UTF_8.name()),
+                        UriUtils.encode(urlService.getKsqlDbId(), StandardCharsets.UTF_8.name()),
+                        UriUtils.encode("{\"auto.offset.reset\":\"latest\"}", StandardCharsets.UTF_8.name())),
+                "Find high-value stock trades for review");
+    }
+    private UseCase getInfoSecUseCase() throws UnsupportedEncodingException {
+        String cmd = "CREATE STREAM IF NOT EXISTS US_ENRICHED_STOCK_TRADES\n    WITH (KAFKA_TOPIC='us_enriched_stock_trades') AS SELECT\n    U.ID USERID, U.REGIONID REGION,\n    T.SIDE SIDE, T.QUANTITY QUANTITY, T.SYMBOL SYMBOL, T.PRICE PRICE, T.ACCOUNT ACCOUNT\n    FROM STOCKTRADES T\n    INNER JOIN USERS U ON T.USERID = U.ID\n    WHERE U.REGIONID = 'REGION_1'\n    EMIT CHANGES;";
+        return new UseCase(
+                "US (Region_1) and International data (Region_2 through Region_9) need to be treated separately. Ensure that all International users are filtered out, such that they are not retained in any US-domiciled datastores.",
+                "us_enriched_stock_trades",
+                "stocktrades, users",
+                cmd,
+                "us_enriched_stock_trades",
+                String.format("%s/editor?command=%s&ksqlClusterId=%s&properties=%s",
+                        urlService.getKsqlDbUrl(), // &ksqlClusterId=lksqlc-1v2p6&properties=%7B%22auto.offset.reset%22%3A%22latest%22%7D
+                        UriUtils.encode(cmd, StandardCharsets.UTF_8.name()),
+                        UriUtils.encode(urlService.getKsqlDbId(), StandardCharsets.UTF_8.name()),
+                        UriUtils.encode("{\"auto.offset.reset\":\"latest\"}", StandardCharsets.UTF_8.name())),
+                "Separate US Data for InfoSec management");
+    }
     @GetMapping
     public List<UseCase> getUseCases() throws UnsupportedEncodingException {
         return List.of(
-                getEnrichUseCase(),
-                getFilterUseCase(),
-                getAggregateUseCase());
+                getStocksSoldUseCase(),
+                getHighValueStockTradesUseCase(),
+                getInfoSecUseCase());
     }
 
 }
