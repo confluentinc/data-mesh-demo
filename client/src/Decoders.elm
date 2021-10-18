@@ -130,6 +130,7 @@ decodeUseCase : Decoder UseCase
 decodeUseCase =
     succeed UseCase
         |> required "name" useCaseName
+        |> required "title" string
         |> required "description" string
         |> required "inputs" string
         |> required "ksqlDbCommand" string
