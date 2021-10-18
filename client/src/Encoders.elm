@@ -12,7 +12,7 @@ encodePublishForm publishForm =
         , ( "dataProductTag"
           , object
                 [ ( "owner", string publishForm.owner )
-                , ( "domain", string publishForm.domain )
+                , ( "domain", string (unDomain publishForm.domain) )
                 , ( "description", string publishForm.description )
                 , ( "quality", productQuality publishForm.quality )
                 , ( "sla", productSla publishForm.sla )

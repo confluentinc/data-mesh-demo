@@ -15,7 +15,7 @@ suite =
                 \_ ->
                     validateOk publishFormValidator
                         { description = "User "
-                        , domain = "Product Team"
+                        , domain = Domain "Product Team"
                         , owner = "Rick"
                         , quality = Raw
                         , sla = Tier3
@@ -26,7 +26,7 @@ suite =
                     validateErr publishFormValidator
                         [ RestrictedOwner ]
                         { description = "User "
-                        , domain = "Product Team"
+                        , domain = Domain "Product Team"
                         , owner = "@edge-team"
                         , quality = Curated
                         , sla = Tier2

@@ -32,7 +32,7 @@ view activeStreamKey model =
             [ h2 []
                 (case model.actuatorInfo of
                     Success actuatorInfo ->
-                        [ text ("Data Products available in the " ++ actuatorInfo.domain ++ " domain") ]
+                        [ text ("Data Products available in the " ++ unDomain actuatorInfo.domain ++ " domain") ]
 
                     _ ->
                         [ text "Data Products available" ]
@@ -158,7 +158,7 @@ streamDetailView mActuatorInfo mStream =
             div []
                 [ form [ UIKit.formHorizontal ]
                     [ disabledFormInput "Name" dataProduct.name
-                    , disabledFormInput "Domain" dataProduct.domain
+                    , disabledFormInput "Domain" (unDomain dataProduct.domain)
                     , disabledFormInput "Description" dataProduct.description
                     , disabledFormInput "Owner" dataProduct.owner
                     , disabledFormInput "Quality" (showProductQuality dataProduct.quality)

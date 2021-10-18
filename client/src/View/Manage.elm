@@ -60,7 +60,7 @@ tableConfig =
         , toMsg = SetDataProductsTableState
         , columns =
             [ Table.stringColumn "Name" getStreamName
-            , Table.stringColumn "Domain" (getStreamDomain >> withDefault "-")
+            , Table.stringColumn "Domain" (getStreamDomain >> Maybe.map unDomain >> withDefault "-")
             , Table.stringColumnWithAttributes
                 "Description"
                 [ class "description" ]
@@ -177,7 +177,7 @@ publishDialog result model =
                                     , UIKit.input
                                     , placeholder "Data Product Domain"
                                     , autofocus True
-                                    , value model.domain
+                                    , value (unDomain model.domain)
                                     , onInput (PublishFormMsg << PublishFormSetDomain)
                                     ]
                                     []
@@ -308,7 +308,7 @@ getStreamName stream =
             topic.name
 
 
-getStreamDomain : Stream -> Maybe String
+getStreamDomain : Stream -> Maybe Domain
 getStreamDomain =
     getDataProduct >> Maybe.map .domain
 

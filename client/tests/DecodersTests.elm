@@ -18,7 +18,7 @@ suite =
                         dataProductsResponse1
                         [ StreamDataProduct
                             { description = "website users"
-                            , domain = "edge"
+                            , domain = Domain "edge"
                             , name = "users"
                             , owner = "@edge-team"
                             , qualifiedName = QualifiedName "lsrc-jj2vp:.:users-value:1"
@@ -67,7 +67,7 @@ suite =
                             }
                         , StreamDataProduct
                             { description = "website pageviews"
-                            , domain = "edge"
+                            , domain = Domain "edge"
                             , name = "pageviews"
                             , owner = "@edge-team"
                             , qualifiedName = QualifiedName "lsrc-jj2vp:.:pageviews-value:1"
@@ -116,7 +116,7 @@ suite =
                             }
                         , StreamDataProduct
                             { description = "Pageviews count by user"
-                            , domain = "n/a"
+                            , domain = Domain "n/a"
                             , name = "pageviews_count_by_user"
                             , owner = "@edge-team"
                             , qualifiedName = QualifiedName "lsrc-jj2vp:.:pageviews_count_by_user-value:2"
@@ -172,7 +172,7 @@ suite =
                         publishDataProductResponse1
                         (StreamDataProduct
                             { description = "Pageviews"
-                            , domain = "n/a"
+                            , domain = Domain "n/a"
                             , name = "pageviews"
                             , owner = "@edge-team"
                             , qualifiedName = QualifiedName "lsrc-jj2vp:.:pageviews-value:1"
@@ -274,7 +274,7 @@ suite =
                     decodesTo decodeActuatorInfo
                         actuatorInfoResponse1
                         { hostedMode = Hosted
-                        , domain = "product"
+                        , domain = Domain "product"
                         , commitId = "dc680f1"
                         }
             , test "response 2 - correct result" <|
@@ -282,7 +282,7 @@ suite =
                     decodesTo decodeActuatorInfo
                         actuatorInfoResponse2
                         { hostedMode = Local
-                        , domain = "product"
+                        , domain = Domain "product"
                         , commitId = "f9ec4ca"
                         }
             ]

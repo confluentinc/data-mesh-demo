@@ -46,9 +46,18 @@ type ScreenshotTarget
     | SearchScreenshot
 
 
+type Domain
+    = Domain String
+
+
+unDomain : Domain -> String
+unDomain (Domain str) =
+    str
+
+
 type alias PublishForm =
     { topic : Topic
-    , domain : String
+    , domain : Domain
     , owner : String
     , description : String
     , quality : ProductQuality
@@ -208,7 +217,7 @@ type Stream
 type alias DataProduct =
     { qualifiedName : QualifiedName
     , name : String
-    , domain : String
+    , domain : Domain
     , description : String
     , owner : String
     , urls : DataProductUrls
@@ -262,7 +271,7 @@ type alias UseCase =
 
 type alias ActuatorInfo =
     { hostedMode : HostedMode
-    , domain : String
+    , domain : Domain
     , commitId : String
     }
 

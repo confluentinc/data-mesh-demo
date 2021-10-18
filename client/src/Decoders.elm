@@ -44,7 +44,7 @@ decodeDataProduct =
         |> ensureTypeIs "DataProduct"
         |> required "qualifiedName" qualifiedName
         |> required "name" string
-        |> required "domain" string
+        |> required "domain" domain
         |> required "description" string
         |> required "owner" string
         |> required "urls" decodeDataProductUrls
@@ -91,6 +91,11 @@ decodeProductSla =
                     _ ->
                         succeed (OtherSla s)
             )
+
+
+domain : Decoder Domain
+domain =
+    Decode.map Domain string
 
 
 qualifiedName : Decoder QualifiedName
@@ -142,7 +147,7 @@ decodeActuatorInfo : Decoder ActuatorInfo
 decodeActuatorInfo =
     succeed ActuatorInfo
         |> required "mode" hostedMode
-        |> required "domain" string
+        |> required "domain" domain
         |> requiredAt [ "git", "commit", "id" ] string
 
 

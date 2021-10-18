@@ -172,7 +172,7 @@ update msg model =
                         Just t ->
                             Just
                                 { topic = t
-                                , domain = ""
+                                , domain = Domain ""
                                 , owner = ""
                                 , description = ""
                                 , quality = Raw
@@ -310,7 +310,7 @@ updatePublishForm msg model =
             ( { model | owner = newOwner }, Cmd.none )
 
         PublishFormSetDomain newDomain ->
-            ( { model | domain = newDomain }, Cmd.none )
+            ( { model | domain = Domain newDomain }, Cmd.none )
 
         PublishFormSetDescription newDescription ->
             ( { model | description = newDescription }, Cmd.none )
