@@ -21,17 +21,6 @@ suite =
                         , sla = Tier3
                         , topic = { name = "users", qualifiedName = QualifiedName "lsrc-wdzkg:.:users-value:1" }
                         }
-            , test "validate restricted owner" <|
-                \_ ->
-                    validateErr publishFormValidator
-                        [ RestrictedOwner ]
-                        { description = "User "
-                        , domain = Domain "Product Team"
-                        , owner = "@edge-team"
-                        , quality = Curated
-                        , sla = Tier2
-                        , topic = { name = "users", qualifiedName = QualifiedName "lsrc-wdzkg:.:users-value:1" }
-                        }
             ]
         ]
 

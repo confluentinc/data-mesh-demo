@@ -71,7 +71,7 @@ type PublishFormError
 
 restrictedOwners : Set String
 restrictedOwners =
-    Set.fromList [ "@edge-team" ]
+    Set.fromList []
 
 
 publishFormValidator : Validator PublishFormError PublishForm
