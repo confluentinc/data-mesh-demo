@@ -11,12 +11,14 @@
     "build": "elm-test ; webpack --mode production",
     "test": "elm-test",
     "testw": "elm-test --watch",
-    "format": "elm-format --yes src tests"
+    "format": "elm-format --yes src tests",
+    "lint": "elm-review"
   },
   "dependencies": {
     "css-loader": "^6.3.0",
     "elm": "^0.19.1-5",
     "elm-format": "^0.8.5",
+    "elm-review": "^2.6.1",
     "elm-test": "^0.19.1-revision7",
     "elm-webpack-loader": "^8.0.0",
     "favicons": "^6.2.2",
