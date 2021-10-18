@@ -159,7 +159,20 @@ streamDetailView mActuatorInfo mStream =
                 [ form [ UIKit.formHorizontal ]
                     [ disabledFormInput "Name" dataProduct.name
                     , disabledFormInput "Domain" (unDomain dataProduct.domain)
-                    , disabledFormInput "Description" dataProduct.description
+                    , div []
+                        [ label [ UIKit.formLabel ] [ text "Description" ]
+                        , div [ UIKit.formControls ]
+                            [ textarea
+                                [ UIKit.textarea
+                                , class "description"
+                                , value dataProduct.description
+                                , disabled True
+                                , rows 2
+                                , wrap "soft"
+                                ]
+                                []
+                            ]
+                        ]
                     , disabledFormInput "Owner" dataProduct.owner
                     , disabledFormInput "Quality" (showProductQuality dataProduct.quality)
                     , disabledFormInput "SLA" (showProductSla dataProduct.sla)
