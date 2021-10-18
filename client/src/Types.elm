@@ -251,6 +251,7 @@ unUseCaseName (UseCaseName str) =
 
 type alias UseCase =
     { name : UseCaseName
+    , title : String
     , description : String
     , inputs : String
     , ksqlDbCommand : String

@@ -221,7 +221,8 @@ suite =
                 \_ ->
                     decodesTo decodeUseCases
                         useCasesResponse1
-                        [ { description = "Enrich an event stream"
+                        [ { title = "Enrich an event stream"
+                          , description = "This use case enriches an event stream"
                           , inputs = "pageviews,users"
                           , ksqlDbCommand = "CREATE STREAM PAGEVIEWS_ENRICHED\n    with (kafka_topic='pageviews_enriched')\n    AS SELECT U.ID AS USERID, U.REGIONID AS REGION,\n        U.GENDER AS GENDER, V.PAGEID AS PAGE\n    FROM PAGEVIEWS V INNER JOIN USERS U \n    ON V.USERID = U.ID;"
                           , ksqlDbLaunchUrl =
@@ -235,7 +236,8 @@ suite =
                           , name = UseCaseName "pageviews_enriched"
                           , outputTopic = "pageviews_enriched"
                           }
-                        , { description = "Filter an event stream"
+                        , { title = "Filter an event stream"
+                          , description = "This use case filters an event stream"
                           , inputs = "pageviews"
                           , ksqlDbCommand = "CREATE STREAM PAGEVIEWS_FILTERED_USER_1\n    with (kafka_topic='pageviews_filtered_user_1')\n    AS SELECT * FROM PAGEVIEWS WHERE USERID = 'User_1';"
                           , ksqlDbLaunchUrl =
@@ -249,7 +251,8 @@ suite =
                           , name = UseCaseName "pageviews_filtered_user_1"
                           , outputTopic = "pageviews_filtered_user_1"
                           }
-                        , { description = "Aggregate an event stream"
+                        , { title = "Aggregate an event stream"
+                          , description = "This use case aggregates an event stream"
                           , inputs = "pageviews"
                           , ksqlDbCommand = "CREATE TABLE PAGEVIEWS_COUNT_BY_USER\n    with (kafka_topic='pageviews_count_by_user')\n    AS SELECT USERID, COUNT(*) AS numusers\n    FROM PAGEVIEWS WINDOW TUMBLING (size 30 second)\n    GROUP BY USERID HAVING COUNT(*) > 1;"
                           , ksqlDbLaunchUrl =
@@ -393,7 +396,8 @@ useCasesResponse1 =
     """
 [
   {
-    "description": "Enrich an event stream",
+    "title": "Enrich an event stream",
+    "description": "This use case enriches an event stream",
     "name": "pageviews_enriched",
     "inputs": "pageviews,users",
     "ksqlDbCommand": "CREATE STREAM PAGEVIEWS_ENRICHED\\n    with (kafka_topic='pageviews_enriched')\\n    AS SELECT U.ID AS USERID, U.REGIONID AS REGION,\\n        U.GENDER AS GENDER, V.PAGEID AS PAGE\\n    FROM PAGEVIEWS V INNER JOIN USERS U \\n    ON V.USERID = U.ID;",
@@ -401,7 +405,8 @@ useCasesResponse1 =
     "ksqlDbLaunchUrl": "https://confluent.cloud/environments/env-qyjxp/clusters/lkc-9mozm/ksql/lksqlc-rng0p/editor?command=CREATE%20STREAM%20PAGEVIEWS_ENRICHED%0A%20%20%20%20with%20%28kafka_topic%3D%27pageviews_enriched%27%29%0A%20%20%20%20AS%20SELECT%20U.ID%20AS%20USERID%2C%20U.REGIONID%20AS%20REGION%2C%0A%20%20%20%20%20%20%20%20U.GENDER%20AS%20GENDER%2C%20V.PAGEID%20AS%20PAGE%0A%20%20%20%20FROM%20PAGEVIEWS%20V%20INNER%20JOIN%20USERS%20U%20%0A%20%20%20%20ON%20V.USERID%20%3D%20U.ID%3B&ksqlClusterId=lksqlc-rng0p&properties=%7B%22auto.offset.reset%22%3A%22latest%22%7D"
   },
   {
-    "description": "Filter an event stream",
+    "title": "Filter an event stream",
+    "description": "This use case filters an event stream",
     "name": "pageviews_filtered_user_1",
     "inputs": "pageviews",
     "ksqlDbCommand": "CREATE STREAM PAGEVIEWS_FILTERED_USER_1\\n    with (kafka_topic='pageviews_filtered_user_1')\\n    AS SELECT * FROM PAGEVIEWS WHERE USERID = 'User_1';",
@@ -409,7 +414,8 @@ useCasesResponse1 =
     "ksqlDbLaunchUrl": "https://confluent.cloud/environments/env-qyjxp/clusters/lkc-9mozm/ksql/lksqlc-rng0p/editor?command=CREATE%20STREAM%20PAGEVIEWS_FILTERED_USER_1%0A%20%20%20%20with%20%28kafka_topic%3D%27pageviews_filtered_user_1%27%29%0A%20%20%20%20AS%20SELECT%20%2A%20FROM%20PAGEVIEWS%20WHERE%20USERID%20%3D%20%27User_1%27%3B&ksqlClusterId=lksqlc-rng0p&properties=%7B%22auto.offset.reset%22%3A%22latest%22%7D"
   },
   {
-    "description": "Aggregate an event stream",
+    "title": "Aggregate an event stream",
+    "description": "This use case aggregates an event stream",
     "name": "pageviews_count_by_user",
     "inputs": "pageviews",
     "ksqlDbCommand": "CREATE TABLE PAGEVIEWS_COUNT_BY_USER\\n    with (kafka_topic='pageviews_count_by_user')\\n    AS SELECT USERID, COUNT(*) AS numusers\\n    FROM PAGEVIEWS WINDOW TUMBLING (size 30 second)\\n    GROUP BY USERID HAVING COUNT(*) > 1;",

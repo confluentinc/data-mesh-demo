@@ -72,7 +72,7 @@ useCasesView activeUseCaseKey useCases =
                                     [ onClick (ChangeView (Create (Just useCase.name))) ]
                                 )
                                 [ td [ UIKit.button, UIKit.buttonLink ]
-                                    [ text (String.fromInt (index + 1) ++ ": " ++ useCase.description) ]
+                                    [ text (String.fromInt (index + 1) ++ ": " ++ useCase.title) ]
                                 ]
                         )
                 )
@@ -106,6 +106,8 @@ useCasesDetail mUseCase executeUseCaseResult =
                                         ]
                                 )
                                 [ ( "Name", unUseCaseName useCase.name )
+                                , ( "Title", useCase.title )
+                                , ( "Description", useCase.description )
                                 , ( "Inputs", useCase.inputs )
                                 , ( "Query"
                                   , useCase.ksqlDbCommand
