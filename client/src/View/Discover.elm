@@ -148,6 +148,17 @@ tableConfig activeStreamKey =
         }
 
 
+disabledForm : List (Html msg) -> Html msg
+disabledForm children =
+    form [ UIKit.formHorizontal ]
+        [ fieldset
+            [ UIKit.fieldset
+            , disabled True
+            ]
+            children
+        ]
+
+
 streamDetailView : Maybe ActuatorInfo -> Maybe Stream -> Html Msg
 streamDetailView mActuatorInfo mStream =
     case mStream of
@@ -156,9 +167,9 @@ streamDetailView mActuatorInfo mStream =
 
         Just (StreamDataProduct dataProduct) ->
             div []
-                [ form [ UIKit.formHorizontal ]
-                    [ disabledFormInput "Name" dataProduct.name
-                    , disabledFormInput "Domain" (unDomain dataProduct.domain)
+                [ disabledForm
+                    [ stringInput "Name" dataProduct.name
+                    , stringInput "Domain" (unDomain dataProduct.domain)
                     , div []
                         [ label [ UIKit.formLabel ] [ text "Description" ]
                         , div [ UIKit.formControls ]
@@ -166,16 +177,15 @@ streamDetailView mActuatorInfo mStream =
                                 [ UIKit.textarea
                                 , class "description"
                                 , value dataProduct.description
-                                , disabled True
                                 , rows 2
                                 , wrap "soft"
                                 ]
                                 []
                             ]
                         ]
-                    , disabledFormInput "Owner" dataProduct.owner
-                    , disabledFormInput "Quality" (showProductQuality dataProduct.quality)
-                    , disabledFormInput "SLA" (showProductSla dataProduct.sla)
+                    , stringInput "Owner" dataProduct.owner
+                    , stringInput "Quality" (showProductQuality dataProduct.quality)
+                    , stringInput "SLA" (showProductSla dataProduct.sla)
                     , div []
                         [ label [ UIKit.formLabel ] [ text "Schema" ]
                         , div [ UIKit.formControls ]
@@ -183,7 +193,6 @@ streamDetailView mActuatorInfo mStream =
                                 [ UIKit.textarea
                                 , class "schema"
                                 , value (Json.prettyPrintIfPossible dataProduct.schema.schema)
-                                , disabled True
                                 , rows 10
                                 , wrap "soft"
                                 ]
@@ -209,10 +218,8 @@ streamDetailView mActuatorInfo mStream =
                 ]
 
         Just (StreamTopic topic) ->
-            div []
-                [ form [ UIKit.formHorizontal ]
-                    [ disabledFormInput "Name" topic.name
-                    ]
+            disabledForm
+                [ stringInput "Name" topic.name
                 ]
 
 
@@ -247,8 +254,8 @@ linkButton hostedMode ( description, url, screenshotTarget ) =
                 ]
 
 
-disabledFormInput : String -> String -> Html msg
-disabledFormInput inputLabel inputValue =
+stringInput : String -> String -> Html msg
+stringInput inputLabel inputValue =
     div []
         [ label [ UIKit.formLabel ] [ text inputLabel ]
         , div [ UIKit.formControls ]
@@ -256,7 +263,6 @@ disabledFormInput inputLabel inputValue =
                 [ type_ "text"
                 , UIKit.input
                 , value inputValue
-                , disabled True
                 ]
                 []
             ]
