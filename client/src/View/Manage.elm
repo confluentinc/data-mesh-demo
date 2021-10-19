@@ -157,8 +157,25 @@ tableConfig { showControls, caption } =
                                 (Table.HtmlDetails []
                                     [ text contents ]
                                 )
+                , thead = Table.infoThead columnTooltips
             }
         }
+
+
+columnTooltips : String -> Maybe String
+columnTooltips name =
+    case name of
+        "Domain" ->
+            Just "The domain of the data product."
+
+        "Quality" ->
+            Just "The quality of the data product."
+
+        "SLA" ->
+            Just "The service level of the data product."
+
+        _ ->
+            Nothing
 
 
 publishButton : Stream -> Html Msg
