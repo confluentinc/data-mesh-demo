@@ -79,8 +79,8 @@ splitStreamTablesView dataProductsTableState ( streams, actuatorInfo ) =
             { showControls = False
             , caption =
                 Just
-                    [ text "Products from other domains"
-                    , tooltip "Products you cannot manage."
+                    [ text "Data Products from other domains"
+                    , tooltip "These are data products that have been published from other domains and are owned by other teams. You cannot perform any management operations on them as you do not have the necessary permissions"
                     ]
             }
             otherStreams
