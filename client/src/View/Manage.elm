@@ -43,7 +43,14 @@ splitStreamTablesView dataProductsTableState ( streams, actuatorInfo ) =
     let
         ( ourStreams, otherStreams ) =
             List.partition
-                (\stream -> getStreamDomain stream == Just actuatorInfo.domain)
+                (\stream ->
+                    case getStreamDomain stream of
+                        Nothing ->
+                            True
+
+                        Just domain ->
+                            domain == actuatorInfo.domain
+                )
                 (Dict.values streams)
 
         showTableUnlessEmpty tableConfigFlags items =
