@@ -71,7 +71,7 @@ type PublishFormError
 
 restrictedOwners : Set String
 restrictedOwners =
-    Set.fromList []
+    Set.empty
 
 
 publishFormValidator : Validator PublishFormError PublishForm
