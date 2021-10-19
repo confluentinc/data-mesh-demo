@@ -1,7 +1,7 @@
 module View.Manage exposing (publishDialog, view)
 
 import Dialog.Common as Dialog
-import GenericDict as Dict
+import GenericDict as Dict exposing (Dict)
 import Html exposing (..)
 import Html.Attributes exposing (autofocus, checked, class, disabled, name, placeholder, type_, value)
 import Html.Events exposing (onClick, onInput)
@@ -12,6 +12,7 @@ import Result.Extras as Result
 import Set
 import Table exposing (defaultCustomizations)
 import Table.Extras as Table
+import Tuple exposing (pair)
 import Types exposing (..)
 import UIKit
 import Validate exposing (validate)
@@ -33,12 +34,40 @@ view model =
             _ ->
                 span [] []
         , webDataView
-            (Dict.values
-                >> Table.view
-                    tableConfig
-                    model.dataProductsTableState
-            )
-            model.streams
+            (splitStreamTablesView model.dataProductsTableState)
+            (RemoteData.map2 pair model.streams model.actuatorInfo)
+        ]
+
+
+splitStreamTablesView : Table.State -> ( Dict QualifiedName Stream, ActuatorInfo ) -> Html Msg
+splitStreamTablesView dataProductsTableState ( streams, actuatorInfo ) =
+    let
+        ( ourStreams, otherStreams ) =
+            List.partition
+                (\stream -> getStreamDomain stream == Just actuatorInfo.domain)
+                (Dict.values streams)
+
+        showTableUnlessEmpty tableConfigFlags items =
+            if List.isEmpty items then
+                span [] []
+
+            else
+                Table.view
+                    (tableConfig tableConfigFlags)
+                    dataProductsTableState
+                    items
+    in
+    div []
+        [ showTableUnlessEmpty
+            { showControls = True
+            , caption = "Products from our domain"
+            }
+            ourStreams
+        , showTableUnlessEmpty
+            { showControls = False
+            , caption = "Products from other domains"
+            }
+            otherStreams
         ]
 
 
@@ -53,37 +82,55 @@ and an owner.
 """
 
 
-tableConfig : Table.Config Stream Msg
-tableConfig =
+type alias TableConfigFlags =
+    { showControls : Bool
+    , caption : String
+    }
+
+
+tableConfig : TableConfigFlags -> Table.Config Stream Msg
+tableConfig { showControls, caption } =
     Table.customConfig
         { toId = streamQualifiedName >> unQualifiedName
         , toMsg = SetDataProductsTableState
         , columns =
-            [ Table.stringColumn "Name" getStreamName
-            , Table.stringColumn "Domain" (getStreamDomain >> Maybe.map unDomain >> withDefault "-")
+            [ Table.stringColumnWithAttributes
+                "Name"
+                [ UIKit.width_1_10 ]
+                getStreamName
+            , Table.stringColumnWithAttributes
+                "Domain"
+                [ UIKit.width_1_10 ]
+                (getStreamDomain >> Maybe.map unDomain >> withDefault "-")
             , Table.stringColumnWithAttributes
                 "Description"
-                [ class "description" ]
+                [ UIKit.width_2_10 ]
                 (getStreamDescription >> withDefault "-")
-            , Table.stringColumn "Owner" (getStreamOwner >> withDefault "-")
-            , Table.stringColumn "Quality" (getStreamQuality >> maybe "-" showProductQuality)
-            , Table.stringColumn "SLA" (getStreamSLA >> maybe "-" showProductSla)
+            , Table.stringColumnWithAttributes
+                "Owner"
+                [ UIKit.width_1_10 ]
+                (getStreamOwner >> withDefault "-")
+            , Table.stringColumnWithAttributes
+                "Quality"
+                [ UIKit.width_1_10 ]
+                (getStreamQuality >> maybe "-" showProductQuality)
+            , Table.stringColumnWithAttributes
+                "SLA"
+                [ UIKit.width_1_10 ]
+                (getStreamSLA >> maybe "-" showProductSla)
             , Table.veryCustomColumn
-                { name = "Data Product"
+                { name = ""
                 , viewData =
                     \dataProduct ->
-                        Table.HtmlDetails []
-                            [ publishButton dataProduct ]
-                , sorter =
-                    Table.increasingOrDecreasingBy
-                        (\stream ->
-                            case stream of
-                                StreamDataProduct _ ->
-                                    0
+                        Table.HtmlDetails [ UIKit.width_2_10 ]
+                            (if showControls then
+                                [ publishButton dataProduct ]
 
-                                StreamTopic _ ->
-                                    1
-                        )
+                             else
+                                [ span [] [] ]
+                            )
+                , sorter =
+                    Table.unsortable
                 }
             ]
         , customizations =
@@ -94,6 +141,11 @@ tableConfig =
                     , UIKit.tableStriped
                     , UIKit.tableSmall
                     ]
+                , caption =
+                    Just
+                        (Table.HtmlDetails []
+                            [ text caption ]
+                        )
             }
         }
 
@@ -104,17 +156,13 @@ publishButton stream =
         stream
     of
         StreamDataProduct dataProduct ->
-            if Set.member dataProduct.owner restrictedOwners then
-                span [] []
-
-            else
-                button
-                    [ UIKit.button
-                    , UIKit.width_1_1
-                    , UIKit.buttonDanger
-                    , onClick (DeleteDataProduct dataProduct.qualifiedName)
-                    ]
-                    [ text "Remove from Mesh" ]
+            button
+                [ UIKit.button
+                , UIKit.width_1_1
+                , UIKit.buttonDanger
+                , onClick (DeleteDataProduct dataProduct.qualifiedName)
+                ]
+                [ text "Remove from Mesh" ]
 
         StreamTopic topic ->
             button

@@ -189,16 +189,61 @@ width_1_3 =
     class "uk-width-1-3"
 
 
-width_1_4 : Attribute msg
-width_1_4 =
-    class "uk-width-1-4"
-
-
 width_2_3 : Attribute msg
 width_2_3 =
     class "uk-width-2-3"
 
 
+width_1_4 : Attribute msg
+width_1_4 =
+    class "uk-width-1-4"
+
+
+width_1_5 : Attribute msg
+width_1_5 =
+    class "uk-width-1-5"
+
+
 width_2_5 : Attribute msg
 width_2_5 =
     class "uk-width-2-5"
+
+
+width_1_6 : Attribute msg
+width_1_6 =
+    class "uk-width-1-6"
+
+
+width_1_7 : Attribute msg
+width_1_7 =
+    class "uk-width-1-7"
+
+
+width_2_7 : Attribute msg
+width_2_7 =
+    class "uk-width-2-7"
+
+
+width_1_10 : Attribute msg
+width_1_10 =
+    class "uk-width-1-10"
+
+
+width_2_10 : Attribute msg
+width_2_10 =
+    width_1_5
+
+
+childWidth_1_6 : Attribute msg
+childWidth_1_6 =
+    class "uk-child-width-1-6"
+
+
+childWidthAuto : Attribute msg
+childWidthAuto =
+    class "uk-child-width-auto"
+
+
+childWidthExpand : Attribute msg
+childWidthExpand =
+    class "uk-child-width-expand"
