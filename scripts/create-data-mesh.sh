@@ -44,6 +44,7 @@ curl -s -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} ${SCHEMA_REGISTRY_URL}/catalo
 
 # Create Data Products
 create_data_product stocktrades @execution-team tier-1 authoritative execution "Includes all BUY and SELL trades, as well as trades from all regions (both national and international)" || exit 1
+create_data_product pageviews @edge-team tier-2 curated edge "Website page views" || exit 1
 create_data_product users @membership-team tier-1 authoritative membership "All users from all regions (both national and international)" || exit 1
 
 printf "\n";print_process_start "====== Prepare ksqlDB entities for new Data Products."
