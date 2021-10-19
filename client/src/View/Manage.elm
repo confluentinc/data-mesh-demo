@@ -66,12 +66,12 @@ splitStreamTablesView dataProductsTableState ( streams, actuatorInfo ) =
     div []
         [ showTableUnlessEmpty
             { showControls = True
-            , caption = "Products from our domain"
+            , caption = Nothing
             }
             ourStreams
         , showTableUnlessEmpty
             { showControls = False
-            , caption = "Products from other domains"
+            , caption = Just "Products from other domains"
             }
             otherStreams
         ]
@@ -90,7 +90,7 @@ and an owner.
 
 type alias TableConfigFlags =
     { showControls : Bool
-    , caption : String
+    , caption : Maybe String
     }
 
 
@@ -148,10 +148,15 @@ tableConfig { showControls, caption } =
                     , UIKit.tableSmall
                     ]
                 , caption =
-                    Just
-                        (Table.HtmlDetails []
-                            [ text caption ]
-                        )
+                    case caption of
+                        Nothing ->
+                            Nothing
+
+                        Just contents ->
+                            Just
+                                (Table.HtmlDetails []
+                                    [ text contents ]
+                                )
             }
         }
 
