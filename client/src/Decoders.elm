@@ -95,7 +95,7 @@ decodeProductSla =
 
 domain : Decoder Domain
 domain =
-    Decode.map Domain string
+    Decode.map toDomain string
 
 
 qualifiedName : Decoder QualifiedName

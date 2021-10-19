@@ -21,7 +21,7 @@ suite =
                             , name = "pageviews"
                             }
                         , quality = Authoritative
-                        , domain = Domain "Product Team"
+                        , domain = toDomain "Product Team"
                         , sla = Tier2
                         }
             ]

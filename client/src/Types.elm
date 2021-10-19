@@ -1,4 +1,39 @@
-module Types exposing (..)
+module Types exposing
+    ( ActuatorInfo
+    , AuditLogModel
+    , DataProduct
+    , DataProductUrls
+    , Domain
+    , Flags
+    , HostedMode(..)
+    , KsqlSchema
+    , Model
+    , Msg(..)
+    , ProductQuality(..)
+    , ProductSla(..)
+    , PublishForm
+    , PublishFormError(..)
+    , PublishFormMsg(..)
+    , PublishFormResult
+    , QualifiedName(..)
+    , ScreenshotTarget(..)
+    , StaticImages
+    , Stream(..)
+    , Topic
+    , UseCase
+    , UseCaseName(..)
+    , View(..)
+    , allProductQualities
+    , allProductSlas
+    , isSameTab
+    , publishFormValidator
+    , streamQualifiedName
+    , toDomain
+    , unDomain
+    , unQualifiedName
+    , unUseCaseName
+    , unpublishStream
+    )
 
 import Array exposing (Array)
 import Browser exposing (UrlRequest)
@@ -48,6 +83,11 @@ type ScreenshotTarget
 
 type Domain
     = Domain String
+
+
+toDomain : String -> Domain
+toDomain =
+    Domain
 
 
 unDomain : Domain -> String
