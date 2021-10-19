@@ -16,6 +16,7 @@ import Types exposing (..)
 import UIKit
 import Validate exposing (validate)
 import View.Common exposing (..)
+import View.Tooltips exposing (tooltip)
 
 
 view : Model -> Html Msg
@@ -24,7 +25,12 @@ view model =
         [ Markdown.toHtml [] manageCopy
         , h2 []
             [ text "Kafka Topics"
-            , p [] [ small [] [ text "To publish as data products" ] ]
+            , p []
+                [ small []
+                    [ text "To publish as data products"
+                    , tooltip "To publish tooltip."
+                    ]
+                ]
             ]
         , case model.deleteResult of
             Failure err ->
@@ -125,7 +131,7 @@ tableConfig { showControls, caption } =
                 [ UIKit.width_1_10 ]
                 (getStreamSLA >> maybe "-" showProductSla)
             , Table.veryCustomColumn
-                { name = ""
+                { name = "Action"
                 , viewData =
                     \dataProduct ->
                         Table.HtmlDetails [ UIKit.width_2_10 ]
@@ -165,14 +171,26 @@ tableConfig { showControls, caption } =
 columnTooltips : String -> Maybe String
 columnTooltips name =
     case name of
+        "Name" ->
+            Just "The name of the data product."
+
         "Domain" ->
             Just "The domain of the data product."
+
+        "Description" ->
+            Just "The description of the data product."
+
+        "Owner" ->
+            Just "The owner of the data product."
 
         "Quality" ->
             Just "The quality of the data product."
 
         "SLA" ->
             Just "The service level of the data product."
+
+        "Action" ->
+            Just "The action of the data product."
 
         _ ->
             Nothing

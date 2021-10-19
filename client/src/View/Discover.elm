@@ -15,6 +15,7 @@ import UIKit
 import Url exposing (Url)
 import View.Common exposing (..)
 import View.Icons exposing (Icon(..), icon)
+import View.Tooltips exposing (tooltip)
 
 
 view : Maybe QualifiedName -> Model -> Html Msg
@@ -30,13 +31,16 @@ view activeStreamKey model =
     div [ class "discover-pane" ]
         [ div [ class "discover-main" ]
             [ h2 []
-                (case model.actuatorInfo of
-                    Success actuatorInfo ->
-                        [ text ("Data Products available in the " ++ unDomain actuatorInfo.domain ++ " domain") ]
+                [ text
+                    (case model.actuatorInfo of
+                        Success actuatorInfo ->
+                            "Data Products available in the " ++ unDomain actuatorInfo.domain ++ " domain"
 
-                    _ ->
-                        [ text "Data Products available" ]
-                )
+                        _ ->
+                            "Data Products available"
+                    )
+                , tooltip "Data products tooltip 1"
+                ]
             , webDataView
                 (Table.view
                     (tableConfig activeStreamKey)
@@ -48,7 +52,10 @@ view activeStreamKey model =
                 )
             ]
         , div [ class "discover-detail" ]
-            [ h2 [] [ text "Data Products Detail" ]
+            [ h2 []
+                [ text "Data Products Detail"
+                , tooltip "Data products tooltip 2"
+                ]
             , streamDetailView
                 (RemoteData.toMaybe model.actuatorInfo)
                 activeStream
