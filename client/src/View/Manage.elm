@@ -77,7 +77,11 @@ splitStreamTablesView dataProductsTableState ( streams, actuatorInfo ) =
             ourStreams
         , showTableUnlessEmpty
             { showControls = False
-            , caption = Just "Products from other domains"
+            , caption =
+                Just
+                    [ text "Products from other domains"
+                    , tooltip "Products you cannot manage."
+                    ]
             }
             otherStreams
         ]
@@ -94,13 +98,13 @@ and an owner.
 """
 
 
-type alias TableConfigFlags =
+type alias TableConfigFlags msg =
     { showControls : Bool
-    , caption : Maybe String
+    , caption : Maybe (List (Html msg))
     }
 
 
-tableConfig : TableConfigFlags -> Table.Config Stream Msg
+tableConfig : TableConfigFlags Msg -> Table.Config Stream Msg
 tableConfig { showControls, caption } =
     Table.customConfig
         { toId = streamQualifiedName >> unQualifiedName
@@ -161,7 +165,7 @@ tableConfig { showControls, caption } =
                         Just contents ->
                             Just
                                 (Table.HtmlDetails []
-                                    [ text contents ]
+                                    contents
                                 )
                 , thead = Table.infoThead columnTooltips
             }
