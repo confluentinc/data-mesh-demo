@@ -1,8 +1,8 @@
 "use strict";
 /*global WebSocket*/
 
-import './static/main.less';
 import "uikit/dist/css/uikit.min.css";
+import './static/main.less';
 
 
 import logoPath from './static/images/logo.png';
