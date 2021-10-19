@@ -10,6 +10,7 @@ import Route exposing (routeToString)
 import Types exposing (..)
 import UIKit
 import View.Common exposing (errorView, loadingWheel, webDataView)
+import View.Tooltips exposing (tooltip)
 
 
 view : Maybe UseCaseName -> Model -> Html Msg
@@ -36,23 +37,16 @@ view activeUseCaseKey model =
 
 dataProductCreationCopy : String
 dataProductCreationCopy =
+    """## Using Data Products for Business Needs
     """
-## Data Product Creation
-
-There are many ways to create a data product. An application may create a data product from user inputs, from REST calls, event streams, other sources, or a combination of inputs. The application code and frameworks that can be used to build data products varies just as widely, from monoliths, to microservices, to batch and streaming jobs.
-
-In this demo, we’re showcasing creating new data products using existing data products in the form of event streams.
-
-The following example shows the creation of a new ksqlDB application, output Kafka topic, and event schema. The application joins the pageviews and users together, enriching the output into a new Kafka topic.
-
-Click the button to go to Confluent Cloud, where this query will be pre-populated. Create the application and return to this screen.
-"""
 
 
 useCasesView : Maybe UseCaseName -> Dict UseCaseName UseCase -> Html Msg
 useCasesView activeUseCaseKey useCases =
     div [ class "create-use-cases" ]
-        [ h2 [] [ text "Sample Business Use-Cases" ]
+        [ h2 [] [ text "Sample Business Use-Cases"
+        , tooltip "There are many ways to use and create data products. These business use-cases illustrate consuming both data products and event streams that are internal to the domain"
+        ]
         , table
             [ UIKit.table
             , UIKit.tableDivider
@@ -83,7 +77,8 @@ useCasesView activeUseCaseKey useCases =
 useCasesDetail : Maybe UseCase -> WebData UseCaseName -> Html Msg
 useCasesDetail mUseCase executeUseCaseResult =
     div [ class "create-use-detail" ]
-        [ h2 [] [ text "Application Information" ]
+        [ h2 [] [ text "Application Information"
+        , tooltip "These sample applications all use ksqlDB for the sake of the prototype. You are free to use any technology to consume and use these data products, from monolithic consumers, to event-driven microservices, to batch-based jobs. You can then in turn emit new data to its own event stream, with may also become its own data product"]
         , case mUseCase of
             Nothing ->
                 i [] [ text "Select a use case from the table on the left." ]
