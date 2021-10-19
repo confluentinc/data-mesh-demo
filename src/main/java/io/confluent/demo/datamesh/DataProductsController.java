@@ -62,7 +62,7 @@ public class DataProductsController {
             request.setDataProductTag(
                 request.getDataProductTag().builder().withDomain(this.domain).build());
         }
-        else if ( request.getDataProductTag().getDomain().equals(domain) ) {
+        else if ( !request.getDataProductTag().getDomain().equals(domain) ) {
             throw new RestrictedDataProductException(
                 String.format("Unauthorized Data Product domain: %s", request.getDataProductTag().getDomain()));
         }
