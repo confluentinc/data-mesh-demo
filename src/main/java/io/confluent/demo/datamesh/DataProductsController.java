@@ -8,10 +8,12 @@ import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -56,16 +58,16 @@ public class DataProductsController {
 
     @PostMapping
     public DataProduct postDataProduct(@RequestBody CreateDataProductRequest request) throws Exception {
-        if (request.getDataProductTag().getDomain() == null || request.getDataProductTag().getDomain().isEmpty()) {
+        if ( !StringUtils.hasText(request.getDataProductTag().getDomain()) ) {
             request.setDataProductTag(
                 request.getDataProductTag().builder().withDomain(this.domain).build());
         }
-        else if (request.getDataProductTag().getDomain() != domain) {
+        else if ( !request.getDataProductTag().getDomain().equals(domain) ) {
             throw new RestrictedDataProductException(
                 String.format("Unauthorized Data Product domain: %s", request.getDataProductTag().getDomain()));
         }
 
-        if (protectedOwners.contains(request.getDataProductTag().getOwner())) {
+        if ( protectedOwners.contains(request.getDataProductTag().getOwner()) ) {
            throw new RestrictedDataProductException(
                 String.format("Unauthorized Data Product owner: %s", request.getDataProductTag().getOwner()));
         }
