@@ -9,7 +9,6 @@ import Markdown
 import Maybe exposing (withDefault)
 import RemoteData exposing (RemoteData(..), WebData)
 import Result.Extras as Result
-import Set
 import Table exposing (defaultCustomizations)
 import Table.Extras as Table
 import Tuple exposing (pair)
