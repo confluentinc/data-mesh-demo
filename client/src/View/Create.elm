@@ -38,6 +38,7 @@ view activeUseCaseKey model =
 dataProductCreationCopy : String
 dataProductCreationCopy =
     """## Using Data Products for Business Needs
+    Once you have identified which data products you need for your business use-case, you can then create the application. In this page, we have several sample business use-cases that outline the consumption and usage of our pre-published data products.
     """
 
 
