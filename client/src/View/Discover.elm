@@ -74,13 +74,8 @@ view activeStreamKey model =
                     _ ->
                         []
                 )
-            , Markdown.toHtml [] discoverCopy
             ]
         ]
-
-
-discoverCopy : String
-discoverCopy = """"""
 
 
 filterDataProducts : List Stream -> List DataProduct
