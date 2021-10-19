@@ -134,6 +134,11 @@ margin =
     class "uk-margin"
 
 
+marginBottom : Attribute msg
+marginBottom =
+    class "uk-margin-bottom"
+
+
 alert : Attribute msg
 alert =
     class "uk-alert"
@@ -204,6 +209,11 @@ width_1_5 =
     class "uk-width-1-5"
 
 
+width_4_5 : Attribute msg
+width_4_5 =
+    class "uk-width-4-5"
+
+
 width_2_5 : Attribute msg
 width_2_5 =
     class "uk-width-2-5"
@@ -212,6 +222,11 @@ width_2_5 =
 width_1_6 : Attribute msg
 width_1_6 =
     class "uk-width-1-6"
+
+
+width_5_6 : Attribute msg
+width_5_6 =
+    class "uk-width-5-6"
 
 
 width_1_7 : Attribute msg

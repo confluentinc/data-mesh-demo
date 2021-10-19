@@ -89,35 +89,32 @@ useCasesDetail mUseCase executeUseCaseResult =
                 i [] [ text "Select a use case from the table on the left." ]
 
             Just useCase ->
-                div []
-                    [ table
-                        [ UIKit.table
-                        , UIKit.tableDivider
-                        , UIKit.tableStriped
-                        , UIKit.tableSmall
-                        ]
-                        [ tbody []
-                            (List.map
-                                (\( title, content ) ->
-                                    tr
-                                        []
-                                        [ th [] [ text title ]
-                                        , td [] [ pre [] [ text content ] ]
-                                        ]
-                                )
-                                [ ( "Name", unUseCaseName useCase.name )
-                                , ( "Title", useCase.title )
-                                , ( "Description", useCase.description )
-                                , ( "Inputs", useCase.inputs )
-                                , ( "Query"
-                                  , useCase.ksqlDbCommand
-                                  )
-                                , ( "Output Topic"
-                                  , useCase.outputTopic
-                                  )
-                                ]
+                table
+                    [ UIKit.table
+                    , UIKit.tableDivider
+                    , class "table-horizontal"
+                    ]
+                    [ tbody []
+                        (List.map
+                            (\( title, content ) ->
+                                tr []
+                                    [ th [] [ text title ]
+                                    , td [] [ content ]
+                                    ]
                             )
-                        ]
+                            [ ( "Title", text useCase.title )
+                            , ( "Description", text useCase.description )
+                            , ( "Name", code [] [ text (unUseCaseName useCase.name) ] )
+                            , ( "Inputs", code [] [ text useCase.inputs ] )
+                            , ( "Output Topic"
+                              , code [] [ text useCase.outputTopic ]
+                              )
+                            , ( "Query"
+                              , pre [ style "max-height" "300px" ]
+                                    [ code [] [ text useCase.ksqlDbCommand ] ]
+                              )
+                            ]
+                        )
                     ]
         , case ( mUseCase, executeUseCaseResult ) of
             ( Nothing, _ ) ->
@@ -141,6 +138,7 @@ useCasesDetail mUseCase executeUseCaseResult =
                 button
                     [ UIKit.button
                     , UIKit.buttonPrimary
+                    , UIKit.marginBottom
                     , onClick (ExecuteUseCase useCase.name)
                     ]
                     [ text "Execute this ksqlDB statement"

@@ -3,7 +3,7 @@ module View.Discover exposing (deleteConfirmationDialog, view)
 import Dialog.Common as Dialog
 import GenericDict as Dict
 import Html exposing (..)
-import Html.Attributes exposing (class, disabled, href, rows, target, type_, value, wrap)
+import Html.Attributes exposing (class, disabled, href, rows, style, target, type_, value, wrap)
 import Html.Events exposing (onClick)
 import Json.Extras as Json
 import Markdown
@@ -167,39 +167,32 @@ streamDetailView mActuatorInfo mStream =
 
         Just (StreamDataProduct dataProduct) ->
             div []
-                [ disabledForm
-                    [ stringInput "Name" dataProduct.name
-                    , stringInput "Domain" (unDomain dataProduct.domain)
-                    , div []
-                        [ label [ UIKit.formLabel ] [ text "Description" ]
-                        , div [ UIKit.formControls ]
-                            [ textarea
-                                [ UIKit.textarea
-                                , class "description"
-                                , value dataProduct.description
-                                , rows 2
-                                , wrap "soft"
-                                ]
-                                []
-                            ]
-                        ]
-                    , stringInput "Owner" dataProduct.owner
-                    , stringInput "Quality" (showProductQuality dataProduct.quality)
-                    , stringInput "SLA" (showProductSla dataProduct.sla)
-                    , div []
-                        [ label [ UIKit.formLabel ] [ text "Schema" ]
-                        , div [ UIKit.formControls ]
-                            [ textarea
-                                [ UIKit.textarea
-                                , class "schema"
-                                , value (Json.prettyPrintIfPossible dataProduct.schema.schema)
-                                , rows 10
-                                , wrap "soft"
-                                ]
-                                []
-                            ]
-                        ]
+                [ table
+                    [ UIKit.table
+                    , UIKit.tableDivider
+                    , class "table-horizontal"
                     ]
+                    (List.map
+                        (\( title, content ) ->
+                            tr []
+                                [ th [] [ text title ]
+                                , td [] [ content ]
+                                ]
+                        )
+                        [ ( "Name", code [] [ text dataProduct.name ] )
+                        , ( "Domain", code [] [ text (unDomain dataProduct.domain) ] )
+                        , ( "Owner", code [] [ text dataProduct.owner ] )
+                        , ( "Quality", text (showProductQuality dataProduct.quality) )
+                        , ( "SLA", text (showProductSla dataProduct.sla) )
+                        , ( "Schema"
+                          , pre []
+                                [ code []
+                                    [ text (Json.prettyPrintIfPossible dataProduct.schema.schema)
+                                    ]
+                                ]
+                          )
+                        ]
+                    )
                 , case mActuatorInfo of
                     Just actuatorInfo ->
                         div [ UIKit.margin, UIKit.width_1_1 ]

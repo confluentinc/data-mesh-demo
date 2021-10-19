@@ -110,9 +110,9 @@ body {
 .discover-pane,
 .create-pane {
   display: grid;
-  grid-column-gap: 30px;
+  grid-column-gap: 4%;
   grid-row-gap: 30px;
-  grid-template-columns: 45% auto;
+  grid-template-columns: 45% 54%;
 }
 
 .discover-pane {
@@ -281,6 +281,18 @@ textarea.schema {
     left: 2rem;
   }
 
+}
+
+.table-horizontal {
+  th {
+    vertical-align: top;
+  }
+
+  pre {
+    max-height: 300px;
+    overflow: scroll;
+    white-space: break-spaces;
+  }
 }
 
 .discover-pane {
