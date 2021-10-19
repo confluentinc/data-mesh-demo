@@ -27,8 +27,8 @@ view model =
             [ text "Kafka Topics"
             , p []
                 [ small []
-                    [ text "To publish as data products"
-                    , tooltip "To publish tooltip."
+                    [ text "Publishable as data products"
+                    , tooltip "These event streams are fully within your domain, and can be published as event streams. Doing so will expose them publicly to all other domains in your org"
                     ]
                 ]
             ]
@@ -172,25 +172,25 @@ columnTooltips : String -> Maybe String
 columnTooltips name =
     case name of
         "Name" ->
-            Just "The name of the data product."
+            Just "The name may be a simple human-readable name, but can also be a full structured URI for explicitness"
 
         "Domain" ->
-            Just "The domain of the data product."
+            Just "The domain that the data product belongs to, typically that of the producer service"
 
         "Description" ->
-            Just "The description of the data product."
+            Just "Plain-text, human-readable description of what this data product is for. Used primarily for discovery and search"
 
         "Owner" ->
-            Just "The owner of the data product."
+            Just "The team responsible for producing, evolving, and maintaining the quality and SLAs of the data product"
 
         "Quality" ->
-            Just "The quality of the data product."
+            Just "Represents the level of production readiness. An organization may impose quality requirements based on data management and risk needs"
 
         "SLA" ->
-            Just "The service level of the data product."
+            Just "Minimum level of service to expect in case of outages. Estimates a time to recovery based on a tier system"
 
         "Action" ->
-            Just "The action of the data product."
+            Just "Allows you to publish or remove the data product from the data mesh. Note that a full-featured product may also include a 'deprecate' button, to enable migration off of deprecated data products"
 
         _ ->
             Nothing

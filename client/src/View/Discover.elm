@@ -39,7 +39,7 @@ view activeStreamKey model =
                         _ ->
                             "Data Products available"
                     )
-                , tooltip "Data products tooltip 1"
+                , tooltip "Discover the data products that are publicly visible to your domain"
                 ]
             , webDataView
                 (Table.view
@@ -54,7 +54,7 @@ view activeStreamKey model =
         , div [ class "discover-detail" ]
             [ h2 []
                 [ text "Data Products Detail"
-                , tooltip "Data products tooltip 2"
+                , tooltip "Contains all the relevant info about your data products. This information is intended to help you identify the data products relevant to your business use-case"
                 ]
             , streamDetailView
                 (RemoteData.toMaybe model.actuatorInfo)
@@ -80,17 +80,7 @@ view activeStreamKey model =
 
 
 discoverCopy : String
-discoverCopy =
-    """
-Discover the data products that are relevant to your domain.
-
-Data Product information contains all the relevant info about this
-product. You can view schemas, ownership, description, and lineage
-information.
-
-You can also export the data product to your own external data store
-for use by individual applications.
-"""
+discoverCopy = """"""
 
 
 filterDataProducts : List Stream -> List DataProduct
