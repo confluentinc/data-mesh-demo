@@ -85,9 +85,19 @@ discoveryCopy =
     """
 ## Discover data products you can consume
 
-Your organisation publishes several data products, with guarantees
-about their quality and support levels. From this page you can
-discover them, dive into their schemas and start consuming.
+*Role: Prospective Consumer*
+
+This tab lets you explore the data products available to you. Data products are published from multiple domains, and finding the ones you need is a necessary step for building a new application. In this tab, you can:
+  - Explore data products
+  - View descriptions, schemas, and other details
+  - Identify the data products needed for your application
+
+Important functions for consumers that are not included in this prototype:
+  - Register your to-be-built application as a consumer of the data product
+  - Request access to sensitive data products, such as those containing PII
+  	- The request will need to be approved by the appropriate team
+  - Communicate with the producers and consumers of the data product
+
 """
 
 

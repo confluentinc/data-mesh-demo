@@ -42,12 +42,19 @@ view activeUseCaseKey model =
 dataProductCreationCopy : String
 dataProductCreationCopy =
     """
-## Using Data Products for Business Needs
-Once you have identified which data products you need for your business use-case, you can then create the application.
+## Create an App Using Data Products
 
-In this page, we have several sample business use-cases that outline the consumption and usage of our pre-published data products.
+*Role: App Developer*
+
+Once you have identified the necessary data products (and registered as a consumer on each one), you can then proceed to building your app. Your application will consume events from each registered data product, perform any necessary business logic, and optionally emit any new events.
+
+This tab contains several sample business use-cases that illustrate the consumption and usage of our pre-published data products. Click on one of the samples to see the details of the application.
+
+Note:
+- You can use any language to consume data products, not just ksqlDB
+- Any events emitted by your app remain within the app's domain
+- To publish your app's output as a data product for others to use, go to the Manage Data Products tab
     """
-
 
 useCasesView : Maybe UseCaseName -> Dict UseCaseName UseCase -> Html Msg
 useCasesView activeUseCaseKey useCases =
