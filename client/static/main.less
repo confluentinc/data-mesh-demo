@@ -117,8 +117,9 @@ body {
 
 .discover-pane {
   grid-template-areas:
+    "copy copy"
     "main detail"
-    "copy detail";
+    "search detail";
 
   .discover-main {
     grid-area: main;
@@ -132,16 +133,21 @@ body {
   .discover-detail {
     grid-area: detail;
   }
+
+  .discover-search {
+    grid-area: search;
+  }
+
 }
 
 .create-pane {
   grid-template-areas:
-    "main main"
+    "copy copy"
     "use-cases detail"
     "publish publish";
 
-  .create-main {
-    grid-area: main;
+  .create-copy {
+    grid-area: copy;
     min-height: 100px;
   }
 

@@ -6,6 +6,7 @@ import Html exposing (..)
 import Html.Attributes exposing (class, disabled, href, target, type_, value)
 import Html.Events exposing (onClick)
 import Json.Extras as Json
+import Markdown
 import RemoteData exposing (RemoteData(..))
 import Table exposing (defaultCustomizations)
 import Table.Extras as Table
@@ -28,7 +29,9 @@ view activeStreamKey model =
                 |> Maybe.withDefault Nothing
     in
     div [ class "discover-pane" ]
-        [ div [ class "discover-main" ]
+        [ div [ class "discover-copy" ]
+            [ Markdown.toHtml [] discoveryCopy ]
+        , div [ class "discover-main" ]
             [ h2 []
                 [ text
                     (case model.actuatorInfo of
@@ -59,7 +62,7 @@ view activeStreamKey model =
                 (RemoteData.toMaybe model.actuatorInfo)
                 activeStream
             ]
-        , div [ class "discover-copy" ]
+        , div [ class "discover-search" ]
             [ p []
                 (case ( model.actuatorInfo, Url.fromString "https://confluent.cloud/search" ) of
                     ( Success actuatorInfo, Just url ) ->
@@ -75,6 +78,17 @@ view activeStreamKey model =
                 )
             ]
         ]
+
+
+discoveryCopy : String
+discoveryCopy =
+    """
+## Discover data products you can consume
+
+Your organisation publishes several data products, with guarantees
+about their quality and support levels. From this page you can
+discover them, dive into their schemas and start consuming.
+"""
 
 
 filterDataProducts : List Stream -> List DataProduct

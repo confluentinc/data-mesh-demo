@@ -22,25 +22,28 @@ import View.Tooltips exposing (tooltip)
 view : Model -> Html Msg
 view model =
     div [ class "manage-pane" ]
-        [ Markdown.toHtml [] manageCopy
-        , h2 []
-            [ text "Kafka Topics"
-            , p []
-                [ small []
-                    [ text "Publishable as data products"
-                    , tooltip "These event streams are fully within your domain, and can be published as event streams. Doing so will expose them publicly to all other domains in your org"
+        [ div [ class "manage-copy" ]
+            [ Markdown.toHtml [] manageCopy ]
+        , div [ class "manage-main" ]
+            [ h2 []
+                [ text "Kafka Topics"
+                , p []
+                    [ small []
+                        [ text "Publishable as data products"
+                        , tooltip "These event streams are fully within your domain, and can be published as event streams. Doing so will expose them publicly to all other domains in your org"
+                        ]
                     ]
                 ]
-            ]
-        , case model.deleteResult of
-            Failure err ->
-                errorView err
+            , case model.deleteResult of
+                Failure err ->
+                    errorView err
 
-            _ ->
-                span [] []
-        , webDataView
-            (splitStreamTablesView model.dataProductsTableState)
-            (RemoteData.map2 pair model.streams model.actuatorInfo)
+                _ ->
+                    span [] []
+            , webDataView
+                (splitStreamTablesView model.dataProductsTableState)
+                (RemoteData.map2 pair model.streams model.actuatorInfo)
+            ]
         ]
 
 
@@ -90,6 +93,8 @@ splitStreamTablesView dataProductsTableState ( streams, actuatorInfo ) =
 manageCopy : String
 manageCopy =
     """
+## Publish new data products to your organisation
+
 This page allows you to manage the properties of your Data Products.
 
 Data Products can be published provided they meet the minimum

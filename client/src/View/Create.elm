@@ -16,28 +16,33 @@ import View.Tooltips exposing (tooltip)
 view : Maybe UseCaseName -> Model -> Html Msg
 view activeUseCaseKey model =
     div [ class "create-pane" ]
-        [ div [ class "create-main" ]
+        [ div [ class "create-copy" ]
             [ Markdown.toHtml [] dataProductCreationCopy ]
-        , webDataView
-            (useCasesView activeUseCaseKey)
-            model.useCases
-        , webDataView
-            (\useCases ->
-                let
-                    activeUseCase =
-                        Maybe.andThen (\k -> Dict.get unUseCaseName k useCases) activeUseCaseKey
-                in
-                useCasesDetail
-                    activeUseCase
-                    model.executeUseCaseResult
-            )
-            model.useCases
+        , div [ class "create-use-cases" ]
+            [ webDataView
+                (useCasesView activeUseCaseKey)
+                model.useCases
+            ]
+        , div [ class "create-use-detail" ]
+            [ webDataView
+                (\useCases ->
+                    let
+                        activeUseCase =
+                            Maybe.andThen (\k -> Dict.get unUseCaseName k useCases) activeUseCaseKey
+                    in
+                    useCasesDetail
+                        activeUseCase
+                        model.executeUseCaseResult
+                )
+                model.useCases
+            ]
         ]
 
 
 dataProductCreationCopy : String
 dataProductCreationCopy =
-    """## Using Data Products for Business Needs
+    """
+## Using Data Products for Business Needs
 Once you have identified which data products you need for your business use-case, you can then create the application.
 
 In this page, we have several sample business use-cases that outline the consumption and usage of our pre-published data products.
@@ -46,10 +51,11 @@ In this page, we have several sample business use-cases that outline the consump
 
 useCasesView : Maybe UseCaseName -> Dict UseCaseName UseCase -> Html Msg
 useCasesView activeUseCaseKey useCases =
-    div [ class "create-use-cases" ]
-        [ h2 [] [ text "Sample Business Use-Cases"
-        , tooltip "There are many ways to use and create data products. These business use-cases illustrate consuming both data products and event streams that are internal to the domain"
-        ]
+    div []
+        [ h2 []
+            [ text "Sample Business Use-Cases"
+            , tooltip "There are many ways to use and create data products. These business use-cases illustrate consuming both data products and event streams that are internal to the domain"
+            ]
         , table
             [ UIKit.table
             , UIKit.tableDivider
@@ -79,9 +85,11 @@ useCasesView activeUseCaseKey useCases =
 
 useCasesDetail : Maybe UseCase -> WebData UseCaseName -> Html Msg
 useCasesDetail mUseCase executeUseCaseResult =
-    div [ class "create-use-detail" ]
-        [ h2 [] [ text "Application Information"
-        , tooltip "These sample applications all use ksqlDB for the sake of the prototype. You are free to use any technology to consume and use these data products, from monolithic consumers, to event-driven microservices, to batch-based jobs. You can then in turn emit new data to its own event stream, with may also become its own data product"]
+    div []
+        [ h2 []
+            [ text "Application Information"
+            , tooltip "These sample applications all use ksqlDB for the sake of the prototype. You are free to use any technology to consume and use these data products, from monolithic consumers, to event-driven microservices, to batch-based jobs. You can then in turn emit new data to its own event stream, with may also become its own data product"
+            ]
         , case mUseCase of
             Nothing ->
                 i [] [ text "Select a use case from the table on the left." ]
