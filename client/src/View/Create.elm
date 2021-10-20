@@ -107,7 +107,7 @@ useCasesDetail mUseCase executeUseCaseResult =
                             , ( "Output Topic"
                               , code [] [ text useCase.outputTopic ]
                               )
-                            , ( "Query"
+                            , ( "ksqlDB Statement"
                               , pre [ style "max-height" "300px" ]
                                     [ code [] [ text useCase.ksqlDbCommand ] ]
                               )
