@@ -9,7 +9,7 @@ plugins {
 }
 
 group = 'io.confluent.demo'
-version = '0.0.28'
+version = '0.0.29'
 sourceCompatibility = '11'
 
 repositories {
