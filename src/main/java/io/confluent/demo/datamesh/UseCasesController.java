@@ -84,7 +84,7 @@ public class UseCasesController {
                 "Most sold stock per minute");
     }
     private UseCase getHighValueStockTradesUseCase() throws UnsupportedEncodingException {
-        String cmd = "CREATE STREAM IF NOT EXISTS HIGH_VALUE_STOCK_TRADES\n    WITH (KAFKA_TOPIC='high_value_stock_trades') AS SELECT\n    U.ID USERID, U.REGIONID REGION,\n    T.SIDE SIDE, T.QUANTITY QUANTITY, T.SYMBOL SYMBOL, T.PRICE PRICE, T.ACCOUNT ACCOUNT\n    FROM STOCKTRADES T\n    INNER JOIN USERS U ON ((T.USERID = U.ID))\n    WHERE ((T.PRICE > 500) AND (T.QUANTITY > 2500))\n    EMIT CHANGES;";
+        String cmd = "CREATE STREAM IF NOT EXISTS high_value_stock_trades\n    WITH (KAFKA_TOPIC='high_value_stock_trades') AS\nSELECT U.ID USERID\n    U.REGIONID REGION,\n    T.SIDE SIDE,\n    T.QUANTITY QUANTITY,\n    T.SYMBOL SYMBOL,\n    T.PRICE PRICE,\n    T.ACCOUNT ACCOUNT\nFROM STOCKTRADES T\nINNER JOIN USERS U ON (T.USERID = U.ID)\nWHERE ((T.PRICE > 500) AND (T.QUANTITY > 2500))\nEMIT CHANGES;";
         return new UseCase(
                 "Join the Users Data Product on the domain-internal Stock Trades topic. Find the largest trades, and emit the enriched trade for further review.",
                 "high_value_stock_trades",
@@ -113,10 +113,25 @@ public class UseCasesController {
                         UriUtils.encode("{\"auto.offset.reset\":\"latest\"}", StandardCharsets.UTF_8.name())),
                 "Separate US Data for InfoSec management");
     }
+    private UseCase getTrendingStocksUseCase() throws UnsupportedEncodingException {
+        String cmd = "CREATE TABLE IF NOT EXISTS trending_stocks\n    WITH (kafka_topic='trending_stocks') AS\nSELECT symbol,\n    SUM(quantity) as total_quantity,\n    WINDOWSTART as window_start,\n    WINDOWEND as window_end\nFROM stocktrades\nWINDOW TUMBLING (SIZE 15 MINUTES)\nGROUP BY symbol;";
+        return new UseCase(
+                "Create a table of stocks that are trading at a greater rate than others over a window of time",
+                "trending_stocks",
+                "stocktrades",
+                cmd,
+                "trending_stocks",
+                String.format("%s/editor?command=%s&ksqlClusterId=%s&properties=%s",
+                        urlService.getKsqlDbUrl(), // &ksqlClusterId=lksqlc-1v2p6&properties=%7B%22auto.offset.reset%22%3A%22latest%22%7D
+                        UriUtils.encode(cmd, StandardCharsets.UTF_8.name()),
+                        UriUtils.encode(urlService.getKsqlDbId(), StandardCharsets.UTF_8.name()),
+                        UriUtils.encode("{\"auto.offset.reset\":\"latest\"}", StandardCharsets.UTF_8.name())),
+                "Calculate Trending Stocks");
+    }
     @GetMapping
     public List<UseCase> getUseCases() throws UnsupportedEncodingException {
         return List.of(
-                getStocksSoldUseCase(),
+                getTrendingStocksUseCase(),
                 getHighValueStockTradesUseCase(),
                 getInfoSecUseCase());
     }
