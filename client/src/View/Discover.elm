@@ -3,10 +3,9 @@ module View.Discover exposing (deleteConfirmationDialog, view)
 import Dialog.Common as Dialog
 import GenericDict as Dict
 import Html exposing (..)
-import Html.Attributes exposing (class, disabled, href, rows, style, target, type_, value, wrap)
+import Html.Attributes exposing (class, disabled, href, target, type_, value)
 import Html.Events exposing (onClick)
 import Json.Extras as Json
-import Markdown
 import RemoteData exposing (RemoteData(..))
 import Table exposing (defaultCustomizations)
 import Table.Extras as Table

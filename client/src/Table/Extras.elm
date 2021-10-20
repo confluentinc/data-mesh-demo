@@ -83,8 +83,3 @@ darkGrey symbol =
 lightGrey : String -> Html msg
 lightGrey symbol =
     Html.span [ style "color" "#ccc" ] [ Html.text (" " ++ symbol) ]
-
-
-simpleRowAttrs : data -> List (Attribute msg)
-simpleRowAttrs _ =
-    []
