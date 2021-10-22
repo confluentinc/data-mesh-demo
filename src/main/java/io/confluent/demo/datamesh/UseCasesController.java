@@ -84,7 +84,7 @@ public class UseCasesController {
                 "Most sold stock per minute");
     }
     private UseCase getHighValueStockTradesUseCase() throws UnsupportedEncodingException {
-        String cmd = "CREATE STREAM IF NOT EXISTS high_value_stock_trades\n    WITH (KAFKA_TOPIC='high_value_stock_trades') AS\nSELECT U.ID USERID\n    U.REGIONID REGION,\n    T.SIDE SIDE,\n    T.QUANTITY QUANTITY,\n    T.SYMBOL SYMBOL,\n    T.PRICE PRICE,\n    T.ACCOUNT ACCOUNT\nFROM STOCKTRADES T\nINNER JOIN USERS U ON (T.USERID = U.ID)\nWHERE ((T.PRICE > 500) AND (T.QUANTITY > 2500))\nEMIT CHANGES;";
+        String cmd = "CREATE STREAM IF NOT EXISTS high_value_stock_trades\n    WITH (KAFKA_TOPIC='high_value_stock_trades') AS\nSELECT U.ID USERID,\n    U.REGIONID REGION,\n    T.SIDE SIDE,\n    T.QUANTITY QUANTITY,\n    T.SYMBOL SYMBOL,\n    T.PRICE PRICE,\n    T.ACCOUNT ACCOUNT\nFROM STOCKTRADES T\nINNER JOIN USERS U ON (T.USERID = U.ID)\nWHERE ((T.PRICE > 500) AND (T.QUANTITY > 2500))\nEMIT CHANGES;";
         return new UseCase(
                 "Join the Users Data Product on the domain-internal Stock Trades topic. Find the largest trades, and emit the enriched trade for further review.",
                 "high_value_stock_trades",
