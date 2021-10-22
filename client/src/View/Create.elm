@@ -53,7 +53,7 @@ This tab contains several sample business use-cases that illustrate the consumpt
 Note:
 - You can use any language to consume data products, not just ksqlDB
 - Any events emitted by your app remain within the app's domain
-- To publish your app's output as a data product for others to use, go to the Manage Data Products tab
+- You can publish your app's output as a data product for others to use from the "Manage Data Products" tab
     """
 
 useCasesView : Maybe UseCaseName -> Dict UseCaseName UseCase -> Html Msg
