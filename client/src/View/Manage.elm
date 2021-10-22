@@ -93,13 +93,19 @@ splitStreamTablesView dataProductsTableState ( streams, actuatorInfo ) =
 manageCopy : String
 manageCopy =
     """
-## Publish new data products to your organisation
+## Publish Data Products to the Data Mesh
 
-This page allows you to manage the properties of your Data Products.
+*Role: Data Product Owner*
 
-Data Products can be published provided they meet the minimum
-established criteria. In this case, they must have both a Description
-and an owner.
+This tab allows you to manage the data products within your domain. There are two main tables:
+- Your domain's Kafka Topics, that can be published as Data Products
+- Data Products available to you from all domains
+- This page only shows Kafka Topics based data products. A full implementation would also show data products from other APIs
+
+Important functions of this tab that are not included in this prototype:
+  - Deprecate a data product, such that only existing consumers can continue to use it
+  - Issue a warning if you try to unregister a data product being consumed by an app
+  - Specify consumer access permission requirements
 """
 
 
