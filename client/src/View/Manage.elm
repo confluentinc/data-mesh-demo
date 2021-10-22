@@ -98,7 +98,7 @@ manageCopy =
 *Role: Data Product Owner*
 
 This tab allows you to manage the data products within your domain. There are two main tables:
-- Your domain's Kafka Topics, that can be publish as Data Products
+- Your domain's Kafka Topics, that can be published as Data Products
 - Data Products available to you from all domains
 - This page only shows Kafka Topics based data products. A full implementation would also show data products from other APIs
 
