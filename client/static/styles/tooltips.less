@@ -1,0 +1,28 @@
+.tooltip-container {
+  position: relative;
+
+  .tooltip {
+    display: none;
+    position: absolute;
+    z-index: 1030;
+    width: 300px; // The contents will grow to this width then start line-wrapping.
+
+    &-contents {
+      position: absolute;
+      box-sizing: border-box;
+      text-transform: none;
+
+      background-color: @tooltip-background-color;
+      color: white;
+      padding: 5px 8px;
+      font-size: 0.8rem;
+      border-radius: 5px;
+    }
+  }
+
+  &:hover .tooltip {
+    display: block;
+    top: 1.5rem;
+    left: 0;
+  }
+}

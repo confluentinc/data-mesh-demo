@@ -1,4 +1,11 @@
 @heading-color: #1d335e;
+@tooltip-background-color: #242544;
+
+@import "general";
+@import "uikit";
+@import "icons";
+@import "loading";
+@import "tooltips";
 
 @font-face {
   font-family: 'MainFont';
@@ -16,7 +23,7 @@ footer {
 }
 
 body > header {
-  background-color: #152a52;
+  background-color: @heading-color;
   background-image: url('../images/header.svg');
   background-repeat: repeat-x;
   background-size: cover;
@@ -92,19 +99,6 @@ body > footer {
 }
 
 body {
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'MainFont';
-    text-transform: capitalize;
-  }
-
-  .uk-button-secondary {
-    background-color:  @heading-color;
-
-    &:hover, &:active, &:focus {
-      background-color:  lighten(@heading-color, 10%);
-    }
-  }
-
   height: 100vh;
   display: grid;
   grid-template-areas:
@@ -183,143 +177,6 @@ body {
   }
 }
 
-.uk-table,
-.uk-modal {
-  word-break: break-word;
-
-  th, button {
-    word-break: keep-all;
-  }
-  thead .icon {
-    top: 3px;
-  }
-}
-
-textarea.schema {
-  resize: vertical;
-}
-
-.loading-wheel {
-  background-image: url('../images/logo.png');
-  color: transparent;
-  height: 80px;
-  margin-top: 40px;
-  margin-bottom: 40px;
-  width: 100%;
-  text-align: center;
-  background-position: center;
-  background-size: contain;
-  background-repeat: no-repeat;
-  .animation-spin();
-  opacity: 0.8;
-}
-
-.animation-spin() {
-  animation-name: spin;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-duration: 2s;
-}
-
-@keyframes spin {
-  0% {
-    transform:rotate(0deg);
-  }
-  30% {
-    transform:rotate(360deg);
-  }
-  35% {
-    transform:rotate(360deg);
-  }
-  65% {
-    transform:rotate(720deg);
-  }
-  100% {
-    transform:rotate(720deg);
-  }
-}
-
-.screenshot-dialog {
-  .uk-modal-dialog {
-    width: 70vw;
-  }
-}
-
-.uk-button {
-  .icon {
-    top: 2px;
-  }
-
-  &.uk-button-primary {
-    .icon {
-      filter: brightness(0) invert(1);
-    }
-  }
-}
-
-.icon {
-  display: inline-block;
-  background-size: contain;
-  background-repeat: no-repeat;
-  width: 1.0rem;
-  height: 1.0rem;
-  position: relative;
-
-  &.icon-external-link {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-external-link'%3E%3Cpath d='M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'%3E%3C/path%3E%3Cpolyline points='15 3 21 3 21 9'%3E%3C/polyline%3E%3Cline x1='10' y1='14' x2='21' y2='3'%3E%3C/line%3E%3C/svg%3E%0A");
-    margin-left: 7px;
-    margin-right: 7px;
-  }
-
-  &.icon-info {
-    background-image: url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 12 12' fill='none' xmlns='http://www.w3.org/2000/svg' class='Icon__StyledIcon-sc-7gic4q-0 bXgwXG' data-testid='info-icon'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M6 12A6 6 0 106 0a6 6 0 000 12zm0-1.286a4.714 4.714 0 110-9.428 4.714 4.714 0 010 9.428zm0-6.428A.857.857 0 106 2.57a.857.857 0 000 1.715zm.643.857v4.286H5.357V5.143h1.286z' fill='%23000'%3E%3C/path%3E%3C/svg%3E");
-    margin: 0 5px;
-    top: 0px;
-    filter: opacity(0.5);
-  }
-}
-
-.tooltip-container {
-  position: relative;
-
-  .tooltip {
-    display: none;
-    position: absolute;
-    z-index: 1030;
-    width: 300px; // The contents will grow to this width then start line-wrapping.
-
-    &-contents {
-      position: absolute;
-      box-sizing: border-box;
-      text-transform: none;
-
-      background-color: #242544;
-      color: #fff;
-      padding: 5px 8px;
-      font-size: 0.8rem;
-      border-radius: 5px;
-    }
-  }
-
-  &:hover .tooltip {
-    display: block;
-    top: 1.5rem;
-    left: 0;
-  }
-}
-
-.table-horizontal {
-  th {
-    vertical-align: top;
-  }
-
-  pre {
-    max-height: 300px;
-    overflow: scroll;
-    white-space: break-spaces;
-  }
-}
-
 .discover-pane {
   table {
     .description {
@@ -327,6 +184,7 @@ textarea.schema {
     }
   }
 }
+
 .manage-pane {
   table {
     .description {
@@ -339,18 +197,21 @@ textarea.schema {
   }
 }
 
-.uk-width-1-7 {
-  width: calc(100% * 1 / 7.001);
+.screenshot-dialog {
+  .uk-modal-dialog {
+    width: 70vw;
+  }
 }
 
-.uk-width-2-7 {
-  width: calc(100% * 2 / 7.001);
-}
 
-.uk-width-1-10 {
-  width: calc(100% * 1 / 10.001);
-}
+.table-horizontal {
+  th {
+    vertical-align: top;
+  }
 
-.uk-width-2-10 {
-  width: calc(100% * 2 / 10.001);
+  pre {
+    max-height: 300px;
+    overflow: scroll;
+    white-space: break-spaces;
+  }
 }

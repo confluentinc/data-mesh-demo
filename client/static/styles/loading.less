@@ -1,0 +1,39 @@
+.loading-wheel {
+  background-image: url('../images/logo.png');
+  color: transparent;
+  height: 80px;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  width: 100%;
+  text-align: center;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  .animation-spin();
+  opacity: 0.8;
+}
+
+.animation-spin() {
+  animation-name: spin;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-duration: 2s;
+}
+
+@keyframes spin {
+  0% {
+    transform:rotate(0deg);
+  }
+  30% {
+    transform:rotate(360deg);
+  }
+  35% {
+    transform:rotate(360deg);
+  }
+  65% {
+    transform:rotate(720deg);
+  }
+  100% {
+    transform:rotate(720deg);
+  }
+}
