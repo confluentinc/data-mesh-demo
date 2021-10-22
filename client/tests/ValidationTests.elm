@@ -19,6 +19,18 @@ suite =
                         , quality = Raw
                         , sla = Tier3
                         , topic = { name = "users", qualifiedName = QualifiedName "lsrc-wdzkg:.:users-value:1" }
+                        , termsAcknowledged = True
+                        }
+            , test "validate terms not acknowledged" <|
+                \_ ->
+                    validateErr publishFormValidator
+                        [ TermsNotAcknowledged ]
+                        { description = "User "
+                        , owner = "Rick"
+                        , quality = Raw
+                        , sla = Tier3
+                        , topic = { name = "users", qualifiedName = QualifiedName "lsrc-wdzkg:.:users-value:1" }
+                        , termsAcknowledged = False
                         }
             ]
         ]

@@ -176,6 +176,7 @@ update msg model =
                                 , description = ""
                                 , quality = Raw
                                 , sla = Tier3
+                                , termsAcknowledged = False
                                 }
 
                         Nothing ->
@@ -316,3 +317,6 @@ updatePublishForm msg model =
 
         PublishFormSetSla newSla ->
             ( { model | sla = newSla }, Cmd.none )
+
+        PublishFormSetTermsAcknowledged newTermsAcknowledged ->
+            ( { model | termsAcknowledged = newTermsAcknowledged }, Cmd.none )

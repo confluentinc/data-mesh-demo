@@ -3,8 +3,8 @@ module View.Manage exposing (publishDialog, view)
 import Dialog.Common as Dialog
 import GenericDict as Dict exposing (Dict)
 import Html exposing (..)
-import Html.Attributes exposing (autofocus, checked, class, disabled, name, placeholder, type_, value)
-import Html.Events exposing (onClick, onInput)
+import Html.Attributes exposing (autofocus, checked, class, disabled, for, id, name, placeholder, type_, value)
+import Html.Events exposing (onCheck, onClick, onInput)
 import Markdown
 import Maybe exposing (withDefault)
 import RemoteData exposing (RemoteData(..), WebData)
@@ -235,13 +235,13 @@ publishDialog result model =
         validationResult =
             validate publishFormValidator model
 
-        hasOwnerValidationErrors =
+        hasValidationError err =
             case validationResult of
                 Ok _ ->
                     False
 
                 Err errs ->
-                    List.member RestrictedOwner errs
+                    List.member err errs
     in
     { closeMessage = Just AbandonPublishDialog
     , containerClass = Nothing
@@ -283,7 +283,7 @@ publishDialog result model =
                                      , value model.owner
                                      , onInput (PublishFormMsg << PublishFormSetOwner)
                                      ]
-                                        ++ (if hasOwnerValidationErrors then
+                                        ++ (if hasValidationError RestrictedOwner then
                                                 [ UIKit.formDanger ]
 
                                             else
@@ -318,6 +318,30 @@ publishDialog result model =
                             showProductSla
                             (Just model.sla)
                             allProductSlas
+                        , hr [] []
+                        , div [ UIKit.formControlsText ]
+                            [ input
+                                ([ type_ "checkbox"
+                                 , id "terms_acknowledged"
+                                 , UIKit.checkbox
+                                 , checked model.termsAcknowledged
+                                 , onCheck (PublishFormMsg << PublishFormSetTermsAcknowledged)
+                                 ]
+                                    ++ (if hasValidationError TermsNotAcknowledged then
+                                            [ UIKit.formDanger ]
+
+                                        else
+                                            []
+                                       )
+                                )
+                                []
+                            , label
+                                [ for "terms_acknowledged"
+                                ]
+                                [ text " "
+                                , text "I acknowledge that by publishing this Data Product, I agree to the terms outlined in my SLA."
+                                ]
+                            ]
                         ]
                     ]
                 , case validationResult of
@@ -442,3 +466,6 @@ formatValidationError error =
     case error of
         RestrictedOwner ->
             text "That owner is reserved. Please choose another."
+
+        TermsNotAcknowledged ->
+            text "Please acknowledge the SLA requirements."

@@ -22,6 +22,7 @@ suite =
                             }
                         , quality = Authoritative
                         , sla = Tier2
+                        , termsAcknowledged = True
                         }
             ]
         ]

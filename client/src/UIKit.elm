@@ -64,6 +64,11 @@ input =
     class "uk-input"
 
 
+checkbox : Attribute msg
+checkbox =
+    class "uk-checkbox"
+
+
 radio : Attribute msg
 radio =
     class "uk-radio"

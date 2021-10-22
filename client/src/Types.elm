@@ -45,7 +45,7 @@ import Stomp exposing (AuditLogMsg)
 import Stomp.Client as Stomp
 import Table
 import Url exposing (Url)
-import Validate exposing (Validator, ifTrue)
+import Validate exposing (Validator, ifFalse, ifTrue)
 
 
 type alias Model =
@@ -101,11 +101,13 @@ type alias PublishForm =
     , description : String
     , quality : ProductQuality
     , sla : ProductSla
+    , termsAcknowledged : Bool
     }
 
 
 type PublishFormError
     = RestrictedOwner
+    | TermsNotAcknowledged
 
 
 restrictedOwners : Set String
@@ -117,6 +119,7 @@ publishFormValidator : Validator PublishFormError PublishForm
 publishFormValidator =
     Validate.all
         [ ifTrue (\form -> Set.member form.owner restrictedOwners) RestrictedOwner
+        , ifFalse .termsAcknowledged TermsNotAcknowledged
         ]
 
 
@@ -228,6 +231,7 @@ type PublishFormMsg
     | PublishFormSetDescription String
     | PublishFormSetQuality ProductQuality
     | PublishFormSetSla ProductSla
+    | PublishFormSetTermsAcknowledged Bool
 
 
 type alias PublishFormResult =
