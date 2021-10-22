@@ -9,6 +9,13 @@
 
 header {
   grid-area: header;
+}
+
+footer {
+  grid-area: footer;
+}
+
+body > header {
   background-color: #152a52;
   background-image: url('../images/header.svg');
   background-repeat: repeat-x;
@@ -39,7 +46,7 @@ header {
   grid-area: main;
 }
 
-footer {
+body > footer {
   @animation-duration: 600ms;
   @audit-log-height: 400px;
 
@@ -108,26 +115,28 @@ body {
 }
 
 .discover-pane,
-.create-pane {
+.create-pane,
+.manage-pane {
   display: grid;
   grid-column-gap: 4%;
   grid-row-gap: 30px;
+}
+
+.discover-pane,
+.create-pane {
   grid-template-columns: 45% 54%;
 }
 
 .discover-pane {
   grid-template-areas:
-    "copy copy"
+    "header header"
     "main detail"
-    "search detail";
+    "search detail"
+    "footer footer";
 
   .discover-main {
     grid-area: main;
     min-height: 300px;
-  }
-
-  .discover-copy {
-    grid-area: copy;
   }
 
   .discover-detail {
@@ -137,17 +146,16 @@ body {
   .discover-search {
     grid-area: search;
   }
-
 }
 
 .create-pane {
   grid-template-areas:
-    "copy copy"
+    "header header"
     "use-cases detail"
-    "publish publish";
+    "publish publish"
+    "footer footer";
 
-  .create-copy {
-    grid-area: copy;
+  header {
     min-height: 100px;
   }
 
@@ -161,6 +169,17 @@ body {
 
   .create-publish {
     grid-area: publish;
+  }
+}
+
+.manage-pane {
+  grid-template-areas:
+    "header"
+    "main "
+    "footer";
+
+  .manage-main {
+    grid-area: main;
   }
 }
 

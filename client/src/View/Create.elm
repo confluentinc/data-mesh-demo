@@ -16,8 +16,8 @@ import View.Tooltips exposing (tooltip)
 view : Maybe UseCaseName -> Model -> Html Msg
 view activeUseCaseKey model =
     div [ class "create-pane" ]
-        [ div [ class "create-copy" ]
-            [ Markdown.toHtml [] dataProductCreationCopy ]
+        [ header []
+            [ Markdown.toHtml [] dataProductCreationIntro ]
         , div [ class "create-use-cases" ]
             [ webDataView
                 (useCasesView activeUseCaseKey)
@@ -36,11 +36,13 @@ view activeUseCaseKey model =
                 )
                 model.useCases
             ]
+        , footer []
+            [ Markdown.toHtml [] dataProductCreationOutro ]
         ]
 
 
-dataProductCreationCopy : String
-dataProductCreationCopy =
+dataProductCreationIntro : String
+dataProductCreationIntro =
     """
 ## Create an App Using Data Products
 
@@ -55,6 +57,15 @@ Note:
 - Any events emitted by your app remain within the app's domain
 - You can publish your app's output as a data product for others to use from the "Manage Data Products" tab
     """
+
+dataProductCreationOutro : String
+dataProductCreationOutro =
+    """
+## The End
+
+That's all we have for this page.
+    """
+
 
 useCasesView : Maybe UseCaseName -> Dict UseCaseName UseCase -> Html Msg
 useCasesView activeUseCaseKey useCases =

@@ -29,8 +29,8 @@ view activeStreamKey model =
                 |> Maybe.withDefault Nothing
     in
     div [ class "discover-pane" ]
-        [ div [ class "discover-copy" ]
-            [ Markdown.toHtml [] discoveryCopy ]
+        [ header []
+            [ Markdown.toHtml [] discoveryIntro ]
         , div [ class "discover-main" ]
             [ h2 []
                 [ text
@@ -77,11 +77,13 @@ view activeStreamKey model =
                         []
                 )
             ]
+        , footer []
+            [ Markdown.toHtml [] discoveryOutro ]
         ]
 
 
-discoveryCopy : String
-discoveryCopy =
+discoveryIntro : String
+discoveryIntro =
     """
 ## Discover data products you can consume
 
@@ -99,6 +101,15 @@ Important functions for consumers that are not included in this prototype:
   - Communicate with the producers and consumers of the data product
 
 """
+
+
+discoveryOutro : String
+discoveryOutro =
+    """
+## The End
+
+That's all we have for this page.
+    """
 
 
 filterDataProducts : List Stream -> List DataProduct

@@ -22,8 +22,8 @@ import View.Tooltips exposing (tooltip)
 view : Model -> Html Msg
 view model =
     div [ class "manage-pane" ]
-        [ div [ class "manage-copy" ]
-            [ Markdown.toHtml [] manageCopy ]
+        [ header []
+            [ Markdown.toHtml [] manageIntro ]
         , div [ class "manage-main" ]
             [ h2 []
                 [ text "Kafka Topics"
@@ -44,6 +44,8 @@ view model =
                 (splitStreamTablesView model.dataProductsTableState)
                 (RemoteData.map2 pair model.streams model.actuatorInfo)
             ]
+        , footer []
+            [ Markdown.toHtml [] manageOutro ]
         ]
 
 
@@ -90,8 +92,8 @@ splitStreamTablesView dataProductsTableState ( streams, actuatorInfo ) =
         ]
 
 
-manageCopy : String
-manageCopy =
+manageIntro : String
+manageIntro =
     """
 ## Publish Data Products to the Data Mesh
 
@@ -107,6 +109,15 @@ Important functions of this tab that are not included in this prototype:
   - Issue a warning if you try to unregister a data product being consumed by an app
   - Specify consumer access permission requirements
 """
+
+
+manageOutro : String
+manageOutro =
+    """
+## The End
+
+That's all we have for this page.
+    """
 
 
 type alias TableConfigFlags msg =
