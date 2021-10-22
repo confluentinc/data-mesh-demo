@@ -1,0 +1,47 @@
+.uk-table,
+.uk-modal {
+  word-break: break-word;
+
+  th, button {
+    word-break: keep-all;
+  }
+  thead .icon {
+    top: 3px;
+  }
+}
+
+.uk-button {
+  .icon {
+    top: 2px;
+  }
+
+  &.uk-button-primary {
+    .icon {
+      filter: brightness(0) invert(1);
+    }
+  }
+
+  .uk-button-secondary {
+    background-color:  @heading-color;
+
+    &:hover, &:active, &:focus {
+      background-color:  lighten(@heading-color, 10%);
+    }
+  }
+}
+
+.uk-width-1-7 {
+  width: calc(100% * 1 / 7.001);
+}
+
+.uk-width-2-7 {
+  width: calc(100% * 2 / 7.001);
+}
+
+.uk-width-1-10 {
+  width: calc(100% * 1 / 10.001);
+}
+
+.uk-width-2-10 {
+  width: calc(100% * 2 / 10.001);
+}

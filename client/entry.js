@@ -2,7 +2,7 @@
 /*global WebSocket*/
 
 import "uikit/dist/css/uikit.min.css";
-import './static/main.less';
+import './static/styles/main.less';
 
 
 import logoPath from './static/images/logo.png';

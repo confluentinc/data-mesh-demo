@@ -1,0 +1,222 @@
+@heading-color: #1d335e;
+@tooltip-background-color: #242544;
+
+@import "general";
+@import "uikit";
+@import "icons";
+@import "loading";
+@import "tooltips";
+
+@font-face {
+  font-family: 'MainFont';
+  src: url('../fonts/MarkOT/MarkOT.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+header {
+  grid-area: header;
+}
+
+footer {
+  grid-area: footer;
+}
+
+body {
+  height: 100vh;
+  display: grid;
+  grid-template-areas:
+    "header"
+    "main"
+    "footer";
+  grid-template-rows: auto 1fr auto;
+  gap: 15px;
+}
+
+body > header {
+  background-color: @heading-color;
+  background-image: url('../images/header.svg');
+  background-repeat: repeat-x;
+  background-size: cover;
+
+  .uk-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    height: 120px;
+    gap: 15px;
+
+    .logo {
+      height: 60px;
+      width: 60px;
+      filter: brightness(0) invert(1);
+    }
+
+    h1 {
+      margin: 0;
+      color: white;
+    }
+  }
+}
+
+.main {
+  grid-area: main;
+}
+
+body > footer {
+  @animation-duration: 600ms;
+  @audit-log-height: 400px;
+
+  position: fixed;
+  bottom: 0;
+
+  width: 100%;
+  max-height: @audit-log-height;
+  height: @audit-log-height;
+  transition: height @animation-duration ease-in-out;
+  filter: drop-shadow(0 0 4px grey);
+
+  button.audit-log-switch {
+    // Push it above the footer line.
+    position: absolute;
+    top: -40px;
+
+    &:after {
+      display: inline-block;
+      content: " ⌃";
+      margin-left: 10px;
+      transition: transform @animation-duration ease-in-out;
+    }
+  }
+
+  ul {
+    border-top: solid 1px @heading-color;
+    overflow-y: scroll;
+    padding: 15px 30px 0 30px;
+    margin: 0;
+    transition: height @animation-duration ease-in-out;
+    height: @audit-log-height;
+    background-color: white;
+  }
+
+  &.audit-log-minimised {
+    height: 25px;
+
+    button:after {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.discover-pane,
+.create-pane,
+.manage-pane {
+  display: grid;
+  grid-column-gap: 50px;
+  grid-row-gap: 30px;
+
+  footer {
+    padding-bottom: 60px;
+  }
+}
+
+.discover-pane,
+.create-pane {
+  grid-template-columns: 45% 55%;
+}
+
+.discover-pane {
+  grid-template-areas:
+    "header header"
+    "main detail"
+    "search detail"
+    "footer footer";
+
+  .discover-main {
+    grid-area: main;
+    min-height: 300px;
+  }
+
+  .discover-detail {
+    grid-area: detail;
+  }
+
+  .discover-search {
+    grid-area: search;
+  }
+}
+
+.create-pane {
+  grid-template-areas:
+    "header header"
+    "use-cases detail"
+    "publish publish"
+    "footer footer";
+
+  header {
+    min-height: 100px;
+  }
+
+  .create-use-cases {
+    grid-area: use-cases;
+  }
+
+  .create-detail {
+    grid-area: detail;
+  }
+
+  .create-publish {
+    grid-area: publish;
+  }
+}
+
+.manage-pane {
+  grid-template-areas:
+    "header"
+    "main "
+    "footer";
+
+  .manage-main {
+    grid-area: main;
+  }
+}
+
+.discover-pane {
+  table {
+    .description {
+      max-width: 250px;
+    }
+  }
+}
+
+.manage-pane {
+  table {
+    .description {
+      max-width: 300px;
+    }
+    caption {
+      font-weight: bold;
+      color: inherit;
+    }
+  }
+}
+
+.screenshot-dialog {
+  .uk-modal-dialog {
+    width: 70vw;
+  }
+}
+
+
+.table-horizontal {
+  th {
+    vertical-align: top;
+  }
+
+  pre {
+    max-height: 300px;
+    overflow: scroll;
+    white-space: break-spaces;
+  }
+}

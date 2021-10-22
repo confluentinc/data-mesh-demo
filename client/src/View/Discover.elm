@@ -29,8 +29,8 @@ view activeStreamKey model =
                 |> Maybe.withDefault Nothing
     in
     div [ class "discover-pane" ]
-        [ div [ class "discover-copy" ]
-            [ Markdown.toHtml [] discoveryCopy ]
+        [ header []
+            [ Markdown.toHtml [] discoveryIntro ]
         , div [ class "discover-main" ]
             [ h2 []
                 [ text
@@ -77,11 +77,13 @@ view activeStreamKey model =
                         []
                 )
             ]
+        , footer []
+            [ Markdown.toHtml [] discoveryOutro ]
         ]
 
 
-discoveryCopy : String
-discoveryCopy =
+discoveryIntro : String
+discoveryIntro =
     """
 ## Discover data products you can consume
 
@@ -92,13 +94,18 @@ This tab lets you explore the data products available to you. Data products are 
   - View descriptions, schemas, and other details
   - Identify the data products needed for your application
 
+"""
+
+
+discoveryOutro : String
+discoveryOutro =
+    """
 Important functions for consumers that are not included in this prototype:
   - Register your to-be-built application as a consumer of the data product
   - Request access to sensitive data products, such as those containing PII
   	- The request will need to be approved by the appropriate team
   - Communicate with the producers and consumers of the data product
-
-"""
+    """
 
 
 filterDataProducts : List Stream -> List DataProduct

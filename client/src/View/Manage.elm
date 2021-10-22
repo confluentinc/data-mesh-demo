@@ -22,8 +22,8 @@ import View.Tooltips exposing (tooltip)
 view : Model -> Html Msg
 view model =
     div [ class "manage-pane" ]
-        [ div [ class "manage-copy" ]
-            [ Markdown.toHtml [] manageCopy ]
+        [ header []
+            [ Markdown.toHtml [] manageIntro ]
         , div [ class "manage-main" ]
             [ h2 []
                 [ text "Kafka Topics"
@@ -44,6 +44,8 @@ view model =
                 (splitStreamTablesView model.dataProductsTableState)
                 (RemoteData.map2 pair model.streams model.actuatorInfo)
             ]
+        , footer []
+            [ Markdown.toHtml [] manageOutro ]
         ]
 
 
@@ -90,8 +92,8 @@ splitStreamTablesView dataProductsTableState ( streams, actuatorInfo ) =
         ]
 
 
-manageCopy : String
-manageCopy =
+manageIntro : String
+manageIntro =
     """
 ## Publish Data Products to the Data Mesh
 
@@ -101,12 +103,17 @@ This tab allows you to manage the data products within your domain. There are tw
 - Your domain's Kafka Topics, that can be published as Data Products
 - Data Products available to you from all domains
 - This page only shows Kafka Topics based data products. A full implementation would also show data products from other APIs
+"""
 
+
+manageOutro : String
+manageOutro =
+    """
 Important functions of this tab that are not included in this prototype:
   - Deprecate a data product, such that only existing consumers can continue to use it
   - Issue a warning if you try to unregister a data product being consumed by an app
   - Specify consumer access permission requirements
-"""
+    """
 
 
 type alias TableConfigFlags msg =
