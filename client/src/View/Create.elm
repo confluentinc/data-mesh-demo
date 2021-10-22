@@ -51,19 +51,15 @@ dataProductCreationIntro =
 Once you have identified the necessary data products (and registered as a consumer on each one), you can then build your app which will consume events from each registered data product, perform any necessary business logic, and optionally emit any new events.
 
 This tab contains several sample business use-cases that illustrate the consumption and usage of the pre-published data products. Click on one of the samples to see the details of the application.
-
-Note:
-- ksqlDB is used for demonstration purposes but you can use any language to consume data products
-- Any events emitted by your app remain within the app's domain
-- You can publish your app's output as a data product for others to use from the "Manage Data Products" tab
     """
 
 dataProductCreationOutro : String
 dataProductCreationOutro =
     """
-## The End
-
-That's all we have for this page.
+Note:
+- ksqlDB is used for demonstration purposes but you can use any language to consume data products
+- Any events emitted by your app remain within the app's domain
+- You can publish your app's output as a data product for others to use from the "Manage Data Products" tab
     """
 
 
