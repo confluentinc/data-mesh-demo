@@ -10,6 +10,22 @@ SHELL=/bin/bash -o pipefail
 
 check-dependency = $(if $(shell command -v $(1)),,$(error Make sure $(1) is installed))
 
+get_service_account_id = $(shell ccloud kafka cluster list -o json | jq -r '.[0].name' | awk -F'-' '{print $$4;}')
+
+check_defined = \
+    $(strip $(foreach 1,$1, \
+        $(call __check_defined,$1,$(strip $(value 2)))))
+__check_defined = \
+    $(if $(value $1),, \
+      $(error Undefined $1$(if $2, ($2))))
+
+echo: SERVICE_ACCOUNT_ID = $(call get_service_account_id) 
+echo: CONFIG_FILE ?= ${MAKE_DIR}stack-configs/java-service-account-${SERVICE_ACCOUNT_ID}.config
+echo:
+	@:$(call check_defined, CONFIG_FILE, config file)
+	@echo ${SERVICE_ACCOUNT_ID}
+	@echo ${CONFIG_FILE}
+
 clean: ## Clean build output
 	@./gradlew clean
 
@@ -17,12 +33,10 @@ build: clean ## Clean and build the demo server
 	@./gradlew bootjar
 
 .PHONY: run
-run: SERVICE_ACCOUNT_ID = $(shell ccloud kafka cluster list -o json | jq -r '.[0].name' | awk -F'-' '{print $$4;}')
-run: CONFIG_FILE ?= ${MAKE_DIR}/stack-configs/java-service-account-${SERVICE_ACCOUNT_ID}.config
-run: clean ## Run the demo server
-ifeq ($(strip $(SERVICE_ACCOUNT_ID)),)
-	$(error Could not determine CONFIG_FILE path)
-endif
+run: SERVICE_ACCOUNT_ID = $(call get_service_account_id)
+run: CONFIG_FILE ?= ${MAKE_DIR}stack-configs/java-service-account-${SERVICE_ACCOUNT_ID}.config
+run: ## Run the demo server 
+	@:$(call check_defined, CONFIG_FILE, config file)
 	@./gradlew bootRun -Pargs=--spring.config.additional-location=file:${CONFIG_FILE}
 
 .PHONY: data-mesh
@@ -31,12 +45,10 @@ data-mesh: ## Creates a new Data Mesh in Confluent Cloud then builds and runs th
 	@make run
 
 .PHONY: destroy
-destroy: SERVICE_ACCOUNT_ID = $(shell ccloud kafka cluster list -o json | jq -r '.[0].name' | awk -F'-' '{print $$4;}')
-destroy: CONFIG_FILE ?= ${MAKE_DIR}/stack-configs/java-service-account-${SERVICE_ACCOUNT_ID}.config
+destroy: SERVICE_ACCOUNT_ID = $(call get_service_account_id)
+destroy: CONFIG_FILE ?= ${MAKE_DIR}stack-configs/java-service-account-${SERVICE_ACCOUNT_ID}.config
 destroy: ## Destroys the Data Mesh configured in the variable $CONFIG_FILE
-ifeq ($(strip $(SERVICE_ACCOUNT_ID)),)
-	$(error Could not determine CONFIG_FILE path)
-endif
+	@:$(call check_defined, CONFIG_FILE, config file)
 	@echo -n "Are you sure you want to destroy environment from config file: '${CONFIG_FILE}' [y/n] " && read ans && [ $${ans:-n} = y ]
 	@./scripts/destroy-data-mesh.sh ${CONFIG_FILE}
 
