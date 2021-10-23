@@ -10,7 +10,6 @@ plugins {
 
 group = 'io.confluent.demo'
 version = '0.0.31'
-sourceCompatibility = '11'
 
 repositories {
 	mavenCentral()
@@ -39,6 +38,12 @@ dependencies {
 	}
 	implementation 'io.confluent.ksql:ksqldb-api-client:0.21.0', noLog
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(11)
+	}
 }
 
 node {

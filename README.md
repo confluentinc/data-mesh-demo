@@ -41,7 +41,8 @@ A companion blog post can be found here:
 * If you want to create a new Data Mesh on Confluent Cloud as well as build and run the demo run the following.
   This process creates Confluent Cloud resources, including an environment, Apache Kafka cluster, [ksqlDB](https://ksqldb.io/) Application, and sample Data Products.
   The script waits for all cloud resources to be fully provisioned and *can take 10-15 minutes to complete*.
- 
+
+  *Note*: This command needs to be run from a new terminal (not one that has ran this command previously)
   ```
   make data-mesh
   ```
@@ -59,8 +60,20 @@ configuration file, you can skip the previous data mesh creation step and just r
   ```
  
 * Once the data mesh creation and demo run process is complete, you will see the Spring Boot banner 
-  and a log entries that looks like:
+  and a log entries that look similar to: 
   ```
+  ...
+    .   ____          _            __ _ _
+   /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+  ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+   \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+    '  |____| .__|_| |_|_| |_\__, | / / / /
+   =========|_|==============|___/=/_/_/_/
+  ...
+  2021-10-23 14:02:31.473  INFO 27995 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+  ...
+  2021-10-23 14:02:31.475  INFO 27995 --- [           main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+  2021-10-23 14:02:31.489  INFO 27995 --- [           main] io.confluent.demo.datamesh.DataMeshDemo  : Started DataMeshDemo in 2.337 seconds (JVM running for 2.651)
   Log ....
   ```
  
@@ -91,30 +104,55 @@ with the REST API directly. By default, the REST API listens on `localhost:8080`
   curl -s localhost:8080/priv/data-products | jq
   [
     {
-      "qualifiedName": "lsrc-w8v85:.:users-value:1",
+      "@type": "DataProduct",
       "name": "users",
-      "description": "website users",
-      "owner": "rick"
+      "qualifiedName": "lsrc-dnxzz:.:users-value:1",
+      "description": "All users from all regions (both national and international)",
+      "owner": "@membership-team",
+      "domain": "membership",
+      "sla": "tier-1",
+      "quality": "authoritative",
+      "urls": {
+        "schemaUrl": "https://confluent.cloud/environments/env-op2xo/schema-registry/schemas/users-value",
+        "portUrl": "https://confluent.cloud/environments/env-op2xo/clusters/lkc-5joyz/topics/users",
+        "lineageUrl": "https://confluent.cloud/environments/env-op2xo/clusters/lkc-5joyz/stream-lineage/stream/topic-users/n/topic-users/overview",
+        "exportUrl": "https://confluent.cloud/environments/env-op2xo/clusters/lkc-5joyz/connectors/browse"
+      },
+      "schema": {
+        "subject": "users-value",
+        "version": 1,
+        "id": 100003,
+        "schema": "{\"type\":\"record\",\"name\":\"users\",\"namespace\":\"ksql\",\"fields\":[{\"name\":\"registertime\",\"type\":\"long\"},{\"name\":\"userid\",\"type\":\"string\"},{\"name\":\"regionid\",\"type\":\"string\"},{\"name\":\"gender\",\"type\":\"string\"}],\"connect.name\":\"ksql.users\"}"
+      }
     },
-    {
-      "qualifiedName": "lsrc-w8v85:.:pageviews-value:1",
-      "name": "pageviews",
-      "description": "website pageviews",
-      "owner": "adam"
-    }
+    ...
   ]
   ```
 
-* Get information on one data product. This requires the qualified name of the data product, 
-which is the Schema Registry subject:
+* Get one specifc data product. This requires the qualified name of the data product:
 
   ```
-  curl -s localhost:8080/priv/data-products/lsrc-w8v85:.:users-value:1 | jq
   {
-    "qualifiedName": "lsrc-w8v85:.:users-value:1",
+    "@type": "DataProduct",
     "name": "users",
-    "description": "website users",
-    "owner": "rick"
+    "qualifiedName": "lsrc-dnxzz:.:users-value:1",
+    "description": "All users from all regions (both national and international)",
+    "owner": "@membership-team",
+    "domain": "membership",
+    "sla": "tier-1",
+    "quality": "authoritative",
+    "urls": {
+      "schemaUrl": "https://confluent.cloud/environments/env-op2xo/schema-registry/schemas/users-value",
+      "portUrl": "https://confluent.cloud/environments/env-op2xo/clusters/lkc-5joyz/topics/users",
+      "lineageUrl": "https://confluent.cloud/environments/env-op2xo/clusters/lkc-5joyz/stream-lineage/stream/topic-users/n/topic-users/overview",
+      "exportUrl": "https://confluent.cloud/environments/env-op2xo/clusters/lkc-5joyz/connectors/browse"
+    },
+    "schema": {
+      "subject": "users-value",
+      "version": 1,
+      "id": 100003,
+      "schema": "{\"type\":\"record\",\"name\":\"users\",\"namespace\":\"ksql\",\"fields\":[{\"name\":\"registertime\",\"type\":\"long\"},{\"name\":\"userid\",\"type\":\"string\"},{\"name\":\"regionid\",\"type\":\"string\"},{\"name\":\"gender\",\"type\":\"string\"}],\"connect.name\":\"ksql.users\"}"
+    }
   }
   ```
 
@@ -125,46 +163,33 @@ which is the Schema Registry subject:
     {
       "@type": "DataProduct",
       "name": "users",
-      "qualifiedName": "lsrc-7xxv2:.:users-value:1",
-      "description": "website users",
-      "owner": "rick",
+      "qualifiedName": "lsrc-dnxzz:.:users-value:1",
+      "description": "All users from all regions (both national and international)",
+      "owner": "@membership-team",
+      "domain": "membership",
+      "sla": "tier-1",
+      "quality": "authoritative",
       "urls": {
-        "schemaUrl": "https://confluent.cloud/environments/env-6qx3j/schema-registry/schemas/users-value",
-        "portUrl": "https://confluent.cloud/environments/env-6qx3j/clusters/lkc-1771v/topics/users",
-        "lineageUrl": "https://confluent.cloud/environments/env-6qx3j/clusters/lkc-1771v/stream-lineage/view/users-value"
+        "schemaUrl": "https://confluent.cloud/environments/env-op2xo/schema-registry/schemas/users-value",
+        "portUrl": "https://confluent.cloud/environments/env-op2xo/clusters/lkc-5joyz/topics/users",
+        "lineageUrl": "https://confluent.cloud/environments/env-op2xo/clusters/lkc-5joyz/stream-lineage/stream/topic-users/n/topic-users/overview",
+        "exportUrl": "https://confluent.cloud/environments/env-op2xo/clusters/lkc-5joyz/connectors/browse"
+      },
+      "schema": {
+        "subject": "users-value",
+        "version": 1,
+        "id": 100003,
+        "schema": "{\"type\":\"record\",\"name\":\"users\",\"namespace\":\"ksql\",\"fields\":[{\"name\":\"registertime\",\"type\":\"long\"},{\"name\":\"userid\",\"type\":\"string\"},{\"name\":\"regionid\",\"type\":\"string\"},{\"name\":\"gender\",\"type\":\"string\"}],\"connect.name\":\"ksql.users\"}"
       }
     },
-    ...
     {
       "@type": "Topic",
-      "name": "pksqlc-09g26PAGEVIEWS_USER3",
-      "qualifiedName": "lsrc-7xxv2:.:pksqlc-09g26PAGEVIEWS_USER3-value:2"
-    }
+      "name": "trending_stocks",
+      "qualifiedName": "lsrc-dnxzz:.:trending_stocks-value:2"
+    },
+    ...
   ]
   ```
-
-* Create a new data product for an existing topic:
-  ```
-  curl -XPOST -H 'Content-Type: application/json' --data "@topicrequest.json" http://localhost:8080/priv/data-products
-  ```
-  Where the contents of `topicrequest.json` file are as below. The `qualifiedName` field must be a valid 
-  `sr_subject_version` in the cc data catalog.
-  ```
-  {
-    "@type": "TOPIC",
-    "qualifiedName": "lsrc-7xxv2:.:pksqlc-09g26PAGEVIEWS_USER2-value:2",
-    "dataProductTag": {
-        "owner": "ybyzek",
-        "description": "pageviews users 2"
-    }
-  }
-  ```
-
-* Delete a data product:
-  ```
-  curl -X DELETE http://localhost:8080/data-products/lsrc-7xxv2:.:pksqlc-09g26PAGEVIEWS_USER2-value:2
-  ```
-
 
 ## Client Development Instructions
 
