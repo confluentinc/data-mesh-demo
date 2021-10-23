@@ -1,75 +1,94 @@
-# Data Mesh Demo
+# Confluent Data Mesh Demo
 
-An example implementation of Data Mesh on top of [Confluent Cloud](https://www.confluent.io/confluent-cloud/tryfree/).
+A Data Mesh prototype built on [Confluent Cloud](https://www.confluent.io/confluent-cloud/tryfree/).
 
-## Prerequisties
+![Preview](preview.png)
+
+## Hosted Version
+
+The Data Mesh demo is available in a hosted environment by visiting:
+
+https://www.confluent-data-mesh-prototype.com
+
+A companion blog post can be found here:
+
+*TODO Blog Link*
+
+## Running Locally 
+
+###  Prerequisties
+* [Confluent Cloud](https://www.confluent.io/confluent-cloud/tryfree/) account
+* [Confluent Cloud CLI](https://docs.confluent.io/ccloud-cli/current/install.html) `v1.36.0` or later
 * Java 11
 * Gradle
 * Node
 * Yarn
-* jq
-* A user account in [Confluent Cloud](https://www.confluent.io/confluent-cloud/tryfree/)
-* Local install of [Confluent Cloud CLI](https://docs.confluent.io/ccloud-cli/current/install.html) v1.36.0 or later
+* [jq](https://stedolan.github.io/jq/download/)
 
-## Instructions (WIP during development)
+### Instructions
 
-### Bringup
-
-#### To build a Confluent Cloud account and create initial data products
-
-* Clone the repository locally and change directories
+* Clone the repository and change into the project directory:
   ```
   git clone https://github.com/confluentinc/data-mesh-demo
   cd data-mesh-demo
   ```
 
-* Create the Data Mesh in Confluent Cloud, bootstrapped with two data products `users` and `pageviews`, by running the following command. This script will take 10-15 minutes to complete.
+* Ensure your `ccloud` CLI is logged into Confluent Cloud (`--save` prevents timeouts):
   ```
-  ./scripts/create-data-mesh.sh
+  ccloud login --save
   ```
-
-  It is successful when you see the following message:
+  
+* If you want to create a new Data Mesh on Confluent Cloud as well as build and run the demo run the following.
+  This process creates Confluent Cloud resources, including an environment, Apache Kafka cluster, [ksqlDB](https://ksqldb.io/) Application, and sample Data Products.
+  The script waits for all cloud resources to be fully provisioned and *can take 10-15 minutes to complete*.
+ 
   ```
-  Congrats! You are ready to start using the data products in the Data Mesh.
+  make data-mesh
   ```
+  
+  The script creates a configuration file for your new data mesh environment in the `stack-configs` folder 
+  local to this project. The file path will resemble `stack-configs/java-service-account-1234567.config`. This file contains
+  important security and configuration data for your new data mesh environment. You should protect this file and  
+  retain it as you'll need it later to destroy the new data mehs environment.
 
-#### To Compile and run the demo locally:
-
-* Build the web service and client code by running the following command:
-   ```
-   ./gradlew bootJar
-   ```
-
-  Ensure you see the message:
+ 
+* If you previously ran the `make data-mesh` command and still have the Confluent Cloud environemnt and 
+configuration file, you can skip the previous data mesh creation step and just run the demo with:
   ```
-  BUILD SUCCESSFUL in 22s
+  CONFIG_FILE=<path-to-config-file> make run
   ```
-
-* Start the web service, passing in as an argument the configuration file that was auto generated from `./scripts/create-data-mesh.sh`.
+ 
+* Once the data mesh creation and demo run process is complete, you will see the Spring Boot banner 
+  and a log entries that looks like:
   ```
-  java -jar build/libs/datamesh-0.0.1-SNAPSHOT.jar --spring.config.additional-location=file:$(pwd)/stack-configs/java-service-account-<SERVICE_ACCOUNT_ID>.config
+  Log ....
   ```
+ 
+* To view the data mesh demo, open a web browser to: http://localhost:8080
 
-  It is successful and will wait for requests when you see a log message similar to this:
+### Teardown
+
+Once you are done with the Data Mesh demo you'll want to stop the server and destroy the cloud resources.
+
+* Stop the demo web service by issuing `<ctrl-c>` in the terminal where you started it.
+
+* Destroy the Data Mesh resources in Confluent Cloud (including the environment, cluster, and ksqlDB app).
+ 
+  (_Note_: This command expects the path to the configuration file created during the `make data-mesh` 
+  command to be present in the `CONFIG_FILE` environment variable. If you started a new terminal you may need to 
+  set the value to the appropriate file):
   ```
-	2021-08-06 14:31:22.531  INFO 42900 --- [           main] io.confluent.demo.datamesh.DataMeshDemo  : Started DataMeshDemo in 1.901 seconds (JVM running for 2.331)
+  make destroy
   ```
+  
+### Data Mesh Demo API Usage
 
-#### To run a pre-packaged Docker version 
+The Data Mesh Demo models a data mesh via a REST API. The following are examples of some functions you can perform
+with the REST API directly. By default, the REST API listens on `localhost:8080`.
 
-Substitute in your stack config service account file path as appropriate:
-
-```
-docker run -it --rm -p 8080:8080 -v $(pwd)/stack-configs/java-service-account-<SERVICE_ACCOUNT_ID>.config:/java-service-account-<SERVICE_ACCOUNT_ID>.config:ro cnfldemos/data-mesh-demo:0.0.1-SNAPSHOT --spring.config.location=file:/java-service-account-<SERVICE_ACCOUNT_ID>.config
-```
-
-### Usage
-
-* Use endpoint `localhost:8080` to interact with the REST API.
-
-  Example: discover the existing data products:
+* Discover the existing data products:
   ```
-  curl -s localhost:8080/data-products | jq
+  curl -s localhost:8080/priv/data-products | jq
   [
     {
       "qualifiedName": "lsrc-w8v85:.:users-value:1",
@@ -86,9 +105,11 @@ docker run -it --rm -p 8080:8080 -v $(pwd)/stack-configs/java-service-account-<S
   ]
   ```
 
-  Example: get one information on one data product. This requires the qualified name of the data product, which is the Schema Registry subject:
+* Get information on one data product. This requires the qualified name of the data product, 
+which is the Schema Registry subject:
+
   ```
-  curl -s localhost:8080/data-products/lsrc-w8v85:.:users-value:1 | jq
+  curl -s localhost:8080/priv/data-products/lsrc-w8v85:.:users-value:1 | jq
   {
     "qualifiedName": "lsrc-w8v85:.:users-value:1",
     "name": "users",
@@ -97,9 +118,9 @@ docker run -it --rm -p 8080:8080 -v $(pwd)/stack-configs/java-service-account-<S
   }
   ```
 
-  Example: Get all the data products and topics in one list:
+* Get all the data products and topics in one list:
   ```
-  curl -s localhost:8080/data-products/manage | jq
+  curl -s localhost:8080/priv/data-products/manage | jq
   [
     {
       "@type": "DataProduct",
@@ -122,56 +143,36 @@ docker run -it --rm -p 8080:8080 -v $(pwd)/stack-configs/java-service-account-<S
   ]
   ```
 
-  Example: Create a new data product for an existing topic:
+* Create a new data product for an existing topic:
   ```
-  curl -XPOST -H 'Content-Type: application/json' --data "@topicrequest.json" http://localhost:8080/data-products
+  curl -XPOST -H 'Content-Type: application/json' --data "@topicrequest.json" http://localhost:8080/priv/data-products
   ```
-    Where the contents of topicrequest.json file are as below. The `qualifiedName` field must be a valid `sr_subject_version` in the cc data catalog.
-    ```
-    {
-      "@type": "TOPIC",
-      "qualifiedName": "lsrc-7xxv2:.:pksqlc-09g26PAGEVIEWS_USER2-value:2",
-      "dataProductTag": {
-      	"owner": "ybyzek",
-      	"description": "pageviews users 2"
-      }
+  Where the contents of `topicrequest.json` file are as below. The `qualifiedName` field must be a valid 
+  `sr_subject_version` in the cc data catalog.
+  ```
+  {
+    "@type": "TOPIC",
+    "qualifiedName": "lsrc-7xxv2:.:pksqlc-09g26PAGEVIEWS_USER2-value:2",
+    "dataProductTag": {
+        "owner": "ybyzek",
+        "description": "pageviews users 2"
     }
-    ```
+  }
+  ```
 
-  Example: Delete a data product:
+* Delete a data product:
   ```
   curl -X DELETE http://localhost:8080/data-products/lsrc-7xxv2:.:pksqlc-09g26PAGEVIEWS_USER2-value:2
   ```
 
-  Example: Create a new data product using ksqlDB:
-  ```
-  curl -XPOST -H 'Content-Type: application/json' --data "@ksqldbrequest.json" http://localhost:8080/data-products
-  ```
-    Where the contents of the `ksqldbrequest.json` file are as below.  Note: The requested name of the Data Product must match the expected output topic name (without the `-value` postfix) of the ksqlDB command.
-    ```
-    {
-      "@type": "KSQLDB",
-      "name": "pageviews_user3",
-      "owner": "owner value here",
-      "description": "description value here",
-      "command": "CREATE STREAM PAGEVIEWS_USER3 WITH (KAFKA_TOPIC='pageviews_user3', PARTITIONS=3, REPLICAS=3) AS SELECT * FROM PAGEVIEWS WHERE (PAGEVIEWS.USERID = 'User_3') EMIT CHANGES;"
-    }
-    ```
-  
 
-#### Teardown
+## Client Development Instructions
 
-* Stop the web service by issuing `<ctrl-c>` in the window where you started it.
+The client is built with [Elm](https://elm-lang.org/) and the source is build as part of the Java server build step. 
+If you like to develop the client code independent, you can use the following.
 
-* Destroy the Data Mesh in Confluent Cloud.  Pass in as an argument the configuration file that was auto generated from `./scripts/create-data-mesh.sh`
-  ```
-  ./scripts/destroy-data-mesh.sh stack-configs/java-service-account-<SERVICE_ACCOUNT_ID>.config
-  ```
-
-## Client Instructions
-
-### Development
-
+To run a webserver hosting the client code that will watch for changes and load
+connected browswers:
 ```sh
 cd client
 yarn
@@ -179,14 +180,3 @@ yarn dev
 ```
 
 The website is now served at http://localhost:9000.
-
-### Production
-
-```sh
-cd client
-yarn
-yarn build
-```
-
-The client files are now in `client/dist/`. They can be hosted by the
-main webserver by _...TODO..._.
