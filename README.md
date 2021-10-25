@@ -33,7 +33,7 @@ A companion blog post can be found here:
   cd data-mesh-demo
   ```
 
-* Ensure your `ccloud` CLI is logged into Confluent Cloud (`--save` prevents timeouts):
+* Ensure your `ccloud` CLI is logged into Confluent Cloud (the ``--save`` argument saves your Confluent Cloud user login credentials or refresh token (in the case of SSO) to the local ``netrc`` file)
   ```
   ccloud login --save
   ```
