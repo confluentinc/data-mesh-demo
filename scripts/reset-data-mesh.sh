@@ -12,8 +12,8 @@ function drop_schema() {
 }
 function drop_data_product() {
   NAME=$NAME TYPE=$TYPE drop_ksql_component
-  NAME=$NAME TYPE=$TYPE drop_topic
-  NAME="${NAME}-value" TYPE=$TYPE drop_schema
+  NAME=$NAME drop_topic
+  NAME="${NAME}-value" drop_schema
 }
 
 # Delete any data products that might have been created by users
