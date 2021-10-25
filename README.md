@@ -40,7 +40,7 @@ A companion blog post can be found here:
   
 * If you want to create a new Data Mesh on Confluent Cloud as well as build and run the demo run the following.
   This process creates Confluent Cloud resources, including an environment, Apache Kafka cluster, [ksqlDB](https://ksqldb.io/) Application, and sample Data Products.
-  The script waits for all cloud resources to be fully provisioned and *can take 10-15 minutes to complete*.
+  The script waits for all cloud resources to be fully provisioned and *can take 15+ minutes to complete*.
 
   *Note*: This command needs to be run from a new terminal (not one that has ran this command previously)
   ```
