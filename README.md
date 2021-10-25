@@ -50,7 +50,7 @@ A companion blog post can be found here:
   The script creates a configuration file for your new data mesh environment in the `stack-configs` folder 
   local to this project. The file path will resemble `stack-configs/java-service-account-1234567.config`. This file contains
   important security and configuration data for your new data mesh environment. You should protect this file and  
-  retain it as you'll need it later to destroy the new data mehs environment.
+  retain it as you'll need it later to destroy the new data mesh environment.
 
  
 * If you previously ran the `make data-mesh` command and still have the Confluent Cloud environemnt and 
