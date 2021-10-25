@@ -60,7 +60,7 @@ configuration file, you can skip the previous data mesh creation step and just r
   ```
  
 * Once the data mesh creation and demo run process is complete, you will see the Spring Boot banner 
-  and a log entries that look similar to: 
+  and log entries that look similar to: 
   ```
   ...
     .   ____          _            __ _ _
