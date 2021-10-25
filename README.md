@@ -10,6 +10,10 @@ The Data Mesh demo is available in a hosted environment by visiting:
 
 https://www.confluent-data-mesh-prototype.com
 
+The hosted version of the demo allows you to see a subset of the full demo functionality without 
+requiring you to run any code locally. When you would like to run a full version of the demo, follow the 
+[Running Locally](#running-locally) instructions below.
+
 A companion blog post can be found here:
 
 *TODO Blog Link*
@@ -18,6 +22,12 @@ A companion blog post can be found here:
 
 ###  Prerequisties
 * [Confluent Cloud](https://www.confluent.io/confluent-cloud/tryfree/) account
+  * New Confluent Cloud signups receive _$400_ to spend within Confluent Cloud during their first 60 days.
+    Use Confluent Cloud promo code `DATAMESH200` to receive an additional **$200** free usage
+    This will sufficiently cover one day of running this example, beyond which you may be billed 
+    for the Confluent Cloud resources until you destroy them. Enter the promo code in the Billing & payment page
+    under the Payment details subsection.
+
 * [Confluent Cloud CLI](https://docs.confluent.io/ccloud-cli/current/install.html) `v1.36.0` or later
 * Java 11
 * Gradle
@@ -27,30 +37,34 @@ A companion blog post can be found here:
 
 ### Instructions
 
-* Clone the repository and change into the project directory:
+* Clone the repository and change into the project directory
   ```
   git clone https://github.com/confluentinc/data-mesh-demo
   cd data-mesh-demo
   ```
 
-* Ensure your `ccloud` CLI is logged into Confluent Cloud (the ``--save`` argument saves your Confluent Cloud user login credentials or refresh token (in the case of SSO) to the local ``netrc`` file)
+* Ensure your `ccloud` CLI is logged into Confluent Cloud (the ``--save`` argument saves your Confluent Cloud 
+  user login credentials or refresh token (in the case of SSO) to the local ``netrc`` file, preventing timeouts)
   ```
   ccloud login --save
   ```
   
-* If you want to create a new Data Mesh on Confluent Cloud as well as build and run the demo run the following.
-  This process creates Confluent Cloud resources, including an environment, Apache Kafka cluster, [ksqlDB](https://ksqldb.io/) Application, and sample Data Products.
-  The script waits for all cloud resources to be fully provisioned and *can take 15+ minutes to complete*.
+* If you want to create a new Data Mesh on Confluent Cloud as well as build and run the demo, this command 
+  creates Confluent Cloud resources, including an environment, Apache Kafka cluster,
+  [ksqlDB](https://ksqldb.io/) Application, and sample Data Products
+  <br/><br/>
+  **Note**: The script waits for all cloud resources to be fully provisioned and *can take 15+ minutes* to complete. 
+  In addition, the command needs to be run from a new terminal (not one that has run this command previously).
 
-  *Note*: This command needs to be run from a new terminal (not one that has ran this command previously)
   ```
   make data-mesh
   ```
-  
-  The script creates a configuration file for your new data mesh environment in the `stack-configs` folder 
-  local to this project. The file path will resemble `stack-configs/java-service-account-1234567.config`. This file contains
-  important security and configuration data for your new data mesh environment. You should protect this file and  
-  retain it as you'll need it later to destroy the new data mesh environment.
+
+  Once the above command is complete, a configuration file for your new data mesh environment will be located in 
+  the `stack-configs` folder local to this project. The file path will resemble 
+  `stack-configs/java-service-account-1234567.config`. This file contains important security and configuration 
+  data for your new data mesh environment. You should protect this file and retain it as you'll need it later 
+  to destroy the new data mesh environment.
 
  
 * If you previously ran the `make data-mesh` command and still have the Confluent Cloud environemnt and 
