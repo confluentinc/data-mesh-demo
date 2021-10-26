@@ -1,119 +1,37 @@
-<svg width="100%" height="auto" viewBox="0 0 1280 108" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMin meet">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M0 0H1280V108H0V0Z" fill="#142B52"></path>
-<path opacity="0.4" d="M256 526C397.385 526 512 411.385 512 270C512 128.615 397.385 14 256 14C114.615 14 0 128.615 0 270C0 411.385 114.615 526 256 526Z" fill="#006B95"></path>
-<path opacity="0.4" d="M1024 96C1165.38 96 1280 -18.6151 1280 -160C1280 -301.385 1165.38 -416 1024 -416C882.615 -416 768 -301.385 768 -160C768 -18.6151 882.615 96 1024 96Z" fill="#006B95"></path>
-<g opacity="0.2">
-<circle cx="14" cy="78" r="2" fill="#A5DEEF"></circle>
-<circle cx="14" cy="94" r="2" fill="#A5DEEF"></circle>
-<circle cx="30" cy="78" r="2" fill="#A5DEEF"></circle>
-<circle cx="94" cy="78" r="2" fill="#A5DEEF"></circle>
-<circle cx="62" cy="78" r="2" fill="#A5DEEF"></circle>
-<circle cx="30" cy="94" r="2" fill="#A5DEEF"></circle>
-<circle cx="94" cy="94" r="2" fill="#A5DEEF"></circle>
-<circle cx="62" cy="94" r="2" fill="#A5DEEF"></circle>
-<circle cx="46" cy="78" r="2" fill="#A5DEEF"></circle>
-<circle cx="110" cy="78" r="2" fill="#A5DEEF"></circle>
-<circle cx="78" cy="78" r="2" fill="#A5DEEF"></circle>
-<circle cx="46" cy="94" r="2" fill="#A5DEEF"></circle>
-<circle cx="110" cy="94" r="2" fill="#A5DEEF"></circle>
-<circle cx="78" cy="94" r="2" fill="#A5DEEF"></circle>
-<circle cx="126" cy="78" r="2" fill="#A5DEEF"></circle>
-<circle cx="126" cy="94" r="2" fill="#A5DEEF"></circle>
+<svg width="1600" height="120" viewBox="0 0 1600 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_4565:17400)">
+<rect width="1600" height="120" fill="#040531"/>
+<g opacity="0.8">
+<path opacity="0.89" d="M542 201C701.877 191.428 1435.32 2.77407 1699.5 -74.5" stroke="url(#paint0_linear_4565:17400)" stroke-width="43"/>
+<path opacity="0.65" d="M388 172C574.619 158.66 1092.64 34.6908 1401 -73" stroke="url(#paint1_linear_4565:17400)" stroke-width="56"/>
+<path opacity="0.76" d="M251 172C449.139 156.334 1026.6 -2.53191 1354 -129" stroke="url(#paint2_linear_4565:17400)" stroke-width="20"/>
+<path opacity="0.5" d="M236 214C434.257 198.38 995.697 59.7773 1381 -48" stroke="url(#paint3_linear_4565:17400)" stroke-width="20"/>
+<path opacity="0.75" d="M356 222C508.434 203.058 1204.05 59.8297 1402 15" stroke="url(#paint4_linear_4565:17400)"/>
 </g>
-<g opacity="0.2">
-<circle cx="337" cy="30" r="2" fill="#A5DEEF"></circle>
-<circle cx="337" cy="46" r="2" fill="#A5DEEF"></circle>
-<circle cx="337" cy="14" r="2" fill="#A5DEEF"></circle>
-<circle cx="353" cy="30" r="2" fill="#A5DEEF"></circle>
-<circle cx="353" cy="46" r="2" fill="#A5DEEF"></circle>
-<circle cx="353" cy="14" r="2" fill="#A5DEEF"></circle>
-<circle cx="369" cy="30" r="2" fill="#A5DEEF"></circle>
-<circle cx="433" cy="30" r="2" fill="#A5DEEF"></circle>
-<circle cx="401" cy="30" r="2" fill="#A5DEEF"></circle>
-<circle cx="369" cy="46" r="2" fill="#A5DEEF"></circle>
-<circle cx="433" cy="46" r="2" fill="#A5DEEF"></circle>
-<circle cx="401" cy="46" r="2" fill="#A5DEEF"></circle>
-<circle cx="369" cy="14" r="2" fill="#A5DEEF"></circle>
-<circle cx="433" cy="14" r="2" fill="#A5DEEF"></circle>
-<circle cx="401" cy="14" r="2" fill="#A5DEEF"></circle>
-<circle cx="385" cy="30" r="2" fill="#A5DEEF"></circle>
-<circle cx="449" cy="30" r="2" fill="#A5DEEF"></circle>
-<circle cx="417" cy="30" r="2" fill="#A5DEEF"></circle>
-<circle cx="385" cy="46" r="2" fill="#A5DEEF"></circle>
-<circle cx="449" cy="46" r="2" fill="#A5DEEF"></circle>
-<circle cx="417" cy="46" r="2" fill="#A5DEEF"></circle>
-<circle cx="385" cy="14" r="2" fill="#A5DEEF"></circle>
-<circle cx="449" cy="14" r="2" fill="#A5DEEF"></circle>
-<circle cx="417" cy="14" r="2" fill="#A5DEEF"></circle>
-<circle cx="337" cy="78" r="2" fill="#A5DEEF"></circle>
-<circle cx="337" cy="62" r="2" fill="#A5DEEF"></circle>
-<circle cx="353" cy="78" r="2" fill="#A5DEEF"></circle>
-<circle cx="353" cy="62" r="2" fill="#A5DEEF"></circle>
-<circle cx="369" cy="78" r="2" fill="#A5DEEF"></circle>
-<circle cx="433" cy="78" r="2" fill="#A5DEEF"></circle>
-<circle cx="401" cy="78" r="2" fill="#A5DEEF"></circle>
-<circle cx="369" cy="62" r="2" fill="#A5DEEF"></circle>
-<circle cx="433" cy="62" r="2" fill="#A5DEEF"></circle>
-<circle cx="401" cy="62" r="2" fill="#A5DEEF"></circle>
-<circle cx="385" cy="78" r="2" fill="#A5DEEF"></circle>
-<circle cx="449" cy="78" r="2" fill="#A5DEEF"></circle>
-<circle cx="417" cy="78" r="2" fill="#A5DEEF"></circle>
-<circle cx="385" cy="62" r="2" fill="#A5DEEF"></circle>
-<circle cx="449" cy="62" r="2" fill="#A5DEEF"></circle>
-<circle cx="417" cy="62" r="2" fill="#A5DEEF"></circle>
-<circle cx="449" cy="46" r="2" fill="#A5DEEF"></circle>
-<circle cx="465" cy="30" r="2" fill="#A5DEEF"></circle>
-<circle cx="529" cy="30" r="2" fill="#A5DEEF"></circle>
-<circle cx="465" cy="46" r="2" fill="#A5DEEF"></circle>
-<circle cx="529" cy="46" r="2" fill="#A5DEEF"></circle>
-<circle cx="465" cy="14" r="2" fill="#A5DEEF"></circle>
-<circle cx="529" cy="14" r="2" fill="#A5DEEF"></circle>
-<circle cx="481" cy="30" r="2" fill="#A5DEEF"></circle>
-<circle cx="545" cy="30" r="2" fill="#A5DEEF"></circle>
-<circle cx="481" cy="46" r="2" fill="#A5DEEF"></circle>
-<circle cx="545" cy="46" r="2" fill="#A5DEEF"></circle>
-<circle cx="481" cy="14" r="2" fill="#A5DEEF"></circle>
-<circle cx="545" cy="14" r="2" fill="#A5DEEF"></circle>
-<circle cx="497" cy="30" r="2" fill="#A5DEEF"></circle>
-<circle cx="561" cy="30" r="2" fill="#A5DEEF"></circle>
-<circle cx="513" cy="30" r="2" fill="#A5DEEF"></circle>
-<circle cx="577" cy="30" r="2" fill="#A5DEEF"></circle>
-<circle cx="497" cy="46" r="2" fill="#A5DEEF"></circle>
-<circle cx="561" cy="46" r="2" fill="#A5DEEF"></circle>
-<circle cx="513" cy="46" r="2" fill="#A5DEEF"></circle>
-<circle cx="577" cy="46" r="2" fill="#A5DEEF"></circle>
-<circle cx="497" cy="14" r="2" fill="#A5DEEF"></circle>
-<circle cx="561" cy="14" r="2" fill="#A5DEEF"></circle>
-<circle cx="513" cy="14" r="2" fill="#A5DEEF"></circle>
-<circle cx="577" cy="14" r="2" fill="#A5DEEF"></circle>
-<circle cx="449" cy="78" r="2" fill="#A5DEEF"></circle>
-<circle cx="449" cy="62" r="2" fill="#A5DEEF"></circle>
-<circle cx="465" cy="78" r="2" fill="#A5DEEF"></circle>
-<circle cx="529" cy="78" r="2" fill="#A5DEEF"></circle>
-<circle cx="465" cy="62" r="2" fill="#A5DEEF"></circle>
-<circle cx="529" cy="62" r="2" fill="#A5DEEF"></circle>
-<circle cx="481" cy="78" r="2" fill="#A5DEEF"></circle>
-<circle cx="545" cy="78" r="2" fill="#A5DEEF"></circle>
-<circle cx="481" cy="62" r="2" fill="#A5DEEF"></circle>
-<circle cx="545" cy="62" r="2" fill="#A5DEEF"></circle>
-<circle cx="497" cy="78" r="2" fill="#A5DEEF"></circle>
-<circle cx="561" cy="78" r="2" fill="#A5DEEF"></circle>
-<circle cx="513" cy="78" r="2" fill="#A5DEEF"></circle>
-<circle cx="577" cy="78" r="2" fill="#A5DEEF"></circle>
-<circle cx="497" cy="62" r="2" fill="#A5DEEF"></circle>
-<circle cx="561" cy="62" r="2" fill="#A5DEEF"></circle>
-<circle cx="513" cy="62" r="2" fill="#A5DEEF"></circle>
-<circle cx="577" cy="62" r="2" fill="#A5DEEF"></circle>
 </g>
-<g opacity="0.32">
-<circle cx="906.026" cy="147" r="203" transform="rotate(171.078 906.026 147)" stroke="#007EAF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="125.61 35.52 30.45 25.38 20.3 15.22"></circle>
-<ellipse cx="906.137" cy="146.889" rx="157.889" ry="157.889" transform="rotate(105.841 906.137 146.889)" stroke="#007EAF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="90.25 22.56"></ellipse>
-<ellipse cx="906.248" cy="147.222" rx="112.778" ry="112.778" transform="rotate(-180 906.248 147.222)" stroke="#007EAF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></ellipse>
-</g>
-
 <defs>
-<clipPath id="clip0">
-<rect width="1280" height="108" fill="white"></rect>
+<linearGradient id="paint0_linear_4565:17400" x1="1587.28" y1="77.5258" x2="328.587" y2="538.614" gradientUnits="userSpaceOnUse">
+<stop stop-color="#8ED0FF"/>
+<stop offset="1" stop-color="#0085E5"/>
+</linearGradient>
+<linearGradient id="paint1_linear_4565:17400" x1="1608.12" y1="-0.0754734" x2="271.936" y2="449.12" gradientUnits="userSpaceOnUse">
+<stop stop-color="#149CFF"/>
+<stop offset="1" stop-color="#008BEF"/>
+</linearGradient>
+<linearGradient id="paint2_linear_4565:17400" x1="1514.22" y1="-64.3119" x2="-128.62" y2="391.406" gradientUnits="userSpaceOnUse">
+<stop stop-color="#5EAAE0"/>
+<stop offset="1" stop-color="#0094FF"/>
+</linearGradient>
+<linearGradient id="paint3_linear_4565:17400" x1="1514.9" y1="-15.063" x2="-128.077" y2="442.318" gradientUnits="userSpaceOnUse">
+<stop stop-color="#5EAAE0"/>
+<stop offset="1" stop-color="#0094FF"/>
+</linearGradient>
+<linearGradient id="paint4_linear_4565:17400" x1="1536.84" y1="-19.8292" x2="216.819" y2="213.154" gradientUnits="userSpaceOnUse">
+<stop stop-color="#A1D8FF"/>
+<stop offset="1" stop-color="#00A0E5"/>
+</linearGradient>
+<clipPath id="clip0_4565:17400">
+<rect width="1600" height="120" fill="white"/>
 </clipPath>
 </defs>
 </svg>
