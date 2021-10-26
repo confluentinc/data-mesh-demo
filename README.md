@@ -38,14 +38,14 @@ A companion blog post can be found here:
 ### Instructions
 
 * Clone the repository and change into the project directory
-  ```
+  ```sh
   git clone https://github.com/confluentinc/data-mesh-demo
   cd data-mesh-demo
   ```
 
 * Ensure your `ccloud` CLI is logged into Confluent Cloud (the ``--save`` argument saves your Confluent Cloud 
   user login credentials or refresh token (in the case of SSO) to the local ``netrc`` file, preventing timeouts)
-  ```
+  ```sh
   ccloud login --save
   ```
   
@@ -56,7 +56,7 @@ A companion blog post can be found here:
   **Note**: The script waits for all cloud resources to be fully provisioned and *can take 15+ minutes* to complete. 
   In addition, the command needs to be run from a new terminal (not one that has run this command previously).
 
-  ```
+  ```sh
   make data-mesh
   ```
 
@@ -69,7 +69,7 @@ A companion blog post can be found here:
  
 * If you previously ran the `make data-mesh` command and still have the Confluent Cloud environemnt and 
 configuration file, you can skip the previous data mesh creation step and just run the demo with:
-  ```
+  ```sh
   CONFIG_FILE=<path-to-config-file> make run
   ```
  
@@ -104,7 +104,7 @@ Once you are done with the Data Mesh demo you'll want to stop the server and des
   (_Note_: This command expects the path to the configuration file created during the `make data-mesh` 
   command to be present in the `CONFIG_FILE` environment variable. If you started a new terminal you may need to 
   set the value to the appropriate file):
-  ```
+  ```sh
   make destroy
   ```
   
