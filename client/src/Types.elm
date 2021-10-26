@@ -165,6 +165,9 @@ type alias StaticImages =
     , topicScreenshotPath : String
     , lineageScreenshotPath : String
     , searchScreenshotPath : String
+    , landingImage1Path : String
+    , landingImage2Path : String
+    , landingImage3Path : String
     }
 
 
@@ -172,6 +175,7 @@ type View
     = Discover (Maybe QualifiedName)
     | Create (Maybe UseCaseName)
     | Manage
+    | Landing
     | NotFound
 
 
@@ -185,6 +189,9 @@ isSameTab a b =
             True
 
         ( Manage, Manage ) ->
+            True
+
+        ( Landing, Landing ) ->
             True
 
         ( NotFound, NotFound ) ->

@@ -15,6 +15,7 @@ import UIKit
 import View.Create
 import View.Discover
 import View.Manage
+import View.Landing
 
 
 view : Model -> Document Msg
@@ -55,14 +56,18 @@ mainView model =
             [ ul
                 [ UIKit.tab ]
                 (List.map (tabView model.activeView)
-                    [ ( Discover Nothing, "1) Explore Data Products" )
+                    [ ( Landing, "Data Mesh Home" )
+                    , ( Discover Nothing, "1) Explore Data Products" )
                     , ( Create Nothing, "2) Create Apps Using Data Products" )
                     , ( Manage, "3) Publish Data Products" )
                     ]
                 )
             , case model.activeView of
-                Discover mQualifiedName ->
-                    View.Discover.view mQualifiedName model
+                Landing ->
+                    View.Landing.view model
+
+                Discover asdfa ->
+                    View.Discover.view asdfa model
 
                 Create mName ->
                     View.Create.view mName model
