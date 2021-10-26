@@ -111,11 +111,13 @@ Once you are done with the Data Mesh demo you'll want to stop the server and des
 ### Data Mesh Demo API Usage
 
 The Data Mesh Demo models a data mesh via a REST API. The following are examples of some functions you can perform
-with the REST API directly. By default, the REST API listens on `localhost:8080`.
+with the REST API directly. By default, the REST API listens on http://localhost:8080
 
 * Discover the existing data products:
-  ```
+  ```sh
   curl -s localhost:8080/priv/data-products | jq
+  ```
+  ```json
   [
     {
       "@type": "DataProduct",
@@ -145,7 +147,10 @@ with the REST API directly. By default, the REST API listens on `localhost:8080`
 
 * Get one specifc data product. This requires the qualified name of the data product:
 
+  ```sh
+  curl -s localhost:8080/data-products/lsrc-w8v85:.:users-value:1 | jq
   ```
+  ```json
   {
     "@type": "DataProduct",
     "name": "users",
@@ -171,8 +176,10 @@ with the REST API directly. By default, the REST API listens on `localhost:8080`
   ```
 
 * Get all the data products and topics in one list:
-  ```
+  ```sh
   curl -s localhost:8080/priv/data-products/manage | jq
+  ```
+  ```json
   [
     {
       "@type": "DataProduct",
@@ -208,10 +215,10 @@ with the REST API directly. By default, the REST API listens on `localhost:8080`
 ## Client Development Instructions
 
 The client is built with [Elm](https://elm-lang.org/) and the source is build as part of the Java server build step. 
-If you like to develop the client code independent, you can use the following.
+If you would like to develop the client code independently, you can use the following.
 
 To run a webserver hosting the client code that will watch for changes and load
-connected browswers:
+connected browsers:
 ```sh
 cd client
 yarn
