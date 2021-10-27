@@ -29,7 +29,10 @@ suite =
             ]
         , describe
             "routeToString"
-            [ test "discover" <|
+            [ test "landing" <|
+                \_ ->
+                    Expect.equal "#/landing" (routeToString Landing)
+            , test "discover" <|
                 \_ ->
                     Expect.equal "#/discover" (routeToString (Discover Nothing))
             , test "discover/<name>" <|
