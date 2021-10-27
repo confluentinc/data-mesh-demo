@@ -43,7 +43,6 @@ headerView logoPath =
                 , src logoPath
                 ]
                 []
-            , h1 [] [ text "Confluent" ]
             ]
         ]
 
