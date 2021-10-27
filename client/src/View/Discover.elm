@@ -36,7 +36,7 @@ view activeStreamKey model =
                 [ text
                     (case model.actuatorInfo of
                         Success actuatorInfo ->
-                            "Data Products available in the " ++ unDomain actuatorInfo.domain ++ " domain"
+                            "Data Products available (" ++ unDomain actuatorInfo.domain ++ " domain)"
 
                         _ ->
                             "Data Products available"
@@ -103,7 +103,7 @@ discoveryOutro =
 Important functions for consumers that are not included in this prototype:
   - Register your to-be-built application as a consumer of the data product
   - Request access to sensitive data products, such as those containing PII
-  	- The request will need to be approved by the appropriate team
+  \t- The request will need to be approved by the appropriate team
   - Communicate with the producers and consumers of the data product
     """
 

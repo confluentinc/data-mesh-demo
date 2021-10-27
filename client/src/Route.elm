@@ -22,8 +22,7 @@ routeParser url =
 parser : Parser (View -> View) View
 parser =
     oneOf
-        [
-          map Landing top
+        [ map Landing top
         , map Landing (s "landing")
         , map (Discover Nothing) (s "discover")
         , map (Discover << Just << QualifiedName) (s "discover" </> string)

@@ -53,6 +53,7 @@ Once you have identified the necessary data products (and registered as a consum
 This tab contains several sample business use-cases that illustrate the consumption and usage of the pre-published data products. Click on one of the samples to see the details of the application.
     """
 
+
 dataProductCreationOutro : String
 dataProductCreationOutro =
     """

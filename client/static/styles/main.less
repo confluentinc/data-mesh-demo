@@ -14,6 +14,12 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'TabFont';
+  src: url('../fonts/MarkPro/MarkProMedium.otf') format('opentype');
+  font-style: normal;
+}
+
 header {
   grid-area: header;
 }
@@ -46,9 +52,6 @@ body > header {
 
     height: 120px;
     gap: 15px;
-
-    .logo {
-    }
 
     h1 {
       margin: 0;
@@ -120,6 +123,11 @@ body > footer {
     font-style: italic;
   }
 }
+
+.uk-tab {
+	font-family: TabFont;
+}
+
 
 .discover-pane,
 .create-pane {

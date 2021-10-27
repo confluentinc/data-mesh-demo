@@ -14,8 +14,8 @@ import Types exposing (..)
 import UIKit
 import View.Create
 import View.Discover
-import View.Manage
 import View.Landing
+import View.Manage
 
 
 view : Model -> Document Msg
