@@ -11,6 +11,9 @@ import schemaScreenshotPath from './static/images/schema.png';
 import topicScreenshotPath from './static/images/topic.png';
 import lineageScreenshotPath from './static/images/lineage.png';
 import searchScreenshotPath from './static/images/search.png';
+import landingImage1Path from './static/images/landing/landing-p1.png';
+import landingImage2Path from './static/images/landing/landing-p2.png';
+import landingImage3Path from './static/images/landing/landing-p3.png';
 
 import * as Stomp from './src/Stomp';
 import * as Scrolling from './src/Scrolling';
@@ -29,7 +32,10 @@ socket.onopen = function() {
         schemaScreenshotPath: schemaScreenshotPath,
         topicScreenshotPath: topicScreenshotPath,
         lineageScreenshotPath: lineageScreenshotPath,
-        searchScreenshotPath: searchScreenshotPath
+        searchScreenshotPath: searchScreenshotPath,
+        landingImage1Path: landingImage1Path,
+        landingImage2Path: landingImage2Path,
+        landingImage3Path: landingImage3Path
       }
     }
   });
