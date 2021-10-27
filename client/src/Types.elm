@@ -172,16 +172,19 @@ type alias StaticImages =
 
 
 type View
-    = Discover (Maybe QualifiedName)
+    = Landing
+    | Discover (Maybe QualifiedName)
     | Create (Maybe UseCaseName)
     | Manage
-    | Landing
     | NotFound
 
 
 isSameTab : View -> View -> Bool
 isSameTab a b =
     case ( a, b ) of
+        ( Landing, Landing ) ->
+            True
+
         ( Discover _, Discover _ ) ->
             True
 
@@ -189,9 +192,6 @@ isSameTab a b =
             True
 
         ( Manage, Manage ) ->
-            True
-
-        ( Landing, Landing ) ->
             True
 
         ( NotFound, NotFound ) ->

@@ -13,7 +13,9 @@ suite =
         [ describe
             "routeParser"
             [ test "root" <|
-                \_ -> parsesTo (Discover Nothing) "http://localhost/"
+                \_ -> parsesTo (Landing) "http://localhost/"
+            , test "landing" <|
+                \_ -> parsesTo (Landing) "http://localhost/#landing"
             , test "discover" <|
                 \_ -> parsesTo (Discover Nothing) "http://localhost/#discover"
             , test "discover/<name>" <|
