@@ -65,14 +65,10 @@ splitStreamTablesView dataProductsTableState ( streams, actuatorInfo ) =
                 (Dict.values streams)
 
         showTableUnlessEmpty tableConfigFlags items =
-            if List.isEmpty items then
-                span [] []
-
-            else
-                Table.view
-                    (tableConfig tableConfigFlags)
-                    dataProductsTableState
-                    items
+            Table.view
+                (tableConfig tableConfigFlags)
+                dataProductsTableState
+                items
     in
     div []
         [ showTableUnlessEmpty
@@ -80,13 +76,10 @@ splitStreamTablesView dataProductsTableState ( streams, actuatorInfo ) =
             , caption = Nothing
             }
             ourStreams
+        , h3 [] [ text "Data Products from other domains", tooltip "These are data products that have been published from other domains and are owned by other teams. You cannot perform any management operations on them as you do not have the necessary permissions" ]
         , showTableUnlessEmpty
             { showControls = False
-            , caption =
-                Just
-                    [ text "Data Products from other domains"
-                    , tooltip "These are data products that have been published from other domains and are owned by other teams. You cannot perform any management operations on them as you do not have the necessary permissions"
-                    ]
+            , caption = Nothing
             }
             otherStreams
         ]
