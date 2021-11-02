@@ -6,13 +6,13 @@ import Markdown
 import Types exposing (..)
 
 
-view : String -> Html Msg
-view diagramPath =
+view : StaticImages -> Html Msg
+view images =
     div [ class "landing-pane" ]
         [ Markdown.toHtml [] landingIntro
         , img
             [ class "landing-diagram"
-            , src diagramPath
+            , src images.landingImage1Path
             ]
             []
         ]
