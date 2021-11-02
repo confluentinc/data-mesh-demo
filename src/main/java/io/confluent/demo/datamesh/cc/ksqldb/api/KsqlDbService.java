@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 
 @Service
@@ -59,6 +60,10 @@ public class KsqlDbService {
         auditLogService.sendAuditLogEntry(
             "Use ksqlDB SDK to execute statement",
             String.format("ksqlClient.executeStatement(\"%s\")", foundUseCase.getKsqlDbCommand()));
-        ksqlClient.executeStatement(foundUseCase.getKsqlDbCommand()).get();
+        try {
+            ksqlClient.executeStatement(foundUseCase.getKsqlDbCommand()).get();
+            // Swallow for now due to ksqlDB SDK invalid processing of CREATE ... IF NOT EXIST warnings
+        } catch (Exception ex) {
+        }
     }
 }
