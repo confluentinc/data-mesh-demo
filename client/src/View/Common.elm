@@ -2,6 +2,7 @@ module View.Common exposing
     ( errorView
     , loadingWheel
     , nbsp
+    , selectable
     , showProductQuality
     , showProductSla
     , webDataView
@@ -101,3 +102,8 @@ showProductSla sla =
 
         OtherSla s ->
             s
+
+
+selectable : Attribute msg
+selectable =
+    class "selectable"

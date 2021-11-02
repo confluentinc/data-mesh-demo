@@ -155,7 +155,8 @@ tableConfig activeStreamKey =
                          else
                             []
                         )
-                            ++ [ onClick
+                            ++ [ selectable
+                               , onClick
                                     (ChangeView
                                         (Discover
                                             (if isActive then

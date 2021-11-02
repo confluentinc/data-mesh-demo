@@ -9,7 +9,7 @@ import RemoteData exposing (RemoteData(..), WebData)
 import Route exposing (routeToString)
 import Types exposing (..)
 import UIKit
-import View.Common exposing (errorView, loadingWheel, webDataView)
+import View.Common exposing (errorView, loadingWheel, selectable, webDataView)
 import View.Tooltips exposing (tooltip)
 
 
@@ -82,11 +82,13 @@ useCasesView activeUseCaseKey useCases =
                     |> List.indexedMap
                         (\index useCase ->
                             tr
-                                (if activeUseCaseKey == Just useCase.name then
+                                ((if activeUseCaseKey == Just useCase.name then
                                     [ UIKit.active, onClick (ChangeView (Create Nothing)) ]
 
-                                 else
+                                  else
                                     [ onClick (ChangeView (Create (Just useCase.name))) ]
+                                 )
+                                    ++ [ selectable ]
                                 )
                                 [ td [ UIKit.button, UIKit.buttonLink ]
                                     [ text (String.fromInt (index + 1) ++ ": " ++ useCase.title) ]
