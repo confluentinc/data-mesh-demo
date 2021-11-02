@@ -63,7 +63,7 @@ mainView model =
                 )
             , case model.activeView of
                 Landing ->
-                    View.Landing.view model
+                    View.Landing.view model.flags.staticImages
 
                 Discover asdfa ->
                     View.Discover.view asdfa model
