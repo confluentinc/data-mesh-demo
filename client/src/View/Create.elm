@@ -15,36 +15,29 @@ import View.Tooltips exposing (tooltip)
 
 view : Maybe UseCaseName -> Model -> Html Msg
 view activeUseCaseKey model =
-    div [ class "create-pane" ]
-        [ header []
-            [ Markdown.toHtml [] dataProductCreationIntro ]
-        , webDataView
-            (useCasesOverview
-                activeUseCaseKey
-                model.executeUseCaseResult
-            )
-            model.useCases
-        , footer []
-            [ Markdown.toHtml [] dataProductCreationOutro ]
-        ]
-
-
-useCasesOverview activeUseCaseKey executeUseCaseResult useCases =
-    let
-        activeUseCase =
-            Maybe.andThen (\k -> Dict.get unUseCaseName k useCases) activeUseCaseKey
-    in
-    div []
-        [ div [ class "create-use-cases" ]
-            [ useCasesView activeUseCaseKey
-                useCases
-            ]
-        , div [ class "create-use-detail" ]
-            [ useCasesDetail
-                activeUseCase
-                executeUseCaseResult
-            ]
-        ]
+    webDataView
+        (\useCases ->
+            let
+                activeUseCase =
+                    Maybe.andThen (\k -> Dict.get unUseCaseName k useCases) activeUseCaseKey
+            in
+            div [ class "create-pane" ]
+                [ header []
+                    [ Markdown.toHtml [] dataProductCreationIntro ]
+                , div [ class "create-use-cases" ]
+                    [ useCasesView activeUseCaseKey
+                        useCases
+                    ]
+                , div [ class "create-use-detail" ]
+                    [ useCasesDetail
+                        activeUseCase
+                        model.executeUseCaseResult
+                    ]
+                , footer []
+                    [ Markdown.toHtml [] dataProductCreationOutro ]
+                ]
+        )
+        model.useCases
 
 
 dataProductCreationIntro : String

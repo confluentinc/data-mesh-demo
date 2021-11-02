@@ -20,81 +20,67 @@ import View.Tooltips exposing (tooltip)
 
 view : Maybe QualifiedName -> Model -> Html Msg
 view activeStreamKey model =
-    div [ class "discover-pane" ]
-        [ header []
-            [ Markdown.toHtml [] discoveryIntro ]
-        , webDataView
-            (dataProductsView
-                activeStreamKey
-                model.actuatorInfo
-                model.dataProductsTableState
-            )
-            model.streams
-        , div [ class "discover-search" ]
-            [ p []
-                (case ( model.actuatorInfo, Url.fromString "https://confluent.cloud/search" ) of
-                    ( Success actuatorInfo, Just url ) ->
-                        [ linkButton actuatorInfo.hostedMode
-                            ( "Advanced Search"
-                            , url
-                            , SearchScreenshot
+    webDataView
+        (\streams ->
+            let
+                activeStream =
+                    activeStreamKey
+                        |> Maybe.map
+                            (\key -> Dict.get unQualifiedName key streams)
+                        |> Maybe.withDefault Nothing
+            in
+            div [ class "discover-pane" ]
+                [ header []
+                    [ Markdown.toHtml [] discoveryIntro ]
+                , div [ class "discover-main" ]
+                    [ h2 []
+                        [ text
+                            (case model.actuatorInfo of
+                                Success info ->
+                                    "Data Products available (" ++ unDomain info.domain ++ " domain)"
+
+                                _ ->
+                                    "Data Products available"
                             )
+                        , tooltip "Discover the data products that are publicly visible to your domain"
                         ]
+                    , Table.view
+                        (tableConfig activeStreamKey)
+                        model.dataProductsTableState
+                        (streams
+                            |> Dict.values
+                            |> filterDataProducts
+                        )
+                    ]
+                , div [ class "discover-detail" ]
+                    [ h2 []
+                        [ text "Data Products Detail"
+                        , tooltip "Contains all the relevant info about your data products. This information is intended to help you identify the data products relevant to your business use-case"
+                        ]
+                    , streamDetailView
+                        (RemoteData.toMaybe model.actuatorInfo)
+                        activeStream
+                    ]
+                , div [ class "discover-search" ]
+                    [ p []
+                        (case ( model.actuatorInfo, Url.fromString "https://confluent.cloud/search" ) of
+                            ( Success actuatorInfo, Just url ) ->
+                                [ linkButton actuatorInfo.hostedMode
+                                    ( "Advanced Search"
+                                    , url
+                                    , SearchScreenshot
+                                    )
+                                ]
 
-                    _ ->
-                        []
-                )
-            ]
-        , footer []
-            [ Markdown.toHtml [] discoveryOutro ]
-        ]
-
-
-dataProductsView :
-    Maybe QualifiedName
-    -> WebData ActuatorInfo
-    -> Table.State
-    -> Dict QualifiedName Stream
-    -> Html Msg
-dataProductsView activeStreamKey actuatorInfo dataProductsTableState streams =
-    let
-        activeStream =
-            activeStreamKey
-                |> Maybe.map
-                    (\key -> Dict.get unQualifiedName key streams)
-                |> Maybe.withDefault Nothing
-    in
-    div []
-        [ div [ class "discover-main" ]
-            [ h2 []
-                [ text
-                    (case actuatorInfo of
-                        Success info ->
-                            "Data Products available (" ++ unDomain info.domain ++ " domain)"
-
-                        _ ->
-                            "Data Products available"
-                    )
-                , tooltip "Discover the data products that are publicly visible to your domain"
+                            _ ->
+                                []
+                        )
+                    ]
+                , footer []
+                    [ Markdown.toHtml [] discoveryOutro ]
                 ]
-            , Table.view
-                (tableConfig activeStreamKey)
-                dataProductsTableState
-                (streams
-                    |> Dict.values
-                    |> filterDataProducts
-                )
-            ]
-        , div [ class "discover-detail" ]
-            [ h2 []
-                [ text "Data Products Detail"
-                , tooltip "Contains all the relevant info about your data products. This information is intended to help you identify the data products relevant to your business use-case"
-                ]
-            , streamDetailView
-                (RemoteData.toMaybe actuatorInfo)
-                activeStream
-            ]
-        ]
+        )
+        model.streams
 
 
 discoveryIntro : String
