@@ -1,34 +1,42 @@
 module View.Landing exposing (view)
 
 import Html exposing (..)
-import Html.Attributes exposing (href, src, style)
+import Html.Attributes exposing (class, src)
+import Markdown
 import Types exposing (..)
-import UIKit
 
 
-view model =
-    div []
-        [ h2 [] [ text "The Data Mesh" ]
-        , p [] [ text "Visit our Data Mesh blog post for more information <TODO - Link to Blog>" ]
-        , p [] [ text "This proof-of-concept application showcases a self-serve data mesh UI, for use by both consumers and producers of data products." ]
-        , p []
-            [ strong [] [ text "NOTE:" ]
-            , text "You are using the hosted version of this application. Not all Confluent Cloud functionality will be available to you."
-            , li []
-                [ a [ href "https://github.com/confluentinc/data-mesh-demo/blob/main/README.md#running-locally" ]
-                    [ text "Try using the locally-hosted version for full functionality." ]
-                ]
+view : StaticImages -> Html Msg
+view images =
+    div [ class "landing-pane" ]
+        [ Markdown.toHtml [] landingIntro
+        , img
+            [ class "landing-diagram"
+            , src images.landingImage1Path
             ]
-        , p [] [ h3 [] [ text "Consumers" ] ]
-        , p []
-            [ li [] [ text "Tab 1: Data Product consumers can find the data products that they need" ]
-            , li [] [ text "Tab 2: Build an application to use them" ]
-            , li [] [ text "Tab 3: And optionally publish any output event streams as a new data product" ]
-            ]
-        , p [] [ img [ UIKit.width_2_3, src model.flags.staticImages.landingImage1Path ] [] ]
-        , p [] [ text "While we use ksqlDB in this proof-of-concept application, you are free to build your application using any technology." ]
-        , p [] [ img [ UIKit.width_2_3, src model.flags.staticImages.landingImage2Path ] [] ]
-        , p [] [ h3 [] [ text "Producers" ] ]
-        , p [] [ text "Event Streams, including those sourced via Kafka Connect, can be managed as data products in Tab 3. As the data product owner, you can choose streams within your domain to expose as data products for others to use." ]
-        , p [] [ img [ UIKit.width_1_2, src model.flags.staticImages.landingImage3Path ] [] ]
+            []
         ]
+
+
+landingIntro : String
+landingIntro =
+    """
+## The Data Mesh
+
+This prototype application showcases a self-serve Data Mesh UI, for use by both consumers and producers of
+data products. The companion [Data Mesh blog post](https://www.confluent.io/blog/) goes into more details on
+Data Mesh concepts and how to use this prototype.
+
+**NOTE:** You are using the hosted version of this application, not all of the application's functionality
+is available. If you'd like to run a full featured version connected to your own Confluent Cloud account,
+instructions for
+[running a locally hosted version are available](https://github.com/confluentinc/data-mesh-demo/blob/main/README.md#running-locally)
+
+This prototype is organized by steps you might take to consume and product data products:
+
+* Tab 1 Is for Data Product consumers, where they can explore data products available including the metadata that
+describes them
+* Tab 2 Is for Application Developers who can use available data products to build new
+applications
+* Tab 3 Is for Data Product owners, who can manage what published data products and their advertised metadata
+"""
