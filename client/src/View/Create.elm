@@ -18,26 +18,32 @@ view activeUseCaseKey model =
     div [ class "create-pane" ]
         [ header []
             [ Markdown.toHtml [] dataProductCreationIntro ]
-        , div [ class "create-use-cases" ]
-            [ webDataView
-                (useCasesView activeUseCaseKey)
-                model.useCases
-            ]
-        , div [ class "create-use-detail" ]
-            [ webDataView
-                (\useCases ->
-                    let
-                        activeUseCase =
-                            Maybe.andThen (\k -> Dict.get unUseCaseName k useCases) activeUseCaseKey
-                    in
-                    useCasesDetail
-                        activeUseCase
-                        model.executeUseCaseResult
-                )
-                model.useCases
-            ]
+        , webDataView
+            (useCasesOverview
+                activeUseCaseKey
+                model.executeUseCaseResult
+            )
+            model.useCases
         , footer []
             [ Markdown.toHtml [] dataProductCreationOutro ]
+        ]
+
+
+useCasesOverview activeUseCaseKey executeUseCaseResult useCases =
+    let
+        activeUseCase =
+            Maybe.andThen (\k -> Dict.get unUseCaseName k useCases) activeUseCaseKey
+    in
+    div []
+        [ div [ class "create-use-cases" ]
+            [ useCasesView activeUseCaseKey
+                useCases
+            ]
+        , div [ class "create-use-detail" ]
+            [ useCasesDetail
+                activeUseCase
+                executeUseCaseResult
+            ]
         ]
 
 
