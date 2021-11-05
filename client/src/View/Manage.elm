@@ -25,7 +25,7 @@ view model =
         [ header []
             [ Markdown.toHtml [] manageIntro ]
         , div [ class "manage-main" ]
-            [ h2 []
+            [ h4 []
                 [ text "Kafka Topics"
                 , p []
                     [ small []
@@ -76,7 +76,7 @@ splitStreamTablesView dataProductsTableState ( streams, actuatorInfo ) =
             , caption = Nothing
             }
             ourStreams
-        , h3 [] [ text "Data Products from other domains", tooltip "These are data products that have been published from other domains and are owned by other teams. You cannot perform any management operations on them as you do not have the necessary permissions" ]
+        , h4 [] [ text "Data Products from other domains", tooltip "These are data products that have been published from other domains and are owned by other teams. You cannot perform any management operations on them as you do not have the necessary permissions" ]
         , showTableUnlessEmpty
             { showControls = False
             , caption = Nothing
@@ -88,7 +88,7 @@ splitStreamTablesView dataProductsTableState ( streams, actuatorInfo ) =
 manageIntro : String
 manageIntro =
     """
-## Publish Data Products to the Data Mesh
+### Publish Data Products to the Data Mesh
 
 *Role: Data Product Owner*
 

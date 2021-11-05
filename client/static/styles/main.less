@@ -1,24 +1,35 @@
-@heading-color: #1d335e;
-@tooltip-background-color: #242544;
+@denim: #173361;
+@midnight: #040531;
+@chaka: #0e688c;
+@oyster: #197eed;
+@watermelon: #D8365D;
+@snow: #f8f8f8;
+
+@heading-color: @denim;
+@tooltip-background-color: @midnight;
+
+@font-face {
+  font-family: 'HeadingFont';
+  src: url('../fonts/MarkPro/MarkProBoldItalic.otf') format('opentype');
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'HeadingFont';
+  src: url('../fonts/MarkPro/MarkProMedium.otf') format('opentype');
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MainFont';
+  src: url('../fonts/MarkPro/MarkProNarrowBook.otf') format('opentype');
+}
 
 @import "general";
 @import "uikit";
 @import "icons";
 @import "loading";
 @import "tooltips";
-
-@font-face {
-  font-family: 'MainFont';
-  src: url('../fonts/MarkPro/MarkProBoldItalic.otf') format('opentype');
-  font-weight: 700;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'TabFont';
-  src: url('../fonts/MarkPro/MarkProMedium.otf') format('opentype');
-  font-style: normal;
-}
 
 header {
   grid-area: header;
@@ -29,6 +40,8 @@ footer {
 }
 
 body {
+  font-family: 'MainFont';
+  font-size: 16px;
   height: 100vh;
   display: grid;
   grid-template-areas:
@@ -55,7 +68,7 @@ body > header {
 
     h1 {
       margin: 0;
-      color: white;
+      color: @snow;
     }
   }
 }
@@ -97,7 +110,7 @@ body > footer {
     margin: 0;
     transition: height @animation-duration ease-in-out;
     height: @audit-log-height;
-    background-color: white;
+    background-color: @snow;
   }
 
   &.audit-log-minimised {
@@ -125,7 +138,10 @@ body > footer {
 }
 
 .uk-tab {
-	font-family: TabFont;
+  font-family: HeadingFont;
+  h6 {
+    margin: 0;
+  }
 }
 
 

@@ -11,11 +11,26 @@
 }
 
 .uk-button {
+  border-radius: 30px;
+  &.uk-button-small {
+    border-radius: 0px;
+  }
+
   .icon {
     top: 2px;
   }
 
   &.uk-button-primary {
+    background-color: @oyster;
+
+    &:hover, &:active, &:focus {
+      background-color:  lighten(@oyster, 10%);
+    }
+
+    &:disabled {
+      background-color: @snow;
+    }
+
     .icon {
       filter: brightness(0) invert(1);
     }
@@ -44,4 +59,22 @@
 
 .uk-width-2-10 {
   width: calc(100% * 2 / 10.001);
+}
+
+.uk-alert {
+  &.uk-alert-danger {
+    color: @watermelon;
+    background-color: lighten(@watermelon, 42%);
+  }
+}
+
+em {
+  color: @watermelon;
+}
+
+.uk-modal-title {
+  font-family: 'HeadingFont';
+  font-weight: bold;
+  font-size: 22px;
+  color: @heading-color;
 }
