@@ -29,10 +29,8 @@ A companion blog post can be found here:
     under the Payment details subsection.
 
 * [Confluent Cloud CLI](https://docs.confluent.io/ccloud-cli/current/install.html) `v1.36.0` or later
-* Java 11
-* Gradle
-* Node
-* Yarn
+* [Node](https://nodejs.org/en/download/)
+* [Yarn](https://www.npmjs.com/package/yarn)
 * [jq](https://stedolan.github.io/jq/download/)
 
 ### Instructions
