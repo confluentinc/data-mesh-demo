@@ -28,8 +28,17 @@ A companion blog post can be found here:
     for the Confluent Cloud resources until you destroy them. Enter the promo code in the Billing & payment page
     under the Payment details subsection.
 
-* [Confluent Cloud CLI](https://docs.confluent.io/ccloud-cli/current/install.html) `v1.36.0` or later
-* [Node](https://nodejs.org/en/download/)
+* [Confluent CLI](https://docs.confluent.io/confluent-cli/current/install.html) `v2.0.0` or later
+
+#### Docker
+For conviencne, a Docker container is pre-built and will be used by default.
+* [Docker](https://docs.docker.com/get-docker/)
+
+#### Build and run from source
+If you prefer not to use Docker, you can build and run the project from source locally. The following dev tools are required:
+
+* [Node](https://nodejs.org/en/download/) version >= 12.13.00
+* [npm](https://docs.npmjs.com/cli/v7/configuring-npm/install)
 * [Yarn](https://www.npmjs.com/package/yarn)
 * [jq](https://stedolan.github.io/jq/download/)
 
@@ -41,10 +50,10 @@ A companion blog post can be found here:
   cd data-mesh-demo
   ```
 
-* Ensure your `ccloud` CLI is logged into Confluent Cloud (the ``--save`` argument saves your Confluent Cloud 
+* Ensure your `confluent` CLI is logged into Confluent Cloud (the ``--save`` argument saves your Confluent Cloud 
   user login credentials or refresh token (in the case of SSO) to the local ``netrc`` file, preventing timeouts)
   ```sh
-  ccloud login --save
+  confluent login --save
   ```
   
 * If you want to create a new Data Mesh on Confluent Cloud as well as build and run the demo, this command 
@@ -54,8 +63,14 @@ A companion blog post can be found here:
   **Note**: The script waits for all cloud resources to be fully provisioned and *can take 15+ minutes* to complete. 
   In addition, the command needs to be run from a new terminal (not one that has run this command previously).
 
+To build the data mesh and run the application in Docker, use:
   ```sh
   make data-mesh
+  ```
+
+To build and run the data mesh from source, use:
+  ```sh
+  make data-mesh-from-source
   ```
 
   Once the above command is complete, a configuration file for your new data mesh environment will be located in 
@@ -65,10 +80,9 @@ A companion blog post can be found here:
   to destroy the new data mesh environment.
 
  
-* If you previously ran the `make data-mesh` command and still have the Confluent Cloud environemnt and 
-configuration file, you can skip the previous data mesh creation step and just run the demo with:
+* If you previously ran the `make data-mesh` command and still have the Confluent Cloud environment set as current in the CLI, you can skip the previous data mesh creation step and just re-run the demo server with:
   ```sh
-  CONFIG_FILE=<path-to-config-file> make run
+  make run-docker
   ```
  
 * Once the data mesh creation and demo run process is complete, you will see the Spring Boot banner 
