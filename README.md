@@ -29,7 +29,17 @@ A companion blog post can be found here:
     under the Payment details subsection.
 
 * [Confluent CLI](https://docs.confluent.io/confluent-cli/current/install.html) `v2.0.0` or later
-* [Node](https://nodejs.org/en/download/)
+
+#### Docker
+For conviencne, a Docker container is pre-built and will be used by default.
+* [Docker](https://docs.docker.com/get-docker/)
+
+#### Build and run from source
+If you prefer not to use Docker, you can build the project from source and run it connected
+
+The following tools are required to build and run from source:
+* [Node](https://nodejs.org/en/download/) version >= 12.13.00
+* [npm](https://docs.npmjs.com/cli/v7/configuring-npm/install)
 * [Yarn](https://www.npmjs.com/package/yarn)
 * [jq](https://stedolan.github.io/jq/download/)
 
@@ -54,8 +64,14 @@ A companion blog post can be found here:
   **Note**: The script waits for all cloud resources to be fully provisioned and *can take 15+ minutes* to complete. 
   In addition, the command needs to be run from a new terminal (not one that has run this command previously).
 
+To build the data mesh and run the application in Docker, use:
   ```sh
   make data-mesh
+  ```
+
+To build and run the data mesh from source, use:
+  ```sh
+  make data-mesh-from-source
   ```
 
   Once the above command is complete, a configuration file for your new data mesh environment will be located in 

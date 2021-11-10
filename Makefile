@@ -11,6 +11,7 @@ SHELL=/bin/bash -o pipefail
 check-dependency = $(if $(shell command -v $(1)),,$(error Make sure $(1) is installed))
 
 get_service_account_id = $(shell ccloud kafka cluster list -o json | jq -r '.[0].name' | awk -F'-' '{print $$4;}')
+get_prototype_version = $(shell ./gradlew properties -q | grep "version:" | cut -d ":" -f2 | xargs echo -n)
 
 check_defined = \
     $(strip $(foreach 1,$1, \
@@ -21,10 +22,12 @@ __check_defined = \
 
 echo: SERVICE_ACCOUNT_ID = $(call get_service_account_id) 
 echo: CONFIG_FILE ?= ${MAKE_DIR}stack-configs/java-service-account-${SERVICE_ACCOUNT_ID}.config
+echo: VERSION ?= $(call get_prototype_version)
 echo:
 	@:$(call check_defined, CONFIG_FILE, config file)
 	@echo ${SERVICE_ACCOUNT_ID}
 	@echo ${CONFIG_FILE}
+	@echo ${VERSION}
 
 clean: ## Clean build output
 	@./gradlew clean
@@ -32,17 +35,30 @@ clean: ## Clean build output
 build: clean ## Clean and build the demo server
 	@./gradlew bootjar
 
-.PHONY: run
-run: SERVICE_ACCOUNT_ID = $(call get_service_account_id)
-run: CONFIG_FILE ?= ${MAKE_DIR}stack-configs/java-service-account-${SERVICE_ACCOUNT_ID}.config
-run: ## Run the demo server 
+.PHONY: run-from-source
+run-from-source: SERVICE_ACCOUNT_ID = $(call get_service_account_id)
+run-from-source: CONFIG_FILE ?= ${MAKE_DIR}stack-configs/java-service-account-${SERVICE_ACCOUNT_ID}.config
+run-from-source: ## Build and run the demo from source 
 	@:$(call check_defined, CONFIG_FILE, config file)
 	@./gradlew bootRun -Pargs=--spring.config.additional-location=file:${CONFIG_FILE}
+
+.PHONY: run-docker
+run-docker: SERVICE_ACCOUNT_ID = $(call get_service_account_id)
+run-docker: CONFIG_FILE ?= ${MAKE_DIR}stack-configs/java-service-account-${SERVICE_ACCOUNT_ID}.config
+run-docker: VERSION ?= $(call get_prototype_version)
+run-docker: ## Run the demo in Docker
+	@:$(call check_defined, CONFIG_FILE, config file)
+	@docker run -it --rm -p 8080:8080 -v ${MAKE_DIR}stack-configs/java-service-account-${SERVICE_ACCOUNT_ID}.config:/java-service-account-${SERVICE_ACCOUNT_ID}.config:ro cnfldemos/data-mesh-demo:${VERSION} --spring.config.location=file:/java-service-account-${SERVICE_ACCOUNT_ID}.config
+
+.PHONY: data-mesh-from-source
+data-mesh-from-source: ## Creates a new Data Mesh in Confluent Cloud then builds and runs the demo
+	@./scripts/create-data-mesh.sh
+	@make run-local
 
 .PHONY: data-mesh
 data-mesh: ## Creates a new Data Mesh in Confluent Cloud then builds and runs the demo
 	@./scripts/create-data-mesh.sh
-	@make run
+	@make run-docker
 
 .PHONY: destroy
 destroy: SERVICE_ACCOUNT_ID = $(call get_service_account_id)
