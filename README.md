@@ -28,7 +28,7 @@ A companion blog post can be found here:
     for the Confluent Cloud resources until you destroy them. Enter the promo code in the Billing & payment page
     under the Payment details subsection.
 
-* [Confluent Cloud CLI](https://docs.confluent.io/ccloud-cli/current/install.html) `v1.36.0` or later
+* [Confluent CLI](https://docs.confluent.io/confluent-cli/current/install.html) `v2.0.0` or later
 * [Node](https://nodejs.org/en/download/)
 * [Yarn](https://www.npmjs.com/package/yarn)
 * [jq](https://stedolan.github.io/jq/download/)
@@ -41,10 +41,10 @@ A companion blog post can be found here:
   cd data-mesh-demo
   ```
 
-* Ensure your `ccloud` CLI is logged into Confluent Cloud (the ``--save`` argument saves your Confluent Cloud 
+* Ensure your `confluent` CLI is logged into Confluent Cloud (the ``--save`` argument saves your Confluent Cloud 
   user login credentials or refresh token (in the case of SSO) to the local ``netrc`` file, preventing timeouts)
   ```sh
-  ccloud login --save
+  confluent login --save
   ```
   
 * If you want to create a new Data Mesh on Confluent Cloud as well as build and run the demo, this command 
