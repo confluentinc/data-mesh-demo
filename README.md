@@ -35,9 +35,8 @@ For conviencne, a Docker container is pre-built and will be used by default.
 * [Docker](https://docs.docker.com/get-docker/)
 
 #### Build and run from source
-If you prefer not to use Docker, you can build the project from source and run it connected
+If you prefer not to use Docker, you can build and run the project from source locally. The following dev tools are required:
 
-The following tools are required to build and run from source:
 * [Node](https://nodejs.org/en/download/) version >= 12.13.00
 * [npm](https://docs.npmjs.com/cli/v7/configuring-npm/install)
 * [Yarn](https://www.npmjs.com/package/yarn)
@@ -81,10 +80,9 @@ To build and run the data mesh from source, use:
   to destroy the new data mesh environment.
 
  
-* If you previously ran the `make data-mesh` command and still have the Confluent Cloud environemnt and 
-configuration file, you can skip the previous data mesh creation step and just run the demo with:
+* If you previously ran the `make data-mesh` command and still have the Confluent Cloud environment set as current in the CLI, you can skip the previous data mesh creation step and just re-run the demo server with:
   ```sh
-  CONFIG_FILE=<path-to-config-file> make run
+  make run-docker
   ```
  
 * Once the data mesh creation and demo run process is complete, you will see the Spring Boot banner 
