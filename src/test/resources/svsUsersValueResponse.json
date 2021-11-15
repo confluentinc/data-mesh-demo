@@ -1,0 +1,70 @@
+{
+  "referredEntities": {},
+  "entity": {
+    "typeName": "sr_subject_version",
+    "attributes": {
+      "owner": null,
+      "replicatedTo": null,
+      "userDescription": null,
+      "replicatedFrom": null,
+      "qualifiedName": "lsrc-jpz2w:.:users-value:1",
+      "displayName": null,
+      "description": null,
+      "updateTime": 0,
+      "nameLower": "users-value",
+      "version": 1,
+      "createTime": 1634262442725,
+      "name": "users-value",
+      "context": ".",
+      "schemaType": "AVRO",
+      "doc": null,
+      "id": 100003,
+      "tenant": "lsrc-jpz2w"
+    },
+    "guid": "44998b2f-5244-44b7-a659-ba554146426c",
+    "isIncomplete": false,
+    "status": "ACTIVE",
+    "createdBy": "UNKNOWN",
+    "createTime": 1634262161328,
+    "updateTime": 1634661202354,
+    "version": 0,
+    "relationshipAttributes": {
+      "schema": {
+        "guid": "2d8cd063-7355-4147-bc69-0eddb37c23ba",
+        "typeName": "sr_schema",
+        "entityStatus": "ACTIVE",
+        "displayText": "users",
+        "relationshipType": "sr_subject_version_schema",
+        "relationshipGuid": "caffda1d-8ddc-4f4c-a17f-cef398ee44f1",
+        "relationshipStatus": "ACTIVE",
+        "relationshipAttributes": {
+          "typeName": "sr_subject_version_schema"
+        }
+      },
+      "inputToProcesses": [],
+      "schemas": [],
+      "meanings": [],
+      "outputFromProcesses": []
+    },
+    "classifications": [
+      {
+        "typeName": "DataProduct",
+        "attributes": {
+          "owner": "@membership-team",
+          "domain": "membership",
+          "description": "All users from all regions (both national and international)",
+          "sla": "tier-1",
+          "quality": "authoritative"
+        },
+        "entityGuid": "44998b2f-5244-44b7-a659-ba554146426c",
+        "entityStatus": "ACTIVE",
+        "propagate": false,
+        "removePropagationsOnEntityDelete": false
+      }
+    ],
+    "labels": [],
+    "pendingTasks": [
+      "6da0cfd4-4066-42b7-a73c-528287edb7c6"
+    ]
+  }
+}

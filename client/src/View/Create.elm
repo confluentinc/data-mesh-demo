@@ -43,7 +43,7 @@ view activeUseCaseKey model =
 dataProductCreationIntro : String
 dataProductCreationIntro =
     """
-## Create an App Using Data Products
+### Create an App Using Data Products
 
 *Role: App Developer*
 
@@ -66,7 +66,7 @@ Note:
 useCasesView : Maybe UseCaseName -> Dict UseCaseName UseCase -> Html Msg
 useCasesView activeUseCaseKey useCases =
     div []
-        [ h2 []
+        [ h4 []
             [ text "Sample Business Use-Cases"
             , tooltip "There are many ways to use and create data products. These business use-cases illustrate consuming both data products and event streams that are internal to the domain"
             ]
@@ -102,7 +102,7 @@ useCasesView activeUseCaseKey useCases =
 useCasesDetail : Maybe UseCase -> WebData UseCaseName -> Html Msg
 useCasesDetail mUseCase executeUseCaseResult =
     div []
-        [ h2 []
+        [ h4 []
             [ text "Application Information"
             , tooltip "These sample applications all use ksqlDB for the sake of the prototype. You are free to use any technology to consume and use these data products, from monolithic consumers, to event-driven microservices, to batch-based jobs. You can then in turn emit new data to its own event stream, with may also become its own data product"
             ]

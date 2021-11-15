@@ -21,7 +21,7 @@ view images =
 landingIntro : String
 landingIntro =
     """
-## The Data Mesh
+### The Data Mesh
 
 This prototype application showcases a self-serve Data Mesh UI, for use by both consumers and producers of
 data products. The companion [Data Mesh blog post](https://www.confluent.io/blog/) goes into more details on
@@ -30,7 +30,7 @@ Data Mesh concepts and how to use this prototype.
 **NOTE:** You are using the hosted version of this application, not all of the application's functionality
 is available. If you'd like to run a full featured version connected to your own Confluent Cloud account,
 instructions for
-[running a locally hosted version are available](https://github.com/confluentinc/data-mesh-demo/blob/main/README.md#running-locally)
+[running a locally hosted version are available](https://github.com/confluentinc/data-mesh-demo/blob/main/README.md#running-locally).
 
 This prototype is organized by steps you might take to consume and produce data products:
 

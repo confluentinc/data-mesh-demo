@@ -1,0 +1,70 @@
+{
+  "referredEntities": {},
+  "entity": {
+    "typeName": "sr_subject_version",
+    "attributes": {
+      "owner": null,
+      "replicatedTo": null,
+      "userDescription": null,
+      "replicatedFrom": null,
+      "qualifiedName": "lsrc-jpz2w:.:stocktrades-value:1",
+      "displayName": null,
+      "description": null,
+      "updateTime": 0,
+      "nameLower": "stocktrades-value",
+      "version": 1,
+      "createTime": 1634261667116,
+      "name": "stocktrades-value",
+      "context": ".",
+      "schemaType": "AVRO",
+      "doc": null,
+      "id": 100001,
+      "tenant": "lsrc-jpz2w"
+    },
+    "guid": "edff2e94-97c9-428e-82c7-5527fe340d73",
+    "isIncomplete": false,
+    "status": "ACTIVE",
+    "createdBy": "UNKNOWN",
+    "createTime": 1634244894874,
+    "updateTime": 1634661202333,
+    "version": 0,
+    "relationshipAttributes": {
+      "schema": {
+        "guid": "5fc1f3d2-1b89-4911-80e9-3679bf07517f",
+        "typeName": "sr_schema",
+        "entityStatus": "ACTIVE",
+        "displayText": "StockTrade",
+        "relationshipType": "sr_subject_version_schema",
+        "relationshipGuid": "89fd4192-db0e-49e8-bde1-c5e85f933829",
+        "relationshipStatus": "ACTIVE",
+        "relationshipAttributes": {
+          "typeName": "sr_subject_version_schema"
+        }
+      },
+      "inputToProcesses": [],
+      "schemas": [],
+      "meanings": [],
+      "outputFromProcesses": []
+    },
+    "classifications": [
+      {
+        "typeName": "DataProduct",
+        "attributes": {
+          "owner": "@execution-team",
+          "domain": "execution",
+          "description": "Includes all BUY and SELL trades, as well as trades from all regions (both national and international)",
+          "sla": "tier-1",
+          "quality": "authoritative"
+        },
+        "entityGuid": "edff2e94-97c9-428e-82c7-5527fe340d73",
+        "entityStatus": "ACTIVE",
+        "propagate": false,
+        "removePropagationsOnEntityDelete": false
+      }
+    ],
+    "labels": [],
+    "pendingTasks": [
+      "49e2d144-2cf7-4697-aa01-8f109b629bae"
+    ]
+  }
+}

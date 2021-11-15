@@ -33,7 +33,7 @@ view activeStreamKey model =
                 [ header []
                     [ Markdown.toHtml [] discoveryIntro ]
                 , div [ class "discover-main" ]
-                    [ h2 []
+                    [ h4 []
                         [ text
                             (case model.actuatorInfo of
                                 Success info ->
@@ -53,7 +53,7 @@ view activeStreamKey model =
                         )
                     ]
                 , div [ class "discover-detail" ]
-                    [ h2 []
+                    [ h4 []
                         [ text "Data Products Detail"
                         , tooltip "Contains all the relevant info about your data products. This information is intended to help you identify the data products relevant to your business use-case"
                         ]
@@ -86,7 +86,7 @@ view activeStreamKey model =
 discoveryIntro : String
 discoveryIntro =
     """
-## Discover data products you can consume
+### Discover data products you can consume
 
 *Role: Prospective Consumer*
 
@@ -291,7 +291,7 @@ deleteConfirmationDialog dataProduct =
     , containerClass = Nothing
     , header =
         Just
-            (h2 [ UIKit.modalTitle ]
+            (h3 [ UIKit.modalTitle ]
                 [ text "Are you sure?" ]
             )
     , body =

@@ -1,0 +1,81 @@
+{
+  "searchParameters": {
+    "includeDeleted": false,
+    "limit": 0,
+    "offset": 0
+  },
+  "types": [
+    "sr_subject_version"
+  ],
+  "entities": [
+    {
+      "typeName": "sr_subject_version",
+      "attributes": {
+        "createTime": 1634262442725,
+        "qualifiedName": "lsrc-jpz2w:.:users-value:1",
+        "name": "users-value",
+        "context": ".",
+        "id": 100003,
+        "nameLower": "users-value",
+        "version": 1,
+        "tenant": "lsrc-jpz2w"
+      },
+      "guid": "44998b2f-5244-44b7-a659-ba554146426c",
+      "status": "ACTIVE",
+      "displayText": "users-value",
+      "classificationNames": [
+        "DataProduct"
+      ],
+      "meaningNames": [],
+      "meanings": [],
+      "isIncomplete": false,
+      "labels": []
+    },
+    {
+      "typeName": "sr_subject_version",
+      "attributes": {
+        "createTime": 1634261667116,
+        "qualifiedName": "lsrc-jpz2w:.:stocktrades-value:1",
+        "name": "stocktrades-value",
+        "context": ".",
+        "id": 100001,
+        "nameLower": "stocktrades-value",
+        "version": 1,
+        "tenant": "lsrc-jpz2w"
+      },
+      "guid": "ba885953-eedc-40b9-9795-1a75539e2798",
+      "status": "ACTIVE",
+      "displayText": "stocktrades-value",
+      "classificationNames": [
+        "DataProduct"
+      ],
+      "meaningNames": [],
+      "meanings": [],
+      "isIncomplete": false,
+      "labels": []
+    },
+    {
+      "typeName": "sr_subject_version",
+      "attributes": {
+        "createTime": 1634262161165,
+        "qualifiedName": "lsrc-jpz2w:.:pageviews-value:1",
+        "name": "pageviews-value",
+        "context": ".",
+        "id": 100002,
+        "nameLower": "pageviews-value",
+        "version": 1,
+        "tenant": "lsrc-jpz2w"
+      },
+      "guid": "1ca32b66-85bd-46f1-a585-f788668b776b",
+      "status": "ACTIVE",
+      "displayText": "pageviews-value",
+      "classificationNames": [
+        "DataProduct"
+      ],
+      "meaningNames": [],
+      "meanings": [],
+      "isIncomplete": false,
+      "labels": []
+    }
+  ]
+}

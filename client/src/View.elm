@@ -83,12 +83,12 @@ mainView model =
 tabView : View -> ( View, String ) -> Html Msg
 tabView activeView ( tab, label ) =
     li [ classList [ ( "uk-active", isSameTab activeView tab ) ] ]
-        [ a [ href (routeToString tab) ] [ text label ] ]
+        [ a [ href (routeToString tab) ] [ h6 [] [ text label ] ] ]
 
 
 notFoundView : Html msg
 notFoundView =
-    h2 [] [ text "Not Found" ]
+    h3 [] [ text "Not Found" ]
 
 
 footerView : AuditLogModel -> Html Msg
@@ -167,7 +167,7 @@ screenshotDialog staticImages screenshotTarget =
     in
     { closeMessage = Just ClearScreenshot
     , containerClass = Just "screenshot-dialog"
-    , header = Just (h2 [ UIKit.modalTitle ] [ text title ])
+    , header = Just (h3 [ UIKit.modalTitle ] [ text title ])
     , body =
         Just
             (div [ UIKit.grid ]
@@ -195,7 +195,7 @@ screenshotDialog staticImages screenshotTarget =
 previewCopy : String
 previewCopy =
     """
-### Preview
+#### Preview
 
 This is a preview. To get the interactive version you'll can set up
 your own local datamesh by following the instructions
