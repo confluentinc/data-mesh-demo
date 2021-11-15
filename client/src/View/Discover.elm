@@ -37,7 +37,7 @@ view activeStreamKey model =
                         [ text
                             (case model.actuatorInfo of
                                 Success info ->
-                                    "Data Products available (" ++ unDomain info.domain ++ " domain)"
+                                    "Data Products available for the Analytics Domain"
 
                                 _ ->
                                     "Data Products available"
@@ -223,7 +223,6 @@ streamDetailView mActuatorInfo mStream =
                             (List.intersperse (text " ")
                                 (List.map (linkButton actuatorInfo.hostedMode)
                                     [ ( "Topic Detail", dataProduct.urls.portUrl, TopicScreenshot )
-                                    , ( "Schema Detail", dataProduct.urls.schemaUrl, SchemaScreenshot )
                                     , ( "Data Lineage", dataProduct.urls.lineageUrl, LineageScreenshot )
                                     , ( "Export", dataProduct.urls.exportUrl, ExportScreenshot )
                                     ]
