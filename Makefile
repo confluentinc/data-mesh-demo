@@ -68,6 +68,10 @@ destroy: ## Destroys the Data Mesh configured in the variable $CONFIG_FILE
 	@echo -n "Are you sure you want to destroy environment from config file: '${CONFIG_FILE}' [y/n] " && read ans && [ $${ans:-n} = y ]
 	@./scripts/destroy-data-mesh.sh ${CONFIG_FILE}
 
+.PHONY: test	
+test:
+	@./gradlew test
+
 help:
 	@$(foreach m,$(MAKEFILE_LIST),grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(m) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-$(HELP_TAB_WIDTH)s\033[0m %s\n", $$1, $$2}';)
 
