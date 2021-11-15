@@ -1,0 +1,70 @@
+{
+  "referredEntities": {},
+  "entity": {
+    "typeName": "sr_subject_version",
+    "attributes": {
+      "owner": null,
+      "replicatedTo": null,
+      "userDescription": null,
+      "replicatedFrom": null,
+      "qualifiedName": "lsrc-jpz2w:.:pageviews-value:1",
+      "displayName": null,
+      "description": null,
+      "updateTime": 0,
+      "nameLower": "pageviews-value",
+      "version": 1,
+      "createTime": 1634262161165,
+      "name": "pageviews-value",
+      "context": ".",
+      "schemaType": "AVRO",
+      "doc": null,
+      "id": 100002,
+      "tenant": "lsrc-jpz2w"
+    },
+    "guid": "e3981b49-bc0e-4908-8705-2744f66f8bff",
+    "isIncomplete": false,
+    "status": "ACTIVE",
+    "createdBy": "UNKNOWN",
+    "createTime": 1634261667316,
+    "updateTime": 1634661202333,
+    "version": 0,
+    "relationshipAttributes": {
+      "schema": {
+        "guid": "9390ca9e-df9d-4246-b161-2408dd646bff",
+        "typeName": "sr_schema",
+        "entityStatus": "ACTIVE",
+        "displayText": "pageviews",
+        "relationshipType": "sr_subject_version_schema",
+        "relationshipGuid": "466cef29-c195-4574-a9d4-b0659bacda37",
+        "relationshipStatus": "ACTIVE",
+        "relationshipAttributes": {
+          "typeName": "sr_subject_version_schema"
+        }
+      },
+      "inputToProcesses": [],
+      "schemas": [],
+      "meanings": [],
+      "outputFromProcesses": []
+    },
+    "classifications": [
+      {
+        "typeName": "DataProduct",
+        "attributes": {
+          "owner": "@edge-team",
+          "domain": "edge",
+          "description": "Website page views",
+          "sla": "tier-2",
+          "quality": "curated"
+        },
+        "entityGuid": "e3981b49-bc0e-4908-8705-2744f66f8bff",
+        "entityStatus": "ACTIVE",
+        "propagate": false,
+        "removePropagationsOnEntityDelete": false
+      }
+    ],
+    "labels": [],
+    "pendingTasks": [
+      "d99e14a4-81b4-4c62-b9d4-49a682508350"
+    ]
+  }
+}

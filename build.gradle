@@ -70,6 +70,10 @@ jib {
 
 test {
 	useJUnitPlatform()
+	testLogging {
+		events "failed"
+		exceptionFormat "full"
+	}
 }
 
 bootRun {
