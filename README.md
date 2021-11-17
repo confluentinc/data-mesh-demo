@@ -14,9 +14,10 @@ The hosted version of the demo allows you to see a subset of the full demo funct
 requiring you to run any code locally. When you would like to run a full version of the demo, follow the 
 [Running Locally](#running-locally) instructions below.
 
-A companion blog post can be found here:
-
+<!--
 *TODO Blog Link*
+A companion blog post can be found here:
+-->
 
 ## Running Locally 
 
