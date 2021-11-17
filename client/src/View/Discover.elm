@@ -203,9 +203,9 @@ streamDetailView mActuatorInfo mStream =
                                 , td [] [ content ]
                                 ]
                         )
-                        [ ( "Name", code [] [ text dataProduct.name ] )
-                        , ( "Domain", code [] [ text (unDomain dataProduct.domain) ] )
-                        , ( "Owner", code [] [ text dataProduct.owner ] )
+                        [ ( "Name",  text dataProduct.name )
+                        , ( "Domain",  text (unDomain dataProduct.domain) )
+                        , ( "Owner",  text dataProduct.owner )
                         , ( "Quality", text (showProductQuality dataProduct.quality) )
                         , ( "SLA", text (showProductSla dataProduct.sla) )
                         , ( "Schema"

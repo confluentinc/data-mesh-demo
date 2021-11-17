@@ -126,10 +126,10 @@ useCasesDetail mUseCase executeUseCaseResult =
                             )
                             [ ( "Title", text useCase.title )
                             , ( "Description", text useCase.description )
-                            , ( "Name", code [] [ text (unUseCaseName useCase.name) ] )
-                            , ( "Inputs", code [] [ text useCase.inputs ] )
+                            , ( "Name", text (unUseCaseName useCase.name) )
+                            , ( "Inputs", text useCase.inputs )
                             , ( "Output Topic"
-                              , code [] [ text useCase.outputTopic ]
+                              , text useCase.outputTopic
                               )
                             , ( "ksqlDB Statement"
                               , pre [ style "max-height" "300px" ]
