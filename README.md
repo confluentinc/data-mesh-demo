@@ -30,18 +30,18 @@ A companion blog post can be found here:
     under the Payment details subsection.
 
 * [Confluent CLI](https://docs.confluent.io/confluent-cli/current/install.html) `v2.0.0` or later
+* [jq](https://stedolan.github.io/jq/download/)
 
 #### Docker
 For conviencne, a Docker container is pre-built and will be used by default.
 * [Docker](https://docs.docker.com/get-docker/)
 
 #### Build and run from source
-If you prefer not to use Docker, you can build and run the project from source locally. The following dev tools are required:
+If you prefer not to use Docker, you can build and run the project from source locally. The following additional developer tools are required:
 
 * [Node](https://nodejs.org/en/download/) version >= 12.13.00
 * [npm](https://docs.npmjs.com/cli/v7/configuring-npm/install)
 * [Yarn](https://www.npmjs.com/package/yarn)
-* [jq](https://stedolan.github.io/jq/download/)
 
 ### Instructions
 
