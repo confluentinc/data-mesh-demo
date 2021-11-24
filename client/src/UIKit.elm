@@ -74,6 +74,11 @@ radio =
     class "uk-radio"
 
 
+select : Attribute msg
+select =
+    class "uk-select"
+
+
 textarea : Attribute msg
 textarea =
     class "uk-textarea"

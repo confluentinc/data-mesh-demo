@@ -1,6 +1,7 @@
 module TestUtils exposing
     ( decodesTo
     , encodesTo
+    , expectContains
     )
 
 import Expect exposing (Expectation, fail)
@@ -27,3 +28,12 @@ encodesTo encoder expected value =
     Expect.equal
         (String.trim expected)
         (encode 2 (encoder value))
+
+
+expectContains : a -> List a -> Expectation
+expectContains expected actual =
+    if List.member expected actual then
+        Expect.pass
+
+    else
+        Expect.fail ("Expected list containing: " ++ Debug.toString expected ++ "\nGot: " ++ Debug.toString actual)

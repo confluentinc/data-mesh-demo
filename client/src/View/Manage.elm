@@ -9,6 +9,7 @@ import Markdown
 import Maybe exposing (withDefault)
 import RemoteData exposing (RemoteData(..), WebData)
 import Result.Extras as Result
+import Set exposing (Set)
 import Table exposing (defaultCustomizations)
 import Table.Extras as Table
 import Tuple exposing (pair)
@@ -281,22 +282,23 @@ publishDialog result model =
                         [ div []
                             [ label [ UIKit.formLabel ] [ text "Owner" ]
                             , div [ UIKit.formControls ]
-                                [ input
-                                    ([ type_ "text"
-                                     , UIKit.input
-                                     , placeholder "Data Product Owner"
-                                     , autofocus True
+                                [ select
+                                    ([ onInput (PublishFormMsg << PublishFormSetOwner)
                                      , value model.owner
-                                     , onInput (PublishFormMsg << PublishFormSetOwner)
+                                     , UIKit.select
                                      ]
-                                        ++ (if hasValidationError RestrictedOwner then
+                                        ++ (if hasValidationError OwnerInvalid then
                                                 [ UIKit.formDanger ]
 
                                             else
                                                 []
                                            )
                                     )
-                                    []
+                                    (validOwners
+                                        |> Set.insert model.owner
+                                        |> Set.toList
+                                        |> List.map (\owner -> option [ value owner ] [ text owner ])
+                                    )
                                 ]
                             ]
                         , div []
@@ -469,9 +471,12 @@ getDataProduct stream =
 
 formatValidationError : PublishFormError -> Html msg
 formatValidationError error =
-    case error of
-        RestrictedOwner ->
-            text "That owner is reserved. Please choose another."
+    div []
+        [ case error of
 
-        TermsNotAcknowledged ->
-            text "Please acknowledge the SLA requirements."
+            OwnerInvalid ->
+                text "Please select an owner for this product."
+
+            TermsNotAcknowledged ->
+                text "Please acknowledge the SLA requirements."
+        ]

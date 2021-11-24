@@ -33,6 +33,7 @@ module Types exposing
     , unQualifiedName
     , unUseCaseName
     , unpublishStream
+    , validOwners
     )
 
 import Array exposing (Array)
@@ -45,7 +46,7 @@ import Stomp exposing (AuditLogMsg)
 import Stomp.Client as Stomp
 import Table
 import Url exposing (Url)
-import Validate exposing (Validator, ifFalse, ifTrue)
+import Validate exposing (Validator, ifBlank, ifFalse, ifTrue)
 
 
 type alias Model =
@@ -106,19 +107,24 @@ type alias PublishForm =
 
 
 type PublishFormError
-    = RestrictedOwner
+    = OwnerInvalid
     | TermsNotAcknowledged
 
 
-restrictedOwners : Set String
-restrictedOwners =
-    Set.empty
+validOwners : Set String
+validOwners =
+    Set.fromList
+        [ "@analytics-team"
+        , "@stock-trades-team"
+        , "@user-management-team"
+        , "@accounting-team"
+        ]
 
 
 publishFormValidator : Validator PublishFormError PublishForm
 publishFormValidator =
     Validate.all
-        [ ifTrue (\form -> Set.member form.owner restrictedOwners) RestrictedOwner
+        [ ifTrue (\form -> not (Set.member form.owner validOwners)) OwnerInvalid
         , ifFalse .termsAcknowledged TermsNotAcknowledged
         ]
 
