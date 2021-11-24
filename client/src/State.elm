@@ -173,7 +173,10 @@ update msg model =
                             Just
                                 { topic = t
                                 , owner = ""
-                                , description = ""
+                                , description =
+                                    topic
+                                        |> Maybe.map generateDescription
+                                        |> Maybe.withDefault ""
                                 , quality = Raw
                                 , sla = Tier3
                                 , termsAcknowledged = False

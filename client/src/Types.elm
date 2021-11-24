@@ -25,6 +25,7 @@ module Types exposing
     , View(..)
     , allProductQualities
     , allProductSlas
+    , generateDescription
     , isSameTab
     , publishFormValidator
     , streamQualifiedName
@@ -119,6 +120,22 @@ validOwners =
         , "@user-management-team"
         , "@accounting-team"
         ]
+
+
+generateDescription : Topic -> String
+generateDescription topic =
+    case topic.name of
+        "high_value_stock_trades" ->
+            "Stock trades of a high combined monetary value."
+
+        "trending_stocks" ->
+            "Stocks that are trending based on 15 minute tumbling windows."
+
+        "us_enriched_stock_trades" ->
+            "Enriched stock trades performed by accounts domiciled within the USA."
+
+        other ->
+            "Data Product from the " ++ other ++ " topic."
 
 
 publishFormValidator : Validator PublishFormError PublishForm

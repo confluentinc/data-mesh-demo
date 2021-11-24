@@ -54,6 +54,11 @@ formDanger =
     class "uk-form-danger"
 
 
+formWarning : Attribute msg
+formWarning =
+    class "uk-form-warning"
+
+
 fieldset : Attribute msg
 fieldset =
     class "uk-fieldset"

@@ -3,7 +3,7 @@ module View.Manage exposing (publishDialog, view)
 import Dialog.Common as Dialog
 import GenericDict as Dict exposing (Dict)
 import Html exposing (..)
-import Html.Attributes exposing (autofocus, checked, class, disabled, for, id, name, placeholder, type_, value)
+import Html.Attributes exposing (autofocus, checked, class, disabled, for, id, name, placeholder, rows, type_, value)
 import Html.Events exposing (onCheck, onClick, onInput)
 import Markdown
 import Maybe exposing (withDefault)
@@ -304,11 +304,11 @@ publishDialog result model =
                         , div []
                             [ label [ UIKit.formLabel ] [ text "Description" ]
                             , div [ UIKit.formControls ]
-                                [ input
-                                    [ type_ "text"
-                                    , UIKit.input
-                                    , placeholder "Data Product Description"
+                                [ textarea
+                                    [ UIKit.textarea
                                     , value model.description
+                                    , rows 2
+                                    , disabled True
                                     , onInput (PublishFormMsg << PublishFormSetDescription)
                                     ]
                                     []
@@ -473,7 +473,6 @@ formatValidationError : PublishFormError -> Html msg
 formatValidationError error =
     div []
         [ case error of
-
             OwnerInvalid ->
                 text "Please select an owner for this product."
 
