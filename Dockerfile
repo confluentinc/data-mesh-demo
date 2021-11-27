@@ -1,4 +1,4 @@
-FROM cnfldemos/data-mesh-demo:0.0.45
+FROM cnfldemos/data-mesh-demo:0.0.46
 
 ARG config
 
@@ -6,4 +6,5 @@ COPY $config /config.config
 
 ENV PORT=8080
 
-ENTRYPOINT ["java", "-Dserver.port=${PORT}", "-cp", "@/app/jib-classpath-file", "io.confluent.demo.datamesh.DataMeshDemo", "--spring.config.additional-location=file:/config.config"]
+CMD java -Dserver.port=${PORT} -cp @/app/jib-classpath-file io.confluent.demo.datamesh.DataMeshDemo --spring.config.additional-location=file:/config.config
+ENTRYPOINT []
