@@ -4,8 +4,11 @@ echo -e "\nLet's go build a Data Mesh!\n"
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
-# Source library
-curl -sS -o ${DIR}/ccloud_library.sh https://raw.githubusercontent.com/confluentinc/examples/latest/utils/ccloud_library.sh
+# ccloud_library contains function for creating
+# Confluent Cloud resources
+# For now a copy of ccloud_library is copied locally until examples
+#		CLI-1399 is tested and merged
+# curl -sS -o ${DIR}/ccloud_library.sh https://raw.githubusercontent.com/brianstrauch/examples/CLI-1399/utils/ccloud_library.sh
 source ${DIR}/ccloud_library.sh
 source ${DIR}/helper.sh
 
@@ -22,9 +25,9 @@ printf "\n";print_process_start "====== Create a new ccloud-stack to bootstrap t
 ccloud::prompt_continue_ccloud_demo || exit 1
 export EXAMPLE="data-mesh-demo"
 ccloud::create_ccloud_stack true || exit 1
-export SERVICE_ACCOUNT_ID=$(ccloud kafka cluster list -o json | jq -r '.[0].name' | awk -F'-' '{print $4;}')
+export SERVICE_ACCOUNT_ID=$(confluent kafka cluster list -o json | jq -r '.[0].name | ltrimstr("demo-kafka-cluster-")')
 export CONFIG_FILE=stack-configs/java-service-account-$SERVICE_ACCOUNT_ID.config
-CCLOUD_CLUSTER_ID=$(ccloud kafka cluster list -o json | jq -c -r '.[] | select (.name == "'"demo-kafka-cluster-$SERVICE_ACCOUNT_ID"'")' | jq -r .id)
+CCLOUD_CLUSTER_ID=$(confluent kafka cluster list -o json | jq -c -r '.[] | select (.name == "'"demo-kafka-cluster-$SERVICE_ACCOUNT_ID"'")' | jq -r .id)
 # Create parameters customized for Confluent Cloud instance created above
 ccloud::generate_configs $CONFIG_FILE
 source "delta_configs/env.delta"

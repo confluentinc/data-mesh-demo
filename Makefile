@@ -10,7 +10,7 @@ SHELL=/bin/bash -o pipefail
 
 check-dependency = $(if $(shell command -v $(1)),,$(error Make sure $(1) is installed))
 
-get_service_account_id = $(shell ccloud kafka cluster list -o json | jq -r '.[0].name' | awk -F'-' '{print $$4;}')
+get_service_account_id = $(shell confluent kafka cluster list -o json | jq -r '.[0].name | ltrimstr("demo-kafka-cluster-")')
 get_prototype_version = $(shell ./gradlew properties -q | grep "version:" | cut -d ":" -f2 | xargs echo -n)
 
 check_defined = \
@@ -20,7 +20,7 @@ __check_defined = \
     $(if $(value $1),, \
       $(error Undefined $1$(if $2, ($2))))
 
-echo: SERVICE_ACCOUNT_ID = $(call get_service_account_id) 
+echo: SERVICE_ACCOUNT_ID = $(call get_service_account_id)
 echo: CONFIG_FILE ?= ${MAKE_DIR}stack-configs/java-service-account-${SERVICE_ACCOUNT_ID}.config
 echo: VERSION ?= $(call get_prototype_version)
 echo:

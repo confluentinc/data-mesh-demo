@@ -16,11 +16,11 @@ function check_jq() {
 
 function preflight_checks() {
   # Verifications
-  ccloud::validate_version_ccloud_cli $CCLOUD_MIN_VERSION \
-    && print_pass "ccloud version ok" \
+  ccloud::validate_version_cli $CCLOUD_MIN_VERSION \
+    && print_pass "confluent version ok" \
     || exit 1
-  ccloud::validate_logged_in_ccloud_cli \
-    && print_pass "logged into ccloud CLI" \
+  ccloud::validate_logged_in_cli \
+    && print_pass "logged into confluent CLI" \
     || exit 1
   check_jq \
     && print_pass "jq installed" \
@@ -37,7 +37,7 @@ function create_data_product () {
 
   printf "\n";print_process_start "====== Create a new Data Product called $dp."
 
-  CMD="ccloud kafka topic create $dp"
+  CMD="confluent kafka topic create $dp"
   $CMD &>"$REDIRECT_TO" \
     && print_pass "$CMD" \
     || exit_with_error -c $? -n "$NAME" -m "$CMD" -l $(($LINENO -3))
@@ -68,11 +68,11 @@ function create_ksqldb_app() {
   MAX_WAIT=720
   echo "Waiting up to $MAX_WAIT seconds for Confluent Cloud ksqlDB cluster to be UP"
   ccloud::retry $MAX_WAIT ccloud::validate_ccloud_ksqldb_endpoint_ready $KSQLDB_ENDPOINT || exit 1
-  CMD="ccloud ksql app list -o json | jq -r '.[].id'"
+  CMD="confluent ksql app list -o json | jq -r '.[].id'"
   ksqlDBAppId=$(eval $CMD) \
     && print_pass "Retrieved ksqlDB application ID: $ksqlDBAppId" \
     || exit_with_error -c $? -n "$NAME" -m "$CMD" -l $(($LINENO -3))
-  CMD="ccloud ksql app configure-acls $ksqlDBAppId stocktrades pageviews users"
+  CMD="confluent ksql app configure-acls $ksqlDBAppId stocktrades pageviews users"
   $CMD \
     && print_pass "$CMD" \
     || exit_with_error -c $? -n "$NAME" -m "$CMD" -l $(($LINENO -3))
@@ -109,14 +109,14 @@ function augment_config_file() {
 
   # Determine IDs for environment and Kafka cluster
   ENVIRONMENT_NAME_PREFIX=${ENVIRONMENT_NAME_PREFIX:-"ccloud-stack-$SERVICE_ACCOUNT_ID"}
-  ENVIRONMENT_ID=$(ccloud environment list -o json | jq -r 'map(select(.name | startswith("'"$ENVIRONMENT_NAME_PREFIX"'"))) | .[].id')
+  ENVIRONMENT_ID=$(confluent environment list -o json | jq -r 'map(select(.name | startswith("'"$ENVIRONMENT_NAME_PREFIX"'"))) | .[].id')
   KAFKA_CLUSTER_NAME=${KAFKA_CLUSTER_NAME:-"demo-kafka-cluster-$SERVICE_ACCOUNT_ID"}
-  KAFKA_CLUSTER_ID=$(ccloud kafka cluster list -o json | jq -r 'map(select(.name | startswith("'"$KAFKA_CLUSTER_NAME"'"))) | .[].id')
-  SCHEMA_REGISTRY_ID=$(ccloud schema-registry cluster describe -o json | jq -r ".cluster_id")
-  KSQLDB_ID=$(ccloud ksql app list -o json | jq -r 'map(select(.name == "demo-ksqldb-'"$SERVICE_ACCOUNT_ID"'")) | .[].id')
+  KAFKA_CLUSTER_ID=$(confluent kafka cluster list -o json | jq -r 'map(select(.name | startswith("'"$KAFKA_CLUSTER_NAME"'"))) | .[].id')
+  SCHEMA_REGISTRY_ID=$(confluent schema-registry cluster describe -o json | jq -r ".cluster_id")
+  KSQLDB_ID=$(confluent ksql app list -o json | jq -r 'map(select(.name == "demo-ksqldb-'"$SERVICE_ACCOUNT_ID"'")) | .[].id')
 
   # Create credentials for the cloud resource for the Connector REST API
-  REST_API_AUTH_USER_INFO=$(ccloud api-key create --resource cloud -o json) || exit 1
+  REST_API_AUTH_USER_INFO=$(confluent api-key create --resource cloud -o json) || exit 1
   REST_API_KEY=$(echo "$REST_API_AUTH_USER_INFO" | jq -r .key)
   REST_API_SECRET=$(echo "$REST_API_AUTH_USER_INFO" | jq -r .secret)
 
