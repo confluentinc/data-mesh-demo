@@ -2,8 +2,11 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
-# Source library
-curl -sS -o ${DIR}/ccloud_library.sh https://raw.githubusercontent.com/confluentinc/examples/latest/utils/ccloud_library.sh
+# ccloud_library contains function for creating
+# Confluent Cloud resources
+# For now a copy of ccloud_library is copied locally until examples
+#		CLI-1399 is tested and merged
+# curl -sS -o ${DIR}/ccloud_library.sh https://raw.githubusercontent.com/brianstrauch/examples/CLI-1399/utils/ccloud_library.sh
 source ${DIR}/ccloud_library.sh
 source ${DIR}/helper.sh
 
@@ -14,10 +17,10 @@ QUIET="${QUIET:-false}"
   REDIRECT_TO="/dev/stdout"
 
 # Verifications
-ccloud::validate_version_ccloud_cli $CCLOUD_MIN_VERSION \
+ccloud::validate_version_cli $CCLOUD_MIN_VERSION \
   && print_pass "ccloud version ok" \
   || exit 1
-ccloud::validate_logged_in_ccloud_cli \
+ccloud::validate_logged_in_cli \
   && print_pass "logged into ccloud CLI" \
   || exit 1
 check_jq \
