@@ -142,8 +142,8 @@ public class DataProductsController {
             .map(Mapper::ccToTopic)
             .filter(topic -> !topic.getName().startsWith("_"))
             .filter(topic -> {
-                return allDataProducts.stream().filter(dp -> dp.getName() == topic.getName())
-                        .collect(Collectors.toList()).size() > 0;
+                return allDataProducts.stream().filter(dp -> dp.getName().equals(topic.getName()))
+                        .collect(Collectors.toList()).size() == 0;
             })
             .collect(Collectors.toList());
 
