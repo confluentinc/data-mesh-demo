@@ -82,7 +82,7 @@ jib {
 test {
 	useJUnitPlatform()
 	testLogging {
-		events "failed"
+		events "PASSED", "SKIPPED", "FAILED"
 		exceptionFormat "full"
 	}
 }
