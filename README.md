@@ -161,7 +161,7 @@ with the REST API directly. By default, the REST API listens on http://localhost
 * Get one specifc data product. This requires the qualified name of the data product:
 
   ```sh
-  curl -s localhost:8080/data-products/lsrc-w8v85:.:users-value:1 | jq
+  curl -s localhost:8080/priv/data-products/lsrc-w8v85:.:users-value:1 | jq
   ```
   ```json
   {
