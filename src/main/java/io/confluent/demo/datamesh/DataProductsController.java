@@ -132,7 +132,7 @@ public class DataProductsController {
 
     @GetMapping(path = "/manage")
     public ArrayList<DataProductOrTopic> getProductsAndTopics() {
-        List<DataProduct> dps = getDataProducts();
+        List<DataProduct> allDataProducts = getDataProducts();
 
         SubjectVersionServiceResult subjectVersionServiceResult = subjectVersionService.getPotentialDataProducts();
 
@@ -141,10 +141,14 @@ public class DataProductsController {
             .stream()
             .map(Mapper::ccToTopic)
             .filter(topic -> !topic.getName().startsWith("_"))
+            .filter(topic -> {
+                return allDataProducts.stream().filter(dp -> dp.getName().equals(topic.getName()))
+                        .collect(Collectors.toList()).size() == 0;
+            })
             .collect(Collectors.toList());
 
         ArrayList<DataProductOrTopic> rv = new ArrayList<>();
-        rv.addAll(dps);
+        rv.addAll(allDataProducts);
         rv.addAll(topics);
 
         subjectVersionServiceResult.getAuditLogEntry().ifPresent(auditLogService::sendAuditLogEntry);
