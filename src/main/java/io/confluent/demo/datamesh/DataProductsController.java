@@ -37,6 +37,51 @@ public class DataProductsController {
         }
     }
     private final List<String> protectedOwners = List.of("@edge-team");
+    private final List<String> allowedDescriptions = List.of(
+            "Stock trades of a high combined monetary value.",
+            "Stocks that are trending based on 15 minute tumbling windows.",
+            "Enriched stock trades performed by accounts domiciled within the USA.");
+    private final List<String> allowedOwners = List.of(
+            "@analytics-team",
+            "@stock-trades-team",
+            "@user-management-team",
+            "@accounting-team");
+    private final List<String> allowedSLAs = List.of("tier-1", "tier-2", "tier-3");
+    private final List<String> allowedQualities = List.of("authoritative", "curated", "raw");
+
+    private void validateCreateDataProductRequest(CreateDataProductRequest request) {
+        DataProductTag incomingTag = request.getDataProductTag();
+
+        if ( !allowedDescriptions.contains(incomingTag.getDescription()) ) {
+            throw new RestrictedDataProductException(
+                    String.format("Unauthorized Data Product description"));
+        }
+
+        if ( !allowedOwners.contains(incomingTag.getOwner()) ) {
+            throw new RestrictedDataProductException(
+                    String.format("Unauthorized Data Product owner"));
+        }
+
+        if ( !allowedSLAs.contains(incomingTag.getSla()) ) {
+            throw new RestrictedDataProductException(
+                    String.format("Unauthorized Data Product SLA"));
+        }
+
+        if ( !allowedQualities.contains(incomingTag.getQuality()) ) {
+            throw new RestrictedDataProductException(
+                    String.format("Unauthorized Data Product Quality"));
+        }
+
+        if ( !incomingTag.getDomain().equals(domain) ) {
+            throw new RestrictedDataProductException(
+                    String.format("Unauthorized Data Product domain: %s", request.getDataProductTag().getDomain()));
+        }
+
+        if ( protectedOwners.contains(incomingTag.getOwner()) ) {
+            throw new RestrictedDataProductException(
+                    String.format("Unauthorized Data Product owner: %s", request.getDataProductTag().getOwner()));
+        }
+    }
 
     @GetMapping
     public List<DataProduct> getDataProducts() {
@@ -58,19 +103,13 @@ public class DataProductsController {
 
     @PostMapping
     public DataProduct postDataProduct(@RequestBody CreateDataProductRequest request) throws Exception {
+
         if ( !StringUtils.hasText(request.getDataProductTag().getDomain()) ) {
             request.setDataProductTag(
                 request.getDataProductTag().builder().withDomain(this.domain).build());
         }
-        else if ( !request.getDataProductTag().getDomain().equals(domain) ) {
-            throw new RestrictedDataProductException(
-                String.format("Unauthorized Data Product domain: %s", request.getDataProductTag().getDomain()));
-        }
 
-        if ( protectedOwners.contains(request.getDataProductTag().getOwner()) ) {
-           throw new RestrictedDataProductException(
-                String.format("Unauthorized Data Product owner: %s", request.getDataProductTag().getOwner()));
-        }
+        validateCreateDataProductRequest(request);
 
         Pair<DataProduct, Optional<AuditLogEntry>> response = dataProductService.createDataProduct(request);
         response.getValue1().ifPresent(auditLogService::sendAuditLogEntry);
