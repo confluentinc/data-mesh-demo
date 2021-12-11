@@ -40,6 +40,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
+ext['log4j2.version'] = '2.15.0'
+
 java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(11)
