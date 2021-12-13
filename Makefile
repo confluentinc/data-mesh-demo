@@ -11,7 +11,7 @@ SHELL=/bin/bash -o pipefail
 check-dependency = $(if $(shell command -v $(1)),,$(error Make sure $(1) is installed))
 
 get_service_account_id = $(shell confluent kafka cluster list -o json | jq -r '.[0].name | ltrimstr("demo-kafka-cluster-")')
-get_prototype_version = $(shell ./gradlew properties -q | grep "version:" | cut -d ":" -f2 | xargs echo -n)
+get_prototype_version = $(shell ./gradlew properties -q | grep "^version:" | cut -d ":" -f2 | xargs echo -n)
 
 check_defined = \
     $(strip $(foreach 1,$1, \
