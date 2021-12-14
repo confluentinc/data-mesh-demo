@@ -10,7 +10,6 @@ import exportScreenshotPath from './static/images/export.png';
 import schemaScreenshotPath from './static/images/schema.png';
 import topicScreenshotPath from './static/images/topic.png';
 import lineageScreenshotPath from './static/images/lineage.png';
-import searchScreenshotPath from './static/images/search.png';
 import landingImage1Path from './static/images/landing/landing-p1.svg';
 import landingImage2Path from './static/images/landing/landing-p2.svg';
 import landingImage3Path from './static/images/landing/landing-p3.svg';
@@ -32,7 +31,6 @@ socket.onopen = function() {
         schemaScreenshotPath: schemaScreenshotPath,
         topicScreenshotPath: topicScreenshotPath,
         lineageScreenshotPath: lineageScreenshotPath,
-        searchScreenshotPath: searchScreenshotPath,
         landingImage1Path: landingImage1Path,
         landingImage2Path: landingImage2Path,
         landingImage3Path: landingImage3Path

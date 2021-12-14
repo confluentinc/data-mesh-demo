@@ -61,21 +61,6 @@ view activeStreamKey model =
                         (RemoteData.toMaybe model.actuatorInfo)
                         activeStream
                     ]
-                , div [ class "discover-search" ]
-                    [ p []
-                        (case ( model.actuatorInfo, Url.fromString "https://confluent.cloud/search" ) of
-                            ( Success actuatorInfo, Just url ) ->
-                                [ linkButton actuatorInfo.hostedMode
-                                    ( "Advanced Search"
-                                    , url
-                                    , SearchScreenshot
-                                    )
-                                ]
-
-                            _ ->
-                                []
-                        )
-                    ]
                 , footer []
                     [ Markdown.toHtml [] discoveryOutro ]
                 ]
