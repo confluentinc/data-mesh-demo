@@ -80,7 +80,6 @@ type ScreenshotTarget
     | SchemaScreenshot
     | TopicScreenshot
     | LineageScreenshot
-    | SearchScreenshot
 
 
 type Domain
@@ -187,7 +186,6 @@ type alias StaticImages =
     , schemaScreenshotPath : String
     , topicScreenshotPath : String
     , lineageScreenshotPath : String
-    , searchScreenshotPath : String
     , landingImage1Path : String
     , landingImage2Path : String
     , landingImage3Path : String
