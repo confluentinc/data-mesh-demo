@@ -1,4 +1,4 @@
-FROM cnfldemos/data-mesh-demo:0.0.48
+FROM cnfldemos/data-mesh-demo:0.0.50
 
 ARG config
 
