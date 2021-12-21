@@ -44,7 +44,7 @@ function create_data_product () {
 
   CONNECTOR_CONFIG="${DIR_HELPER}/connectors/ccloud-datagen-${dp}.json"
   ccloud::create_connector $CONNECTOR_CONFIG || exit 1
-  ccloud::wait_for_connector_up $CONNECTOR_CONFIG 600 || exit 1
+  ccloud::wait_for_connector_up $CONNECTOR_CONFIG 1200 || exit 1
   printf "\nSleeping 60 seconds until the datagen source connector starts producing records for ${dp}\n"
   sleep 60
 
