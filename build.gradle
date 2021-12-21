@@ -40,7 +40,7 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
-ext['log4j2.version'] = '2.15.0'
+ext['log4j2.version'] = '2.17.0'
 
 java {
 	toolchain {
