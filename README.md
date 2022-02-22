@@ -29,7 +29,7 @@ A companion blog post can be found here:
     for the Confluent Cloud resources until you destroy them. Enter the promo code in the Billing & payment page
     under the Payment details subsection.
 
-* [Confluent CLI](https://docs.confluent.io/confluent-cli/current/install.html) `v2.0.0` or later
+* [Confluent CLI](https://docs.confluent.io/confluent-cli/current/install.html) `v2.6.1` or later
 * [jq](https://stedolan.github.io/jq/download/)
 
 #### Docker
