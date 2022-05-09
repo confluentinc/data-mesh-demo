@@ -24,7 +24,7 @@ landingIntro =
 ### The Data Mesh
 
 This prototype application showcases a self-serve Data Mesh UI, for use by both consumers and producers of
-data products. The companion [Data Mesh blog post](https://www.confluent.io/blog/) goes into more details on
+data products. The companion [Data Mesh blog post](https://www.confluent.io/blog/how-to-build-a-data-mesh-using-event-streams/) goes into more details on
 Data Mesh concepts and how to use this prototype.
 
 **NOTE:** You are using the hosted version of this application, not all of the application's functionality
