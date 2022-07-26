@@ -57,6 +57,7 @@ data-mesh-from-source: ## Creates a new Data Mesh in Confluent Cloud then builds
 
 .PHONY: data-mesh
 data-mesh: ## Creates a new Data Mesh in Confluent Cloud then builds and runs the demo
+	@./scripts/validate-docker.sh
 	@./scripts/create-data-mesh.sh
 	@make run-docker
 
