@@ -53,7 +53,7 @@ run-docker: ## Run the demo in Docker
 .PHONY: data-mesh-from-source
 data-mesh-from-source: ## Creates a new Data Mesh in Confluent Cloud then builds and runs the demo
 	@./scripts/create-data-mesh.sh
-	@make run-local
+	@make run-from-source
 
 .PHONY: data-mesh
 data-mesh: ## Creates a new Data Mesh in Confluent Cloud then builds and runs the demo
