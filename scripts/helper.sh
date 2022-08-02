@@ -68,11 +68,11 @@ function create_ksqldb_app() {
   MAX_WAIT=720
   echo "Waiting up to $MAX_WAIT seconds for Confluent Cloud ksqlDB cluster to be UP"
   ccloud::retry $MAX_WAIT ccloud::validate_ccloud_ksqldb_endpoint_ready $KSQLDB_ENDPOINT || exit 1
-  CMD="confluent ksql app list -o json | jq -r '.[].id'"
+  CMD="confluent ksql cluster list -o json | jq -r '.[].id'"
   ksqlDBAppId=$(eval $CMD) \
     && print_pass "Retrieved ksqlDB application ID: $ksqlDBAppId" \
     || exit_with_error -c $? -n "$NAME" -m "$CMD" -l $(($LINENO -3))
-  CMD="confluent ksql app configure-acls $ksqlDBAppId stocktrades pageviews users"
+  CMD="confluent ksql cluster configure-acls $ksqlDBAppId stocktrades pageviews users"
   $CMD \
     && print_pass "$CMD" \
     || exit_with_error -c $? -n "$NAME" -m "$CMD" -l $(($LINENO -3))
@@ -113,7 +113,7 @@ function augment_config_file() {
   KAFKA_CLUSTER_NAME=${KAFKA_CLUSTER_NAME:-"demo-kafka-cluster-$SERVICE_ACCOUNT_ID"}
   KAFKA_CLUSTER_ID=$(confluent kafka cluster list -o json | jq -r 'map(select(.name | startswith("'"$KAFKA_CLUSTER_NAME"'"))) | .[].id')
   SCHEMA_REGISTRY_ID=$(confluent schema-registry cluster describe -o json | jq -r ".cluster_id")
-  KSQLDB_ID=$(confluent ksql app list -o json | jq -r 'map(select(.name == "demo-ksqldb-'"$SERVICE_ACCOUNT_ID"'")) | .[].id')
+  KSQLDB_ID=$(confluent ksql cluster list -o json | jq -r 'map(select(.name == "demo-ksqldb-'"$SERVICE_ACCOUNT_ID"'")) | .[].id')
 
   # Create credentials for the cloud resource for the Connector REST API
   REST_API_AUTH_USER_INFO=$(confluent api-key create --resource cloud -o json) || exit 1
