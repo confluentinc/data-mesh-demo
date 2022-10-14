@@ -56,6 +56,9 @@ If you prefer not to use Docker, you can build and run the project from source l
   ```sh
   confluent login --save
   ```
+
+* NOTE: You must ensure you remain logged into Confluent Cloud. If you log out during the setup process, you will need to set your default environment and cluster
+
   
 * If you want to create a new Data Mesh on Confluent Cloud as well as build and run the demo, this command 
   creates Confluent Cloud resources, including an environment, Apache Kafka cluster,
