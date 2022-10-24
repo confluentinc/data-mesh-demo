@@ -8,7 +8,7 @@ A Data Mesh prototype built on [Confluent Cloud](https://www.confluent.io/conflu
 
 The Data Mesh demo is available in a hosted environment by visiting:
 
-https://www.confluent-data-mesh-prototype.com
+https://data-mesh-demo.herokuapp.com/
 
 The hosted version of the demo allows you to see a subset of the full demo functionality without 
 requiring you to run any code locally. When you would like to run a full version of the demo, follow the 
