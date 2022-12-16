@@ -8,7 +8,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 # Confluent Cloud resources
 # For now a copy of ccloud_library is copied locally until examples
 #		CLI-1399 is tested and merged
-curl -sS -o ${DIR}/ccloud_library.sh https://raw.githubusercontent.com/confluentinc/examples/latest/utils/ccloud_library.sh
+curl -sS -o ${DIR}/ccloud_library.sh https://raw.githubusercontent.com/confluentinc/examples/7.3.0-post/utils/ccloud_library.sh
 source ${DIR}/ccloud_library.sh
 source ${DIR}/helper.sh
 

@@ -57,7 +57,25 @@ If you prefer not to use Docker, you can build and run the project from source l
   confluent login --save
   ```
 
-* NOTE: You must ensure you remain logged into Confluent Cloud. If you log out during the setup process, you will need to set your default environment and cluster
+* NOTE: You must ensure you remain logged into Confluent Cloud. If you log out during the setup process, you will need to set your default environment and cluster. You may also find yourself logged out during the `make destroy` process, and must log back in and set the environment to the data mesh demo env. 
+eg:
+```sh
+➜  data-mesh-demo git:(main) ✗ confluent environment list
+
+       ID      |                 Name                   
+---------------+----------------------------------------
+  * env-aaaaaa | ccloud-default                       
+    env-dmdemo | ccloud-xxxxxxxxxxxx-data-mesh-demo  
+```
+Then set the default environment back to the "-data-mesh-demo" suffix:
+
+```sh
+➜  data-mesh-demo git:(main) ✗ confluent environment use env-dmdemo                             
+Now using "env-dmdemo" as the default (active) environment.
+```
+Now your `confluent` commands, and others like `make destroy` should work as expected.
+
+
 
   
 * If you want to create a new Data Mesh on Confluent Cloud as well as build and run the demo, this command 
