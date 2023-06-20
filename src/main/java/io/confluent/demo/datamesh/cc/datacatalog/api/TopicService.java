@@ -2,6 +2,7 @@ package io.confluent.demo.datamesh.cc.datacatalog.api;
 
 import io.confluent.demo.datamesh.cc.datacatalog.model.*;
 import io.confluent.demo.datamesh.model.AuditLogEntry;
+import io.confluent.demo.datamesh.model.DataProduct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
@@ -20,20 +21,20 @@ import java.util.stream.Collectors;
 
 @Service
 @RestController
-@RequestMapping("/priv/subjects")
-public class SubjectVersionService {
+@RequestMapping("/priv/topics")
+public class TopicService {
     private final RestTemplate restTemplate;
 
-    public SubjectVersionService(
+    public TopicService(
             RestTemplateBuilder builder,
             @Value("${confluent.cloud.schemaregistry.auth.key}") String srKey,
             @Value("${confluent.cloud.schemaregistry.auth.secret}") String srSecret,
             @Value("${confluent.cloud.schemaregistry.url}") String baseUrl) {
 
         restTemplate = builder
-            .rootUri(baseUrl + "/catalog/v1")
-            .basicAuthentication(srKey, srSecret)
-            .build();
+                .rootUri(baseUrl + "/catalog/v1")
+                .basicAuthentication(srKey, srSecret)
+                .build();
     }
 
     private List<AtlasEntityWithExtInfo> filterForDuplicates(SearchResult result) {
@@ -44,12 +45,12 @@ public class SubjectVersionService {
                 .getEntities()
                 .stream()
                 .collect(Collectors.toMap(
-                        SubjectVersionService::getEntityName,
+                        TopicService::getEntityName,
                         Function.identity(),
-                        SubjectVersionService::getLatestHeader))
+                        TopicService::getLatestHeader))
                 .values()
                 .stream()
-                .map(header -> getSubjectVersionEntity(header.getAttributes().get("qualifiedName").toString()))
+                .map(header -> getTopicEntity(header.getAttributes().get("qualifiedName").toString()))
                 .collect(Collectors.toList());
     }
     private static String getEntityName(AtlasEntityHeader header) {
@@ -64,49 +65,49 @@ public class SubjectVersionService {
         else
             return h1;
     }
-    public static String getQualifiedNameSchemaName(String srSubjectVersionFQN) {
+    public static String getSchemaNameFromQualifiedName(String srSchemaFQN) {
         // Must match the pattern: "lsrc-wqxng:.:pageviews-value:1"
-        return srSubjectVersionFQN.split(":")[2];
+        return srSchemaFQN.split(":")[2];
     }
-    public static String getQualifiedNameTopicName(String srSubjectVersionFQN) {
-        // Must match the pattern: "lsrc-wqxng:.:pageviews-value:1"
-        return srSubjectVersionFQN.split(":")[2].split("-")[0];
+    public static String getTopicNameFromQualifiedName(String srTopicFQN) {
+        // Must match the pattern: "lsrc-wqxng:.:pageviews"
+        return srTopicFQN.split(":")[2];
     }
 
-    public AtlasEntityWithExtInfo getSubjectVersionEntity(String qualifiedName) {
+    public AtlasEntityWithExtInfo getTopicEntity(String qualifiedName) {
         OffsetDateTime odt;
-        String entityUrl = String.format("/entity/type/sr_subject_version/name/%s", qualifiedName);
+        String entityUrl = String.format("/entity/type/kafka_topic/name/%s", qualifiedName);
         return restTemplate.getForObject(entityUrl, AtlasEntityWithExtInfo.class);
     }
 
-    public SubjectVersionServiceResult getAll() {
+    public TopicServiceResult getAll() {
         return getAll(Optional.empty(), Optional.empty());
     }
 
-    public SubjectVersionServiceResult getPotentialDataProducts() {
-        return getAll(Optional.empty(), Optional.of("DataProduct"));
+    public TopicServiceResult getPotentialDataProductsByTag() {
+        return getAll(Optional.empty(), Optional.of(DataProduct.DataProductTagName));
     }
-    public SubjectVersionServiceResult getDataProducts() {
-        return getAll(Optional.of("DataProduct"), Optional.empty());
+    public TopicServiceResult getDataProductsByTag() {
+        return getAll(Optional.of(DataProduct.DataProductTagName), Optional.empty());
     }
 
     @GetMapping
-    public SubjectVersionServiceResult getAll(
+    public TopicServiceResult getAll(
             @RequestParam Optional<String> includeTag,
             @RequestParam Optional<String> excludeTag) {
 
         Optional<AuditLogEntry> auditLogEntry = Optional.empty();
 
-        String searchUrl = "/search/basic?types=sr_subject_version&attrs=version";
+        String searchUrl = "/search/basic?types=kafka_topic";
         if(!includeTag.isEmpty() && includeTag.get().trim().length() > 0) {
             searchUrl = searchUrl + "&tag=" + includeTag.get();
             auditLogEntry = Optional.of(new AuditLogEntry(
-                    "Get all Subjects from Confluent Data Catalog with tag '" + includeTag.get() + "'",
+                    "Get all Topics from Confluent Data Catalog with tag '" + includeTag.get() + "'",
                     new String[]{ String.format("GET %s", searchUrl) }));
         }
         else {
             auditLogEntry = Optional.of(new AuditLogEntry(
-                    "Get all Subjects from Confluent Data Catalog",
+                    "Get all Topics from Confluent Data Catalog",
                     new String[]{ String.format("GET %s", searchUrl) }));
         }
 
@@ -119,19 +120,19 @@ public class SubjectVersionService {
         // TODO: Figure out if it's possible to both filter including and excluding tags on the server side
         if (excludeTag.isPresent()) {
             found = found
-                        .stream()
-                        .filter(entry -> {
-                                return Optional.ofNullable(entry.getEntity().getClassifications())
-                                        .orElse(Collections.emptyList())
-                                        .stream()
-                                        .filter(c -> excludeTag.get().equals(c.getTypeName()))
-                                        .findAny()
-                                        .isEmpty(); })
-                        .collect(Collectors.toList());
+                    .stream()
+                    .filter(entry -> {
+                        return Optional.ofNullable(entry.getEntity().getClassifications())
+                                .orElse(Collections.emptyList())
+                                .stream()
+                                .filter(c -> excludeTag.get().equals(c.getTypeName()))
+                                .findAny()
+                                .isEmpty(); })
+                    .collect(Collectors.toList());
         }
 
 
-        return new SubjectVersionServiceResult(found, auditLogEntry);
+        return new TopicServiceResult(found, auditLogEntry);
     }
 
 

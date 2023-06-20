@@ -49,17 +49,24 @@ function create_data_product () {
   sleep 60
 
   # Get the qualified name
-  QN=$(curl -s -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} "${SCHEMA_REGISTRY_URL}/catalog/v1/search/basic?types=sr_subject_version" | jq -r --arg dp "${dp}-value" '.entities[].attributes | select(.name==$dp) | .qualifiedName ')
+  QN=$(curl -s -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} "${SCHEMA_REGISTRY_URL}/catalog/v1/search/basic?types=kafka_topic" | jq -r --arg dp "${dp}" '.entities[].attributes | select(.name==$dp) | .qualifiedName ')
   echo "Qualified name for Kafka subject $dp: $QN"
 
-  echo -e "\nAdd tag to ${dp}"
+  ##TODO - Extract businessmetadata and tag types into a common file, share with java codebase
+  echo -e "\nAdd business metadata to ${dp}"
+  curl -X POST -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} "${SCHEMA_REGISTRY_URL}/catalog/v1/entity/businessmetadata" \
+    --header 'Content-Type: application/json' \
+    --data '[ { "entityType" : "kafka_topic", "entityName" : "'"${QN}"'", "typeName" : "DataProduct", "attributes" : { "owner":"'"${owner}"'", "description":"'"${description}"'", "domain": "'"${domain}"'", "quality": "'"${quality}"'", "sla" : "'"${sla}"'" } }]'
+  echo -e "\nView business metadata details"
+  curl -s -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} "${SCHEMA_REGISTRY_URL}/catalog/v1/entity/type/kafka_topic/name/${QN}/businessmetadata" | jq .
+
+  echo "Attach the data product tag to ${dp}"
   curl -X POST -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} "${SCHEMA_REGISTRY_URL}/catalog/v1/entity/tags" \
     --header 'Content-Type: application/json' \
-    --data '[ { "entityType" : "sr_subject_version", "entityName" : "'"${QN}"'", "typeName" : "DataProduct", "attributes" : { "owner":"'"${owner}"'", "description":"'"${description}"'", "domain": "'"${domain}"'", "quality": "'"${quality}"'", "sla" : "'"${sla}"'" } }]'
+    --data '[ { "entityType" : "kafka_topic", "entityName" : "'"${QN}"'", "typeName" : "ProdDP" }]'
+
   echo -e "\nVerify tag is attached to ${dp}"
-  curl -s -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} "${SCHEMA_REGISTRY_URL}/catalog/v1/search/basic?types=sr_subject_version" | jq -r --arg dp "${dp}-value" '.entities[] | select(.attributes.name==$dp) | .classificationNames[] '
-  echo -e "\nView tag details"
-  curl -s -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} "${SCHEMA_REGISTRY_URL}/catalog/v1/entity/type/sr_subject_version/name/${QN}/tags" | jq .
+  curl -s -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} "${SCHEMA_REGISTRY_URL}/catalog/v1/search/basic?types=kafka_topic" | jq -r --arg dp "${dp}" '.entities[] | select(.attributes.name==$dp) | .classificationNames[] '
 
   return 0
 }
@@ -117,8 +124,8 @@ function augment_config_file() {
 
   # Create credentials for the cloud resource for the Connector REST API
   REST_API_AUTH_USER_INFO=$(confluent api-key create --resource cloud -o json) || exit 1
-  REST_API_KEY=$(echo "$REST_API_AUTH_USER_INFO" | jq -r .key)
-  REST_API_SECRET=$(echo "$REST_API_AUTH_USER_INFO" | jq -r .secret)
+  REST_API_KEY=$(echo "$REST_API_AUTH_USER_INFO" | jq -r .api_key)
+  REST_API_SECRET=$(echo "$REST_API_AUTH_USER_INFO" | jq -r .api_secret)
 
   # Split other credentials into key and secret
   IFS=":" read -r SCHEMA_REGISTRY_KEY SCHEMA_REGISTRY_SECRET <<< "$SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO"

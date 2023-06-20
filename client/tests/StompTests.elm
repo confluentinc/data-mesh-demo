@@ -27,7 +27,7 @@ suite =
                     decodesTo decodeAuditLogMsg
                         auditLogMessage1
                         { message = "Search Confluent Cloud Data Catalog"
-                        , commands = [ "GET /search/basic?types=sr_subject_version&attrs=version&tag=DataProduct" ]
+                        , commands = [ "GET /search/basic?types=kafka_topic&tag=DataProduct" ]
                         }
             ]
         ]
@@ -36,5 +36,5 @@ suite =
 auditLogMessage1 : String
 auditLogMessage1 =
     """
-{"message":"Search Confluent Cloud Data Catalog","commands":["GET /search/basic?types=sr_subject_version&attrs=version&tag=DataProduct"]}
+{"message":"Search Confluent Cloud Data Catalog","commands":["GET /search/basic?types=kafka_topic&tag=DataProduct"]}
 """

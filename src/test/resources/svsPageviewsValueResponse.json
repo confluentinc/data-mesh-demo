@@ -48,20 +48,23 @@
     },
     "classifications": [
       {
-        "typeName": "DataProduct",
-        "attributes": {
-          "owner": "@edge-team",
-          "domain": "edge",
-          "description": "Website page views",
-          "sla": "tier-2",
-          "quality": "curated"
-        },
+        "typeName": "ProdDP",
         "entityGuid": "e3981b49-bc0e-4908-8705-2744f66f8bff",
         "entityStatus": "ACTIVE",
         "propagate": false,
         "removePropagationsOnEntityDelete": false
       }
     ],
+    "businessAttributes": {
+      "DataProduct": {
+        "owner": "@membership-team",
+        "domain": "membership",
+        "description": "All users from all regions (both national and international)",
+        "sla": "tier-1",
+        "quality": "authoritative",
+        "__bmName": "DataProduct"
+      }
+    },
     "labels": [],
     "pendingTasks": [
       "d99e14a4-81b4-4c62-b9d4-49a682508350"

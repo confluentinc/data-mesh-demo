@@ -3,7 +3,7 @@ package io.confluent.demo.datamesh.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import io.confluent.demo.datamesh.cc.datacatalog.model.DataProductTag;
+import io.confluent.demo.datamesh.cc.datacatalog.model.DataProductBusinessMetadata;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY)
@@ -13,17 +13,24 @@ import io.confluent.demo.datamesh.cc.datacatalog.model.DataProductTag;
         @JsonSubTypes.Type(value = CreateKsqlDbDataProductRequest.class, name = "KSQLDB")
 })
 public abstract class CreateDataProductRequest {
-    private DataProductTag dataProductTag;
+    private DataProductBusinessMetadata dataProductBusinessMetadata;
 
-    public CreateDataProductRequest(DataProductTag tag) {
-        this.setDataProductTag(tag);
+    public CreateDataProductRequest(DataProductBusinessMetadata tag) {
+        this.setDataProductBusinessMetadata(tag);
     }
     public CreateDataProductRequest() {
     }
 
-    public void setDataProductTag(DataProductTag tag) { this.dataProductTag = tag;}
-    public DataProductTag getDataProductTag() {return this.dataProductTag;}
+    public void setDataProductBusinessMetadata(DataProductBusinessMetadata dp) { this.dataProductBusinessMetadata = dp;}
+    public DataProductBusinessMetadata getDataProductBusinessMetadata() {return this.dataProductBusinessMetadata;}
 
-    public String getDescription() { return this.dataProductTag.getDescription(); }
-    public String getOwner() { return this.dataProductTag.getOwner(); }
+    public String getDescription() { return this.dataProductBusinessMetadata.getDescription(); }
+    public String getOwner() { return this.dataProductBusinessMetadata.getOwner(); }
+
+    @Override
+    public String toString() {
+        return "CreateDataProductRequest{" +
+                "dataProductBusinessMetadata=" + dataProductBusinessMetadata +
+                '}';
+    }
 }

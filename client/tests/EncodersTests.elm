@@ -34,7 +34,7 @@ publishDataProductRequest1 =
 {
   "@type": "TOPIC",
   "qualifiedName": "lsrc-7xxv2:.:pksqlc-09g26PAGEVIEWS_USER2-value:2",
-  "dataProductTag": {
+  "dataProductBusinessMetadata": {
     "owner": "ybyzek",
     "description": "pageviews users 2",
     "quality": "authoritative",

@@ -5,10 +5,10 @@ import io.confluent.demo.datamesh.model.AuditLogEntry;
 import java.util.List;
 import java.util.Optional;
 
-public class SubjectVersionServiceResult {
+public class TopicServiceResult {
     private List<AtlasEntityWithExtInfo> entities;
     private Optional<AuditLogEntry> auditLogEntry;
-    public SubjectVersionServiceResult(List<AtlasEntityWithExtInfo> entities, Optional<AuditLogEntry> auditLogEntry) {
+    public TopicServiceResult(List<AtlasEntityWithExtInfo> entities, Optional<AuditLogEntry> auditLogEntry) {
         this.entities = entities;
         this.auditLogEntry = auditLogEntry;
     }

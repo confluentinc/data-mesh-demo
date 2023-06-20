@@ -6,8 +6,6 @@ import io.confluent.demo.datamesh.cc.datacatalog.model.DataProductEntity;
 import java.util.Map;
 import java.util.Optional;
 
-import static java.util.Optional.ofNullable;
-
 /**
  * Place to house functions which map various objects into the
  * Data Mesh Demo data model
@@ -32,8 +30,8 @@ public class Mapper {
 
     /**
      * Converts the Confluent Cloud representation of a data product
-     * (Subject Version + Data Product Tag) into a DataProduct instance
-     * @param dpEntity The CC representation of the Subject Version and Tag
+     * (Topic + Data Product Tag + Data Product Business Metadata) into a DataProduct instance
+     * @param dpEntity The CC representation of the Topic data and Business Metadata
      * @return A new DataProduct instance
      */
     public static DataProduct ccToDataProduct(DataProductEntity dpEntity) {
@@ -47,7 +45,7 @@ public class Mapper {
            name = name.substring(0, i);
         }
 
-        Map<String, Object> dataProductAttributes = dpEntity.getDataProductTag().getAttributes();
+        Map<String, Object> dataProductAttributes = dpEntity.getDataProductBusinessMetadata().getAttributes();
 
         return new DataProduct(
             name,

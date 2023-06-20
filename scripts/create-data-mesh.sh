@@ -18,6 +18,7 @@ QUIET="${QUIET:-false}"
   REDIRECT_TO="/dev/null" ||
   REDIRECT_TO="/dev/stdout"
 
+
 printf "\n";print_process_start "====== Preflight Checks."
 preflight_checks || exit 1
 
@@ -33,17 +34,36 @@ ccloud::generate_configs $CONFIG_FILE
 source "delta_configs/env.delta"
 augment_config_file $CONFIG_FILE
 
-echo
-echo "Sleep an additional 2 minutes to wait for all Confluent Cloud metadata to propagate"
-sleep 120
+#Update the governance package to ADVANCED using the CLI.
+#Could also have created the cluster with package set to ADVANCED by default: https://docs.confluent.io/cloud/current/stream-governance/clusters-regions-api.html#create-a-cluster
+echo "Upgrade the governance package to ADVANCED. This is necessary to use Business Metadata types."
+CC_ENV=$(confluent environment list -o json | jq -c -r '.[] | select (.name == "'"ccloud-stack-$SERVICE_ACCOUNT_ID-data-mesh-demo"'")' | jq -r .id)
+echo "cc_env = $CC_ENV"
+UPDATED_GOV=$(confluent schema-registry cluster upgrade --package advanced --environment $CC_ENV)
 
-printf "\n";print_process_start "====== Add new tag definition to the Data Catalog."
-echo -e "\nDefine a new tag in the Data Catalog called DataProduct:"
+echo
+echo "Sleep an additional 30 seconds"
+sleep 30
+echo "Did updating the governance package work?: $UPDATED_GOV"
+
+echo
+echo "Sleep an additional 90 seconds to wait for all Confluent Cloud metadata to propagate"
+sleep 90
+
+printf "\n";print_process_start "====== Add new business metadata definition to the Data Catalog."
+echo -e "\nDefine a new business metadata in the Data Catalog called DataProduct:"
+curl -X POST -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} ${SCHEMA_REGISTRY_URL}/catalog/v1/types/businessmetadatadefs \
+  --header 'Content-Type: application/json' \
+  --data '[{ "entityTypes" : [ "kafka_topic" ], "name" : "DataProduct", "description" : "Data Product Attributes" , "attributeDefs" : [ { "name" : "owner", "cardinality" : "SINGLE", "typeName" : "string" }, { "name" : "description", "isOptional" : "true", "cardinality" : "SINGLE", "typeName" : "string" }, { "name" : "domain", "isOptional" : "true", "cardinality" : "SINGLE", "typeName" : "string" }, { "name" : "sla", "isOptional" : "true", "cardinality" : "SINGLE", "typeName" : "string" }, { "name" : "quality", "isOptional" : "true", "cardinality" : "SINGLE", "typeName" : "string" } ] }]'
+echo -e "\n\nView the new business metadata definition:"
+curl -s -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} ${SCHEMA_REGISTRY_URL}/catalog/v1/types/businessmetadatadefs/DataProduct | jq .
+
+echo -e "\nDefine a new Tag in the Data Catalog called ProdDP:"
 curl -X POST -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} ${SCHEMA_REGISTRY_URL}/catalog/v1/types/tagdefs \
   --header 'Content-Type: application/json' \
-  --data '[{ "entityTypes" : [ "sr_subject_version" ], "name" : "DataProduct", "description" : "Data Product Attributes" , "attributeDefs" : [ { "name" : "owner", "cardinality" : "SINGLE", "typeName" : "string" }, { "name" : "description", "isOptional" : "true", "cardinality" : "SINGLE", "typeName" : "string" }, { "name" : "domain", "isOptional" : "true", "cardinality" : "SINGLE", "typeName" : "string" }, { "name" : "sla", "isOptional" : "true", "cardinality" : "SINGLE", "typeName" : "string" }, { "name" : "quality", "isOptional" : "true", "cardinality" : "SINGLE", "typeName" : "string" } ] }]'
+  --data '[{ "entityTypes" : [ "kafka_topic" ], "name" : "ProdDP", "description" : "Production ready Data Product", "attributeDefs" : [ ] }]'
 echo -e "\n\nView the new tag definition:"
-curl -s -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} ${SCHEMA_REGISTRY_URL}/catalog/v1/types/tagdefs/DataProduct | jq .
+curl -s -u ${SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO} ${SCHEMA_REGISTRY_URL}/catalog/v1/types/tagdefs/ProdDP | jq .
 
 # Create Data Products
 create_data_product stocktrades @execution-team tier-1 authoritative execution "Includes all BUY and SELL trades, as well as trades from all regions (both national and international)" || exit 1

@@ -4,6 +4,8 @@ import io.confluent.demo.datamesh.cc.schemaregistry.model.Schema;
 import io.confluent.demo.datamesh.cc.urls.model.DataProductUrls;
 
 public class DataProduct extends DataProductOrTopic {
+    public static String DataProductTagName = "ProdDP";
+    public static String DataProductBusinessMetadataName = "DataProduct";
     private final String description;
     private final String owner;
     private final String domain;

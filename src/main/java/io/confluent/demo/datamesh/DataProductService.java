@@ -1,7 +1,8 @@
 package io.confluent.demo.datamesh;
 
-import io.confluent.demo.datamesh.cc.datacatalog.api.SubjectVersionService;
+import io.confluent.demo.datamesh.cc.datacatalog.api.BusinessMetadataService;
 import io.confluent.demo.datamesh.cc.datacatalog.api.TagService;
+import io.confluent.demo.datamesh.cc.datacatalog.api.TopicService;
 import io.confluent.demo.datamesh.cc.datacatalog.model.*;
 import io.confluent.demo.datamesh.cc.ksqldb.api.KsqlDbService;
 import io.confluent.demo.datamesh.cc.schemaregistry.api.SchemaRegistryService;
@@ -32,36 +33,38 @@ public class DataProductService {
     }
 
     @Autowired
-    private SubjectVersionService subjectVersionService;
+    private TopicService topicService;
+    @Autowired
+    private TagService tagService;
     @Autowired
     private KsqlDbService ksqlService;
     @Autowired
-    private TagService tagService;
+    private BusinessMetadataService businessMetadataService;
     @Autowired
     private SchemaRegistryService schemaService;
     @Autowired
     private UrlService urlService;
 
-    private DataProductEntity buildDataProductEntityFromSubjectVersion(AtlasEntityWithExtInfo subjectVersion) {
-        String qualifiedName = subjectVersion.getEntity().getAttributes().get("qualifiedName").toString();
+    private DataProductEntity buildDataProductEntityFromTopic(AtlasEntityWithExtInfo topic) {
+        String qualifiedName = topic.getEntity().getAttributes().get("qualifiedName").toString();
         Schema schema = schemaService
-                .getLatest((String)subjectVersion.getEntity().getAttributes().get("name"));
+                .getLatest((String)topic.getEntity().getAttributes().get("name") + "-value");
         return new DataProductEntity(
-                subjectVersion,
-                tagService.getDataProductTagForSubjectVersion(qualifiedName),
+                topic,
+                businessMetadataService.getDataProductBusinessMetadataForTopic(qualifiedName),
                 urlService.getDataProductUrls(qualifiedName),
                 schema);
     }
 
     private List<DataProduct> atlasEntitiesToDataProducts(List<AtlasEntityWithExtInfo> entities) {
         return entities.stream()
-            .map(this::buildDataProductEntityFromSubjectVersion)
+            .map(this::buildDataProductEntityFromTopic)
             .map(Mapper::ccToDataProduct)
             .collect(Collectors.toList());
     }
     public Pair<DataProduct, Optional<AuditLogEntry>> get(String qualifiedName) {
         // TODO: Filter on the server side instead of locally with all the results
-        Pair<List<DataProduct>, Optional<AuditLogEntry>> response = getDataProducts();
+        Pair<List<DataProduct>, Optional<AuditLogEntry>> response = getTopicsTaggedAsDataProducts();
         return new Pair<>(
                 response.getValue0()
                     .stream()
@@ -71,14 +74,14 @@ public class DataProductService {
                 response.getValue1());
     }
 
-    public Pair<List<DataProduct>, Optional<AuditLogEntry>> getDataProducts() {
-        SubjectVersionServiceResult result = subjectVersionService.getDataProducts();
+    public Pair<List<DataProduct>, Optional<AuditLogEntry>> getTopicsTaggedAsDataProducts() {
+        TopicServiceResult result = topicService.getDataProductsByTag();
         return new Pair<>(
-            atlasEntitiesToDataProducts(subjectVersionService.getDataProducts().getEntities()),
+            atlasEntitiesToDataProducts(topicService.getDataProductsByTag().getEntities()),
             result.getAuditLogEntry());
     }
     public List<DataProduct> getAll() {
-        return atlasEntitiesToDataProducts(subjectVersionService.getAll().getEntities());
+        return atlasEntitiesToDataProducts(topicService.getAll().getEntities());
     }
 
     public Pair<DataProduct, Optional<AuditLogEntry>> createDataProduct(CreateDataProductRequest request) throws Exception {
@@ -99,18 +102,22 @@ public class DataProductService {
         }
     }
     public Optional<AuditLogEntry> deleteDataProduct(String qualifiedName) {
-        return tagService.unTagSubjectVersionAsDataProduct(qualifiedName).getAuditLogEntry();
+        tagService.unTagTopicAsDataProduct(qualifiedName);
+        return businessMetadataService.removeDataProductBusinessMetadata(qualifiedName).getAuditLogEntry();
     }
 
     private Pair<DataProduct, Optional<AuditLogEntry>> createTopicDataProduct(final CreateTopicDataProductRequest request)
             throws Exception {
 
-        TagServiceResponse tagResponse =
-                tagService.tagSubjectVersionAsDataProduct(request.getQualifiedName(), request.getDataProductTag());
+        BusinessMetadataServiceResponse response =
+                businessMetadataService.businessMetadataTopicAsDataProduct(request.getQualifiedName(), request.getDataProductBusinessMetadata());
+
+        //TODO - Eliminate topic-tagging when business metadata search is available.
+        tagService.tagTopicAsDataProduct(request.getQualifiedName());
 
         Pair<DataProduct, Optional<AuditLogEntry>> getDataProductResponse =
                 get(request.getQualifiedName());
 
-        return new Pair<>(getDataProductResponse.getValue0(), tagResponse.getAuditLogEntry());
+        return new Pair<>(getDataProductResponse.getValue0(), response.getAuditLogEntry());
     }
 }

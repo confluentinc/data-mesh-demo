@@ -261,7 +261,7 @@ publishDialog result model =
         Just
             (div []
                 [ p []
-                    [ text "Enter the required Data Product tags." ]
+                    [ Markdown.toHtml [] publishInfo ]
                 , case result of
                     Failure err ->
                         errorView err
@@ -479,3 +479,15 @@ formatValidationError error =
             TermsNotAcknowledged ->
                 text "Please acknowledge the SLA requirements."
         ]
+
+publishInfo : String
+publishInfo =
+   """
+Enter the required Data Product tags.
+
+**NOTE:**
+* Your topic must have a value schema
+* Your topic must have at least one event produced to it
+
+**FAILURE TO DO SO WILL RESULT IN A SERVER SIDE VALIDATION ERROR**
+"""
