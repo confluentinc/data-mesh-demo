@@ -156,7 +156,7 @@ with the REST API directly. By default, the REST API listens on http://localhost
     {
       "@type": "DataProduct",
       "name": "users",
-      "qualifiedName": "lsrc-dnxzz:.:users-value:1",
+      "qualifiedName": "lsrc-dnxzz:users",
       "description": "All users from all regions (both national and international)",
       "owner": "@membership-team",
       "domain": "membership",
@@ -182,13 +182,13 @@ with the REST API directly. By default, the REST API listens on http://localhost
 * Get one specifc data product. This requires the qualified name of the data product:
 
   ```sh
-  curl -s localhost:8080/priv/data-products/lsrc-w8v85:.:users-value:1 | jq
+  curl -s localhost:8080/priv/data-products/lsrc-w8v85:users | jq
   ```
   ```json
   {
     "@type": "DataProduct",
     "name": "users",
-    "qualifiedName": "lsrc-dnxzz:.:users-value:1",
+    "qualifiedName": "lsrc-dnxzz:users",
     "description": "All users from all regions (both national and international)",
     "owner": "@membership-team",
     "domain": "membership",
@@ -218,7 +218,7 @@ with the REST API directly. By default, the REST API listens on http://localhost
     {
       "@type": "DataProduct",
       "name": "users",
-      "qualifiedName": "lsrc-dnxzz:.:users-value:1",
+      "qualifiedName": "lsrc-dnxzz:users",
       "description": "All users from all regions (both national and international)",
       "owner": "@membership-team",
       "domain": "membership",
@@ -240,7 +240,7 @@ with the REST API directly. By default, the REST API listens on http://localhost
     {
       "@type": "Topic",
       "name": "trending_stocks",
-      "qualifiedName": "lsrc-dnxzz:.:trending_stocks-value:2"
+      "qualifiedName": "lsrc-dnxzz:trending_stocks"
     },
     ...
   ]

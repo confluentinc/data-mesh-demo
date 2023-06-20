@@ -4,13 +4,13 @@ import io.confluent.demo.datamesh.model.AuditLogEntry;
 
 import java.util.Optional;
 
-public class TagServiceResponse {
-    private final Optional<TagResponse[]> responses;
+public class BusinessMetadataServiceResponse {
+    private final Optional<BusinessMetadataResponse[]> responses;
     private final Optional<AuditLogEntry> auditLogEntry;
-    public TagServiceResponse(Optional<TagResponse[]> responses, Optional<AuditLogEntry> auditLogEntry) {
+    public BusinessMetadataServiceResponse(Optional<BusinessMetadataResponse[]> responses, Optional<AuditLogEntry> auditLogEntry) {
         this.responses = responses;
         this.auditLogEntry = auditLogEntry;
     }
-    public Optional<TagResponse[]> getResponses() {return this.responses;}
+    public Optional<BusinessMetadataResponse[]> getResponses() {return this.responses;}
     public Optional<AuditLogEntry> getAuditLogEntry() {return this.auditLogEntry;}
 }

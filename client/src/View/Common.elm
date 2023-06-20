@@ -55,8 +55,9 @@ errorView : Http.Error -> Html msg
 errorView err =
     div [ UIKit.alert, UIKit.alertDanger ]
         [ h4 [] [ text "Data Load Failed" ]
+        , p [] [ text "Did you follow the two requirements above?" ]
+        , p [] [ text "If so, check your network connection and try again." ]
         , p [] [ text (errorToString err) ]
-        , p [] [ text "Check your network connection and try again." ]
         ]
 
 

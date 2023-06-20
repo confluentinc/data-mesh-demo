@@ -24,7 +24,7 @@
       "status": "ACTIVE",
       "displayText": "users-value",
       "classificationNames": [
-        "DataProduct"
+        "ProdDP"
       ],
       "meaningNames": [],
       "meanings": [],
@@ -47,7 +47,7 @@
       "status": "ACTIVE",
       "displayText": "stocktrades-value",
       "classificationNames": [
-        "DataProduct"
+        "ProdDP"
       ],
       "meaningNames": [],
       "meanings": [],
@@ -70,7 +70,7 @@
       "status": "ACTIVE",
       "displayText": "pageviews-value",
       "classificationNames": [
-        "DataProduct"
+        "ProdDP"
       ],
       "meaningNames": [],
       "meanings": [],

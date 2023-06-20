@@ -1,6 +1,6 @@
 package io.confluent.demo.datamesh.model;
 
-import io.confluent.demo.datamesh.cc.datacatalog.model.DataProductTag;
+import io.confluent.demo.datamesh.cc.datacatalog.model.DataProductBusinessMetadata;
 
 public class CreateKsqlDbDataProductRequest extends CreateDataProductRequest {
     private final String command;
@@ -8,7 +8,7 @@ public class CreateKsqlDbDataProductRequest extends CreateDataProductRequest {
 
     public CreateKsqlDbDataProductRequest(String eventualSubjectName,
                                           String command,
-                                          DataProductTag dataProductTag) {
+                                          DataProductBusinessMetadata dataProductBusinessMetadata) {
         this.eventualSubjectName = eventualSubjectName;
         this.command = command;
     }

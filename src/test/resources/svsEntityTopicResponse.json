@@ -1,0 +1,105 @@
+{
+  "referredEntities": {},
+  "entity": {
+    "typeName": "kafka_topic",
+    "attributes": {
+      "replicationFactor": 3,
+      "maxCompactionLagMs": 0,
+      "compressionType": "UNSPECIFIED",
+      "messageDownconversionEnable": false,
+      "minCleanableDirtyRatio": 0,
+      "uncleanLeaderElectionEnable": false,
+      "minInsyncReplicas": 0,
+      "retentionBytes": -1,
+      "followerReplicationThrottledReplicas": null,
+      "id": "_TOp0zg9RVy9wEfJ9dhYNA",
+      "tenant": "lsrc-wqxng",
+      "externalSourceTopicName": null,
+      "fileDeleteDelayMs": 0,
+      "qualifiedName": "lsrc-wqxng:.:users",
+      "leaderReplicationThrottledReplicas": null,
+      "messageTimestampType": null,
+      "preallocate": false,
+      "isInternal": false,
+      "segmentBytes": 0,
+      "segmentIndexBytes": 0,
+      "flushMessages": 0,
+      "name": "users",
+      "doc": null,
+      "messageFormatVersion": null,
+      "indexIntervalBytes": 0,
+      "minCompactionLagMs": 0,
+      "segmentMs": 0,
+      "mirrorTopicState": null,
+      "segmentJitterMs": 0,
+      "replicatedFrom": null,
+      "maxMessageBytes": 0,
+      "displayName": null,
+      "description": null,
+      "nameLower": "users",
+      "valueSchemaValidation": false,
+      "externalSourceTopicId": null,
+      "owner": null,
+      "retentionMs": 604800000,
+      "replicatedTo": null,
+      "userDescription": null,
+      "deleteRetentionMs": 0,
+      "flushMs": 0,
+      "updateTime": 0,
+      "mirrorTopicUpdateTime": null,
+      "partitionsCount": 6,
+      "messageTimestampDifferenceMaxMs": 0,
+      "createTime": 1687027014000,
+      "keySchemaValidation": false,
+      "cleanupPolicy": "DELETE"
+    },
+    "guid": "b0573902-0326-4757-a74b-ff73dbe16b3a",
+    "isIncomplete": false,
+    "status": "ACTIVE",
+    "createTime": 1687027026400,
+    "updateTime": 1687027026400,
+    "version": 0,
+    "relationshipAttributes": {
+      "inputToProcesses": [],
+      "connectors": [],
+      "mirror_topics": [],
+      "pipelines": [],
+      "source_topic": null,
+      "logical_cluster": {
+        "guid": "41bf45fa-b748-437f-96c3-fc1d93b7ad1f",
+        "typeName": "kafka_logical_cluster",
+        "entityStatus": "ACTIVE",
+        "displayText": "",
+        "relationshipType": "kafka_logical_cluster_topics",
+        "relationshipGuid": "f5b7dccc-ff74-477a-bfdb-635b2405cf47",
+        "relationshipStatus": "ACTIVE",
+        "relationshipAttributes": {
+          "typeName": "kafka_logical_cluster_topics"
+        }
+      },
+      "meanings": [],
+      "outputFromProcesses": [],
+      "cluster_link": null
+    },
+    "classifications": [
+      {
+        "typeName": "ProdDP",
+        "entityGuid": "714e2593-fe4b-42e0-b958-13cea9590d4b",
+        "entityStatus": "ACTIVE",
+        "propagate": false,
+        "removePropagationsOnEntityDelete": false
+      }
+    ],
+    "businessAttributes": {
+      "DataProduct": {
+        "owner": "Roberto",
+        "domain": "@RobLand",
+        "description": "Description goes here",
+        "sla": "tier-2",
+        "quality": "curated",
+        "__bmName": "DataProduct"
+      }
+    },
+    "labels": []
+  }
+}

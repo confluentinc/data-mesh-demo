@@ -9,7 +9,7 @@ encodePublishForm publishForm =
     object
         [ ( "@type", string "TOPIC" )
         , ( "qualifiedName", qualifiedName publishForm.topic.qualifiedName )
-        , ( "dataProductTag"
+        , ( "dataProductBusinessMetadata"
           , object
                 [ ( "owner", string publishForm.owner )
                 , ( "description", string publishForm.description )

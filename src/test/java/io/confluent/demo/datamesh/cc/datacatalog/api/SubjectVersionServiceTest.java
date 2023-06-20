@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.confluent.demo.datamesh.cc.datacatalog.model.AtlasEntityWithExtInfo;
-import io.confluent.demo.datamesh.cc.datacatalog.model.SubjectVersionServiceResult;
+import io.confluent.demo.datamesh.cc.datacatalog.model.TopicServiceResult;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
@@ -19,19 +19,19 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
-@RestClientTest({SubjectVersionService.class})
+@RestClientTest({TopicService.class})
 public class SubjectVersionServiceTest {
 
     @Autowired
     private MockRestServiceServer mockServer;
     @Autowired
-    private SubjectVersionService svsService;
+    private TopicService svsService;
 
     @Test
-    public void getSubjectVersionEntityTest() throws IOException {
+    public void getTopicEntityTest() throws IOException {
 
-        final var qualifiedName = "lsrc-jpz2w:.:stocktrades-value:1";
-        final var response = new ClassPathResource("svsEntitySrSubjectVersionResponse.json");
+        final var qualifiedName = "lsrc-jpz2w:.:stocktrades";
+        final var response = new ClassPathResource("svsEntityTopicResponse.json");
 
         ObjectMapper mapper = JsonMapper
                 .builder()
@@ -43,11 +43,11 @@ public class SubjectVersionServiceTest {
                 response.getFile(), AtlasEntityWithExtInfo.class);
 
         mockServer
-            .expect(requestTo("/entity/type/sr_subject_version/name/" + qualifiedName))
+            .expect(requestTo("/entity/type/kafka_topic/name/" + qualifiedName))
             .andRespond(withSuccess(response, MediaType.APPLICATION_JSON));
 
         AtlasEntityWithExtInfo result =
-                svsService.getSubjectVersionEntity("lsrc-jpz2w:.:stocktrades-value:1");
+                svsService.getTopicEntity("lsrc-jpz2w:.:stocktrades");
 
         assertThat(expected).usingRecursiveComparison().isEqualTo(result);
         mockServer.verify();
@@ -67,19 +67,19 @@ public class SubjectVersionServiceTest {
                 .build();
 
         mockServer
-                .expect(requestTo("/search/basic?types=sr_subject_version&attrs=version"))
+                .expect(requestTo("/search/basic?types=kafka_topic"))
                 .andRespond(withSuccess(response, MediaType.APPLICATION_JSON));
         mockServer
-                .expect(requestTo("/entity/type/sr_subject_version/name/lsrc-jpz2w:.:users-value:1"))
+                .expect(requestTo("/entity/type/kafka_topic/name/lsrc-jpz2w:.:users"))
                 .andRespond(withSuccess(usersResponse, MediaType.APPLICATION_JSON));
         mockServer
-                .expect(requestTo("/entity/type/sr_subject_version/name/lsrc-jpz2w:.:stocktrades-value:1"))
+                .expect(requestTo("/entity/type/kafka_topic/name/lsrc-jpz2w:.:stocktrades"))
                 .andRespond(withSuccess(stockTradesResponse, MediaType.APPLICATION_JSON));
         mockServer
-                .expect(requestTo("/entity/type/sr_subject_version/name/lsrc-jpz2w:.:pageviews-value:1"))
+                .expect(requestTo("/entity/type/kafka_topic/name/lsrc-jpz2w:.:pageviews"))
                 .andRespond(withSuccess(pageViewsResponse, MediaType.APPLICATION_JSON));
 
-        SubjectVersionServiceResult result = svsService.getAll();
+        TopicServiceResult result = svsService.getAll();
 
         mockServer.verify();
     }

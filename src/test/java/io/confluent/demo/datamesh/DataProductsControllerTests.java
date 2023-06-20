@@ -1,7 +1,7 @@
 package io.confluent.demo.datamesh;
 
-import io.confluent.demo.datamesh.cc.datacatalog.api.SubjectVersionService;
-import io.confluent.demo.datamesh.cc.datacatalog.model.DataProductTag;
+import io.confluent.demo.datamesh.cc.datacatalog.api.TopicService;
+import io.confluent.demo.datamesh.cc.datacatalog.model.DataProductBusinessMetadata;
 import io.confluent.demo.datamesh.model.CreateDataProductRequest;
 import io.confluent.demo.datamesh.model.CreateTopicDataProductRequest;
 import io.confluent.demo.datamesh.model.DataProduct;
@@ -15,7 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.util.Assert;
 
-import java.util.ArrayList;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +31,7 @@ public class DataProductsControllerTests {
     @MockBean
     private AuditLogService auditLogService;
     @MockBean
-    private SubjectVersionService svsService;
+    private TopicService svsService;
     @MockBean
     private DataProductService dpService;
     @Autowired
@@ -39,7 +39,8 @@ public class DataProductsControllerTests {
     @Value("${info.domain}")
     private String domain;
 
-    private final DataProductTag.DataProductTagBuilder tagBuilder = new DataProductTag.DataProductTagBuilder(
+    private final DataProductBusinessMetadata.DataProductBusinessMetadataBuilder builder
+            = new DataProductBusinessMetadata.DataProductBusinessMetadataBuilder(
                     "@analytics-team",
                     "Stock trades of a high combined monetary value.",
                     domain,
@@ -49,7 +50,7 @@ public class DataProductsControllerTests {
     @Test
     public void getDataProductsTest() throws Exception {
         Mockito
-            .when(dpService.getDataProducts())
+            .when(dpService.getTopicsTaggedAsDataProducts())
             .thenReturn(new Pair<>(Collections.emptyList(), Optional.empty()));
         List<DataProduct> result = controller.getDataProducts();
         Assert.notNull(result, "result of getting data products should be non-null");
@@ -59,7 +60,7 @@ public class DataProductsControllerTests {
     public void invalidOwnerDataProductRequestTest() {
         CreateDataProductRequest badRequest = new CreateTopicDataProductRequest(
                 "pretend:qualified:name",
-                tagBuilder.withOwner("mean-owner-name").build());
+                builder.withOwner("mean-owner-name").build());
 
         DataProductsController.RestrictedDataProductException exception = assertThrows(
                 DataProductsController.RestrictedDataProductException.class, () -> {
@@ -72,7 +73,7 @@ public class DataProductsControllerTests {
     public void invalidDescriptionDataProductRequestTest() {
         CreateDataProductRequest badRequest = new CreateTopicDataProductRequest(
             "pretend:qualified:name",
-            tagBuilder.withDescription("nasty description").build());
+            builder.withDescription("nasty description").build());
 
         DataProductsController.RestrictedDataProductException exception = assertThrows(
                 DataProductsController.RestrictedDataProductException.class, () -> {
@@ -85,7 +86,7 @@ public class DataProductsControllerTests {
     public void invalidSlaDataProductRequestTest() {
         CreateDataProductRequest badRequest = new CreateTopicDataProductRequest(
                 "pretend:qualified:name",
-        tagBuilder.withSla("ugly sla").build());
+        builder.withSla("ugly sla").build());
 
         DataProductsController.RestrictedDataProductException exception = assertThrows(
                 DataProductsController.RestrictedDataProductException.class, () -> {
@@ -98,7 +99,7 @@ public class DataProductsControllerTests {
     public void invalidQualityDataProductRequestTest() {
         CreateDataProductRequest badRequest = new CreateTopicDataProductRequest(
                 "pretend:qualified:name",
-                tagBuilder.withQuality("gross quality").build());
+                builder.withQuality("gross quality").build());
 
         DataProductsController.RestrictedDataProductException exception = assertThrows(
                 DataProductsController.RestrictedDataProductException.class, () -> {
@@ -111,7 +112,7 @@ public class DataProductsControllerTests {
     public void invalidDomainDataProductRequestTest() {
         CreateDataProductRequest badRequest = new CreateTopicDataProductRequest(
                 "pretend:qualified:name",
-                tagBuilder.withDomain("invalid Domain").build());
+                builder.withDomain("invalid Domain").build());
 
         DataProductsController.RestrictedDataProductException exception = assertThrows(
                 DataProductsController.RestrictedDataProductException.class, () -> {

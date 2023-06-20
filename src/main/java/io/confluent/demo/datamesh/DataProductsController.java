@@ -1,8 +1,10 @@
 package io.confluent.demo.datamesh;
 
-import io.confluent.demo.datamesh.cc.datacatalog.api.SubjectVersionService;
-import io.confluent.demo.datamesh.cc.datacatalog.model.DataProductTag;
-import io.confluent.demo.datamesh.cc.datacatalog.model.SubjectVersionServiceResult;
+import io.confluent.demo.datamesh.cc.datacatalog.api.TopicService;
+import io.confluent.demo.datamesh.cc.datacatalog.model.DataProductBusinessMetadata;
+import io.confluent.demo.datamesh.cc.datacatalog.model.TopicServiceResult;
+import io.confluent.demo.datamesh.cc.schemaregistry.api.SchemaRegistryService;
+import io.confluent.demo.datamesh.cc.schemaregistry.model.Schema;
 import io.confluent.demo.datamesh.model.*;
 import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.directory.SchemaViolationException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -24,7 +26,9 @@ public class DataProductsController {
     @Autowired
     private DataProductService dataProductService;
     @Autowired
-    private SubjectVersionService subjectVersionService;
+    private SchemaRegistryService schemaService;
+    @Autowired
+    private TopicService subjectVersionService;
     @Autowired
     private AuditLogService auditLogService;
     @Value("${info.domain}")
@@ -50,45 +54,65 @@ public class DataProductsController {
     private final List<String> allowedQualities = List.of("authoritative", "curated", "raw");
 
     private void validateCreateDataProductRequest(CreateDataProductRequest request) {
-        DataProductTag incomingTag = request.getDataProductTag();
+        DataProductBusinessMetadata incomingDataProductRequest = request.getDataProductBusinessMetadata();
 
-        if ( !allowedDescriptions.contains(incomingTag.getDescription()) ) {
-            throw new RestrictedDataProductException(
-                    String.format("Unauthorized Data Product description"));
+        //Disabling description check because I want people to be able to add their own topics created in the CC UI.
+//        if ( !allowedDescriptions.contains(incomingDataProductRequest.getDescription()) ) {
+//            throw new RestrictedDataProductException(
+//                    String.format("Unauthorized Data Product description"));
+//        }
+
+        if (request instanceof CreateTopicDataProductRequest) {
+            String name = ((CreateTopicDataProductRequest)request).getTopicName() + "-value";
+            try {
+                String schema = schemaService.getLatest(name).schema;
+            } catch (Exception e) {
+                System.out.println("Failed due to lack of value schema");
+                throw new RestrictedDataProductException(
+                        String.format("No schema found for %s-value", name)
+                );
+            }
+
         }
 
-        if ( !allowedOwners.contains(incomingTag.getOwner()) ) {
+        if ( !allowedOwners.contains(incomingDataProductRequest.getOwner()) ) {
+            System.out.println("Failed owner 1");
             throw new RestrictedDataProductException(
                     String.format("Unauthorized Data Product owner"));
         }
 
-        if ( !allowedSLAs.contains(incomingTag.getSla()) ) {
+        if ( !allowedSLAs.contains(incomingDataProductRequest.getSla()) ) {
+            System.out.println("Failed SLA");
             throw new RestrictedDataProductException(
                     String.format("Unauthorized Data Product SLA"));
         }
 
-        if ( !allowedQualities.contains(incomingTag.getQuality()) ) {
+        if ( !allowedQualities.contains(incomingDataProductRequest.getQuality()) ) {
+            System.out.println("Failed quality");
             throw new RestrictedDataProductException(
                     String.format("Unauthorized Data Product Quality"));
         }
 
-        if ( !incomingTag.getDomain().equals(domain) ) {
+        if ( !incomingDataProductRequest.getDomain().equals(domain) ) {
+            System.out.println("Failed domain");
             throw new RestrictedDataProductException(
-                    String.format("Unauthorized Data Product domain: %s", request.getDataProductTag().getDomain()));
+                    String.format("Unauthorized Data Product domain: %s", request.getDataProductBusinessMetadata().getDomain()));
         }
 
-        if ( protectedOwners.contains(incomingTag.getOwner()) ) {
+        if ( protectedOwners.contains(incomingDataProductRequest.getOwner()) ) {
+            System.out.println("Failed owner 2");
             throw new RestrictedDataProductException(
-                    String.format("Unauthorized Data Product owner: %s", request.getDataProductTag().getOwner()));
+                    String.format("Unauthorized Data Product owner: %s", request.getDataProductBusinessMetadata().getOwner()));
         }
     }
 
     @GetMapping
     public List<DataProduct> getDataProducts() {
-        Pair<List<DataProduct>, Optional<AuditLogEntry>> response = dataProductService.getDataProducts();
+        //TODO - Get the topics, then populate with the metadata
+        Pair<List<DataProduct>, Optional<AuditLogEntry>> response = dataProductService.getTopicsTaggedAsDataProducts();
         response.getValue1().ifPresent(auditLogService::sendAuditLogEntry);
         return new ArrayList<>(
-                dataProductService.getDataProducts().getValue0()
+                dataProductService.getTopicsTaggedAsDataProducts().getValue0()
                     .stream()
                     .filter(dp -> !dp.getName().startsWith("_"))
                     .collect(Collectors.toList()));
@@ -103,14 +127,12 @@ public class DataProductsController {
 
     @PostMapping
     public DataProduct postDataProduct(@RequestBody CreateDataProductRequest request) throws Exception {
-
-        if ( !StringUtils.hasText(request.getDataProductTag().getDomain()) ) {
-            request.setDataProductTag(
-                request.getDataProductTag().builder().withDomain(this.domain).build());
+        if ( !StringUtils.hasText(request.getDataProductBusinessMetadata().getDomain()) ) {
+            request.setDataProductBusinessMetadata(
+                request.getDataProductBusinessMetadata().builder().withDomain(this.domain).build());
         }
 
         validateCreateDataProductRequest(request);
-
         Pair<DataProduct, Optional<AuditLogEntry>> response = dataProductService.createDataProduct(request);
         response.getValue1().ifPresent(auditLogService::sendAuditLogEntry);
         return response.getValue0();
@@ -134,7 +156,7 @@ public class DataProductsController {
     public ArrayList<DataProductOrTopic> getProductsAndTopics() {
         List<DataProduct> allDataProducts = getDataProducts();
 
-        SubjectVersionServiceResult subjectVersionServiceResult = subjectVersionService.getPotentialDataProducts();
+        TopicServiceResult subjectVersionServiceResult = subjectVersionService.getPotentialDataProductsByTag();
 
         List<Topic> topics = subjectVersionServiceResult
             .getEntities()

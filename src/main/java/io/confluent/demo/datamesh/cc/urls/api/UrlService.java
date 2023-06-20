@@ -1,6 +1,6 @@
 package io.confluent.demo.datamesh.cc.urls.api;
 
-import io.confluent.demo.datamesh.cc.datacatalog.api.SubjectVersionService;
+import io.confluent.demo.datamesh.cc.datacatalog.api.TopicService;
 import io.confluent.demo.datamesh.cc.urls.model.DataProductUrls;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -71,8 +71,8 @@ public class UrlService {
 
     @GetMapping("/urls/data-product/{dataProductFQN}")
     public DataProductUrls getDataProductUrls(@PathVariable String dataProductFQN) {
-        String schemaName = SubjectVersionService.getQualifiedNameSchemaName(dataProductFQN);
-        String topicName  = SubjectVersionService.getQualifiedNameTopicName(dataProductFQN);
+        String schemaName = TopicService.getSchemaNameFromQualifiedName(dataProductFQN);
+        String topicName  = TopicService.getTopicNameFromQualifiedName(dataProductFQN);
         String schemaUrl  = getSchemaUrl(schemaName);
         String topicUrl   = getTopicUrl(topicName);
         String lineageUrl = getLineageUrl("topic-" + topicName);

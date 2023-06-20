@@ -1,13 +1,13 @@
 {
   "referredEntities": {},
   "entity": {
-    "typeName": "sr_subject_version",
+    "typeName": "kafka_topic",
     "attributes": {
       "owner": null,
       "replicatedTo": null,
       "userDescription": null,
       "replicatedFrom": null,
-      "qualifiedName": "lsrc-jpz2w:.:users-value:1",
+      "qualifiedName": "lsrc-jpz2w:.:users",
       "displayName": null,
       "description": null,
       "updateTime": 0,
@@ -48,14 +48,7 @@
     },
     "classifications": [
       {
-        "typeName": "DataProduct",
-        "attributes": {
-          "owner": "@membership-team",
-          "domain": "membership",
-          "description": "All users from all regions (both national and international)",
-          "sla": "tier-1",
-          "quality": "authoritative"
-        },
+        "typeName": "ProdDP",
         "entityGuid": "44998b2f-5244-44b7-a659-ba554146426c",
         "entityStatus": "ACTIVE",
         "propagate": false,
