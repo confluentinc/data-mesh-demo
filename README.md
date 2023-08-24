@@ -22,9 +22,11 @@ A companion blog post can be found here:
 ## Running Locally 
 
 ###  Prerequisties
+* OSX or Linux OS. No windows compatibility due to script specifics.
 * [Confluent Cloud](https://www.confluent.io/confluent-cloud/tryfree/) account
   * New Confluent Cloud signups receive _$400_ to spend within Confluent Cloud during their first 60 days.
-    Use Confluent Cloud promo code `DATAMESH200` to receive an additional **$200** free usage
+    Use Confluent Cloud promo code `DATAMESH200` to receive an additional **$200** free usage (Valid until December 31, 2023)
+      (Please see our promotional disclaimer page for more information: https://www.confluent.io/confluent-cloud-promo-disclaimer/)
     This will sufficiently cover one day of running this example, beyond which you may be billed 
     for the Confluent Cloud resources until you destroy them. Enter the promo code in the Billing & payment page
     under the Payment details subsection.
