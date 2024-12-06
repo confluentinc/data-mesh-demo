@@ -14,7 +14,7 @@ version = '0.0.52'
 repositories {
 	mavenCentral()
 	maven {
-		url "https://ksqldb-maven.s3.amazonaws.com/maven/"
+		url "https://ksqldb-mvns.s3.amazonaws.com/maven/"
 	}
 	maven {
 		url "https://jenkins-confluent-packages-beta-maven.s3.amazonaws.com/7.0.0-beta210811194853/1/maven/"
