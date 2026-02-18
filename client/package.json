@@ -28,7 +28,7 @@
     "uikit": "^3.7.5",
     "uuid": "^8.3.2",
     "webpack": "^5.76.0",
-    "webpack-cli": "^4.9.0",
+    "webpack-cli": "^6.0.0",
     "webpack-dev-server": "^4.3.1"
   },
   "resolutions": {
