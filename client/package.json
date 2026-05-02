@@ -21,6 +21,7 @@
     "elm-webpack-loader": "^8.0.0",
     "favicons": "^6.2.2",
     "favicons-webpack-plugin": "^5.0.2",
+    "follow-redirects": "^1.14.7",
     "html-webpack-plugin": "^5.3.2",
     "less": "^4.1.2",
     "less-loader": "^10.0.1",
